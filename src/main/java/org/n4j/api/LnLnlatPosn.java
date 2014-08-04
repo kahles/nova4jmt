@@ -11,7 +11,7 @@ package org.n4j.api;
 
 
 public class LnLnlatPosn {
-    double lng; /*!< longitude. Object longitude. */
-    double lat; /*!< latitude. Object latitude */
+ public   double lng; /*!< longitude. Object longitude. */
+ public   double lat; /*!< latitude. Object latitude */
 
 }

@@ -8,7 +8,7 @@ package org.n4j.api;
 
 public class LnHms {
 
-    int hours;       /*!< Hours. Valid 0 - 23 */
-    int minutes;     /*!< Minutes. Valid 0 - 59 */
-    double seconds;             /*!< Seconds. Valid 0 - 59.9999... */
+  public  int hours;       /*!< Hours. Valid 0 - 23 */
+  public int minutes;     /*!< Minutes. Valid 0 - 59 */
+  public double seconds;             /*!< Seconds. Valid 0 - 59.9999... */
 }
