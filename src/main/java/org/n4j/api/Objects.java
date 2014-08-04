@@ -6,61 +6,11 @@ public class Objects {
 
 
 
-/*! \struct ln_equ_posn
-** \brief Equatorial Coordinates.
-*
-* The Right Ascension and Declination of an object.
-*
-* Angles are expressed in degrees.
-*/
-
-struct ln_equ_posn {
-    double ra;  /*!< RA. Object right ascension in degrees.*/
-    double dec; /*!< DEC. Object declination */
-};
-
-/*! \struct ln_hrz_posn
-** \brief Horizontal Coordinates.
-*
-* The Azimuth and Altitude of an object.
-*
-* Angles are expressed in degrees.
-*/
-
-struct ln_hrz_posn {
-    double az;  /*!< AZ. Object azimuth. <p>
-          0 deg = South, 90 deg = West, 180 deg = Nord, 270 deg = East */
-    double alt; /*!< ALT. Object altitude. <p> 0 deg = horizon, 90 deg = zenit, -90 deg = nadir */
-};
 
 
-/*! \struct ln_lnlat_posn
-** \brief Ecliptical (or celestial) Longitude and Latitude.
-*
-* The Ecliptical (or celestial) Latitude and Longitude of and object.
-*
-* Angles are expressed in degrees. East is positive, West negative.
-*/
-
-struct ln_lnlat_posn {
-    double lng; /*!< longitude. Object longitude. */
-    double lat; /*!< latitude. Object latitude */
-};
 
 
-/*! \struct ln_helio_posn
-* \brief Heliocentric position 
-*
-* A heliocentric position is an objects position relative to the
-* centre of the Sun. 
-*
-* Angles are expressed in degrees.
-* Radius vector is in AU.
-*/
-struct ln_helio_posn {
-    double L;   /*!< Heliocentric longitude */
-    double B;   /*!< Heliocentric latitude */
-    double R;   /*!< Heliocentric radius vector */
+
 };
 
 /*! \struct ln_rect_posn
