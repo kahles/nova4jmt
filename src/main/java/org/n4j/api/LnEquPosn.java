@@ -11,6 +11,6 @@ package org.n4j.api;
 
 public class LnEquPosn {
 
-    double ra;  /*!< RA. Object right ascension in degrees.*/
-    double dec; /*!< DEC. Object declination */
+   public double ra;  /*!< RA. Object right ascension in degrees.*/
+   public double dec; /*!< DEC. Object declination */
 }

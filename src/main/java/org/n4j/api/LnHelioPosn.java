@@ -12,7 +12,7 @@ package org.n4j.api;
 */
 public class LnHelioPosn {
 
-    double L;   /*!< Heliocentric longitude */
-    double B;   /*!< Heliocentric latitude */
-    double R;   /*!< Heliocentric radius vector */
+   public double L;   /*!< Heliocentric longitude */
+   public double B;   /*!< Heliocentric latitude */
+   public double R;   /*!< Heliocentric radius vector */
 }
