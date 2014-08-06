@@ -596,7 +596,7 @@ public class Utility {
 	public static int gettimeofday(TimeVal tv, Timezone tz) {
 
 		long now = System.currentTimeMillis();
-		tv.tv_sec = tv.tv_usec / 1000L;
+		tv.tv_sec = tv.tv_usec / 100L;
 		tv.tv_usec = now - tv.tv_sec;
 
 		tz.tz_dsttime = TimeZone.getDefault().inDaylightTime(new Date(now)) ? 1

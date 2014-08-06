@@ -8,20 +8,25 @@ package org.n4j.api;
 public class LnDate {
 
     /** Years. All values are valid */
-    int years;
+    public int years;
 
     /** Months. Valid values : 1 (January) - 12 (December) */
-    int months;
+    public int months;
 
     /** Days. Valid values 1 - 28,29,30,31 Depends on month. */
-    int days;
+    public int days;
 
     /** Hours. Valid values 0 - 23. */
-    int hours;
+    public int hours;
 
     /** Minutes. Valid values 0 - 59. */
-    int minutes;
+    public int minutes;
 
     /** Seconds. Valid values 0 - 59.99999.... */
-    double seconds;
+    public double seconds;
+    
+    @Override
+    public LnDate clone() throws CloneNotSupportedException {
+        return (LnDate)super.clone();
+    }
 }

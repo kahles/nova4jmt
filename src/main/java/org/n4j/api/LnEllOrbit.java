@@ -9,11 +9,11 @@ package org.n4j.api;
 */
 public class LnEllOrbit {
 
-    double a;   /*!< Semi major axis, in AU */
-    double e;   /*!< Eccentricity */
-    double i;   /*!< Inclination in degrees */
-    double w;   /*!< Argument of perihelion in degrees */
-    double omega;   /*!< Longitude of ascending node in degrees*/
-    double n;   /*!< Mean motion, in degrees/day */
-    double JD;  /*!< Time of last passage in Perihelion, in julian day*/
+    public  double a;   /*!< Semi major axis, in AU */
+    public double e;   /*!< Eccentricity */
+    public  double i;   /*!< Inclination in degrees */
+    public  double w;   /*!< Argument of perihelion in degrees */
+    public double omega;   /*!< Longitude of ascending node in degrees*/
+    public double n;   /*!< Mean motion, in degrees/day */
+    public  double JD;  /*!< Time of last passage in Perihelion, in julian day*/
 }
