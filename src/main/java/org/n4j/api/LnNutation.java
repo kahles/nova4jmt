@@ -11,7 +11,7 @@ package org.n4j.api;
 */
 public class LnNutation {
 
-    double longitude;   /*!< Nutation in longitude, in degrees */
-    double obliquity;   /*!< Nutation in obliquity, in degrees */
-    double ecliptic;    /*!< Mean obliquity of the ecliptic, in degrees */
+   public double longitude;   /*!< Nutation in longitude, in degrees */
+   public double obliquity;   /*!< Nutation in obliquity, in degrees */
+   public double ecliptic;    /*!< Mean obliquity of the ecliptic, in degrees */
 }
