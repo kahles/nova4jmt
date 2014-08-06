@@ -8,17 +8,15 @@ import org.n4j.api.LnNutation;
 
 public class SiderealTime {
 
-	/*
-	 * ! \fn double ln_get_mean_sidereal_time(double JD) \param JD Julian Day
-	 * \return Mean sidereal time.
+	/**
+	 * double ln_get_mean_sidereal_time(double JD) \param JD Julian Day \return
+	 * Mean sidereal time.
 	 * 
 	 * Calculate the mean sidereal time at the meridian of Greenwich of a given
 	 * date.
-	 */
-	/*
+	 *
 	 * Formula 11.1, 11.4 pg 83
 	 */
-
 	public static double ln_get_mean_sidereal_time(double JD) {
 		// TODO long double
 		double sidereal;
@@ -39,17 +37,15 @@ public class SiderealTime {
 		return sidereal;
 	}
 
-	/*
-	 * ! \fn double ln_get_apparent_sidereal_time(double JD) \param JD Julian
-	 * Day /return Apparent sidereal time (hours).
+	/**
+	 * double ln_get_apparent_sidereal_time(double JD) \param JD Julian Day
+	 * /return Apparent sidereal time (hours).
 	 * 
 	 * Calculate the apparent sidereal time at the meridian of Greenwich of a
 	 * given date.
-	 */
-	/*
+	 *
 	 * Formula 11.1, 11.4 pg 83
 	 */
-
 	public static double ln_get_apparent_sidereal_time(double JD) {
 		double correction, sidereal;
 		LnNutation nutation = new LnNutation();
