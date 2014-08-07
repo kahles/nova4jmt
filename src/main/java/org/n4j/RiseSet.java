@@ -1,5 +1,6 @@
 package org.n4j;
 
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 
 import org.n4j.api.LnEquPosn;
@@ -13,12 +14,11 @@ import static java.lang.Math.asin;
 import static java.lang.Math.acos;
 import static java.lang.Math.atan;
 import static java.lang.Math.abs;
-
 import static org.n4j.DynamicalTime.ln_get_jde;
 import static org.n4j.Nutation.ln_get_nutation;
 import static org.n4j.Utility.ln_deg_to_rad;
 import static org.n4j.Utility.ln_range_degrees;
-       
+
 import static org.n4j.Utility.ln_get_version;
 import static org.n4j.Utility.ln_rad_to_deg;
 import static org.n4j.Utility.ln_deg_to_rad;
@@ -77,11 +77,11 @@ import static org.n4j.api.Constants.B1950;
 import static org.n4j.api.Constants.JD2050;
 
 public class RiseSet {
-	static final double LN_STAR_STANDART_HORIZON	=	-0.5667;
+	static final double LN_STAR_STANDART_HORIZON = -0.5667;
+
 	// helper function to check if object can be visible
 	public static int check_coords(LnLnlatPosn observer, double H1,
-		double horizon, LnEquPosn object)
-	{
+			double horizon, LnEquPosn object) {
 		double h;
 
 		/* check if body is circumpolar */
@@ -93,7 +93,7 @@ public class RiseSet {
 			if (h > 90.0)
 				h = 180.0 - h;
 			if (h < -90.0)
-			  	h = -180.0 - h;
+				h = -180.0 - h;
 			if (h < horizon)
 				return -1;
 			// else it must be above horizon
@@ -102,54 +102,55 @@ public class RiseSet {
 		return 0;
 	}
 
-	/*! \fn int ln_get_object_rst(double JD, LnLnlatPosn observer, LnEquPosn object, LnRstTime rst);
-	* \param JD Julian day
-	* \param observer Observers position
-	* \param object Object position
-	* \param rst Pointer to store Rise, Set and Transit time in JD
-	* \return 0 for success, 1 for circumpolar (above the horizon), -1 for circumpolar (bellow the horizon)
-	*
-	* Calculate the time the rise, set and transit (crosses the local meridian at upper culmination)
-	* time of the object for the given Julian day.
-	*
-	* Note: this functions returns 1 if the object is circumpolar, that is it remains the whole
-	* day above the horizon. Returns -1 when it remains the whole day bellow the horizon.
-	*/
+	/*
+	 * ! \fn int ln_get_object_rst(double JD, LnLnlatPosn observer, LnEquPosn
+	 * object, LnRstTime rst); \param JD Julian day \param observer Observers
+	 * position \param object Object position \param rst Pointer to store Rise,
+	 * Set and Transit time in JD \return 0 for success, 1 for circumpolar
+	 * (above the horizon), -1 for circumpolar (bellow the horizon)
+	 * 
+	 * Calculate the time the rise, set and transit (crosses the local meridian
+	 * at upper culmination) time of the object for the given Julian day.
+	 * 
+	 * Note: this functions returns 1 if the object is circumpolar, that is it
+	 * remains the whole day above the horizon. Returns -1 when it remains the
+	 * whole day bellow the horizon.
+	 */
 	public static int ln_get_object_rst(double JD, LnLnlatPosn observer,
-		LnEquPosn object, LnRstTime rst)
-	{
+			LnEquPosn object, LnRstTime rst) {
 		return ln_get_object_rst_horizon(JD, observer, object,
-			LN_STAR_STANDART_HORIZON, rst);	/* standard altitude of stars */
+				LN_STAR_STANDART_HORIZON, rst); /* standard altitude of stars */
 	}
 
-	/*! \fn int ln_get_object_rst_horizon(double JD, LnLnlatPosn observer, LnEquPosn object, long double horizon, LnRstTime rst);
-	* \param JD Julian day
-	* \param observer Observers position
-	* \param object Object position
-	* \param horizon Horizon height
-	* \param rst Pointer to store Rise, Set and Transit time in JD
-	* \return 0 for success, 1 for circumpolar (above the horizon), -1 for circumpolar (bellow the horizon)
-	*
-	* Calculate the time the rise, set and transit (crosses the local meridian at upper culmination)
-	* time of the object for the given Julian day and horizon.
-	*
-	* Note: this functions returns 1 if the object is circumpolar, that is it remains the whole
-	* day above the horizon. Returns -1 when it remains whole day bellow the horizon.
-	*/
-	public static int ln_get_object_rst_horizon(double JD, LnLnlatPosn observer,
-		LnEquPosn object, BigDecimal horizon, LnRstTime rst)
-	{
+	/*
+	 * ! \fn int ln_get_object_rst_horizon(double JD, LnLnlatPosn observer,
+	 * LnEquPosn object, long double horizon, LnRstTime rst); \param JD Julian
+	 * day \param observer Observers position \param object Object position
+	 * \param horizon Horizon height \param rst Pointer to store Rise, Set and
+	 * Transit time in JD \return 0 for success, 1 for circumpolar (above the
+	 * horizon), -1 for circumpolar (bellow the horizon)
+	 * 
+	 * Calculate the time the rise, set and transit (crosses the local meridian
+	 * at upper culmination) time of the object for the given Julian day and
+	 * horizon.
+	 * 
+	 * Note: this functions returns 1 if the object is circumpolar, that is it
+	 * remains the whole day above the horizon. Returns -1 when it remains whole
+	 * day bellow the horizon.
+	 */
+	public static int ln_get_object_rst_horizon(double JD,
+			LnLnlatPosn observer, LnEquPosn object, BigDecimal horizon,
+			LnRstTime rst) {
 		return ln_get_object_rst_horizon_offset(JD, observer, object, horizon,
 				rst, 0.5);
 	}
 
-	public static int ln_get_object_rst_horizon_offset(double JD, LnLnlatPosn observer,
-		LnEquPosn object, BigDecimal horizon, LnRstTime rst,
-		double ut_offset)
-	{
+	public static int ln_get_object_rst_horizon_offset(double JD,
+			LnLnlatPosn observer, LnEquPosn object, BigDecimal horizon,
+			LnRstTime rst, double ut_offset) {
 		int jd;
-		//TODO BigDecimal
-		/*long*/double O, JD_UT, H0, H1;
+		// TODO BigDecimal
+		/* long */double O, JD_UT, H0, H1;
 		double Hat, Har, Has, altr, alts;
 		double mt, mr, ms, mst, msr, mss;
 		double dmt, dmr, dms;
@@ -158,9 +159,10 @@ public class RiseSet {
 		if (Double.isNaN(ut_offset)) {
 			JD_UT = JD;
 		} else {
-			/* convert local sidereal time into degrees
-				 for 0h of UT on day JD */
-			jd = (int)JD;
+			/*
+			 * convert local sidereal time into degrees for 0h of UT on day JD
+			 */
+			jd = (int) JD;
 			JD_UT = jd + ut_offset;
 		}
 
@@ -168,8 +170,8 @@ public class RiseSet {
 		O *= 15.0;
 
 		/* equ 15.1 */
-		H0 = (sin(ln_deg_to_rad(horizon.doubleValue())) -
-			 sin(ln_deg_to_rad(observer.lat)) * sin(ln_deg_to_rad(object.dec)));
+		H0 = (sin(ln_deg_to_rad(horizon.doubleValue())) - sin(ln_deg_to_rad(observer.lat))
+				* sin(ln_deg_to_rad(object.dec)));
 		H1 = (cos(ln_deg_to_rad(observer.lat)) * cos(ln_deg_to_rad(object.dec)));
 
 		H1 = H0 / H1;
@@ -212,16 +214,14 @@ public class RiseSet {
 			Has = mss + observer.lng - object.ra;
 
 			/* find altitude for rise and set */
-			altr = sin(ln_deg_to_rad(observer.lat)) *
-				sin(ln_deg_to_rad(object.dec)) +
-				cos(ln_deg_to_rad(observer.lat)) *
-				cos(ln_deg_to_rad(object.dec)) *
-				cos(ln_deg_to_rad(Har));
-			alts = sin(ln_deg_to_rad(observer.lat)) *
-				sin(ln_deg_to_rad(object.dec)) +
-				cos(ln_deg_to_rad(observer.lat)) *
-				cos(ln_deg_to_rad(object.dec)) *
-				cos(ln_deg_to_rad(Has));
+			altr = sin(ln_deg_to_rad(observer.lat))
+					* sin(ln_deg_to_rad(object.dec))
+					+ cos(ln_deg_to_rad(observer.lat))
+					* cos(ln_deg_to_rad(object.dec)) * cos(ln_deg_to_rad(Har));
+			alts = sin(ln_deg_to_rad(observer.lat))
+					* sin(ln_deg_to_rad(object.dec))
+					+ cos(ln_deg_to_rad(observer.lat))
+					* cos(ln_deg_to_rad(object.dec)) * cos(ln_deg_to_rad(Has));
 
 			/* must be in degrees */
 			altr = ln_rad_to_deg(altr);
@@ -233,19 +233,20 @@ public class RiseSet {
 				Hat -= 360;
 
 			dmt = -(Hat / 360.0);
-			dmr = (altr - horizon.doubleValue()) / (360 * cos(ln_deg_to_rad(object.dec)) *
-				cos(ln_deg_to_rad(observer.lat)) * sin(ln_deg_to_rad(Har)));
-			dms = (alts - horizon.doubleValue()) / (360 * cos(ln_deg_to_rad(object.dec)) *
-				cos(ln_deg_to_rad(observer.lat)) * sin(ln_deg_to_rad(Has)));
+			dmr = (altr - horizon.doubleValue())
+					/ (360 * cos(ln_deg_to_rad(object.dec))
+							* cos(ln_deg_to_rad(observer.lat)) * sin(ln_deg_to_rad(Har)));
+			dms = (alts - horizon.doubleValue())
+					/ (360 * cos(ln_deg_to_rad(object.dec))
+							* cos(ln_deg_to_rad(observer.lat)) * sin(ln_deg_to_rad(Has)));
 
 			/* add corrections and change to JD */
 			mt += dmt;
 			mr += dmr;
 			ms += dms;
 
-			if (mt <= 1.0 && mt >= 0.0 &&
-				mr <= 1.0 && mr >= 0.0 &&
-				ms <= 1.0 && ms >= 0.0)
+			if (mt <= 1.0 && mt >= 0.0 && mr <= 1.0 && mr >= 0.0 && ms <= 1.0
+					&& ms >= 0.0)
 				break;
 		}
 
@@ -257,67 +258,69 @@ public class RiseSet {
 		return 0;
 	}
 
-	/*! \fn int ln_get_object_next_rst(double JD, LnLnlatPosn observer, LnEquPosn object, LnRstTime rst);
-	* \param JD Julian day
-	* \param observer Observers position
-	* \param object Object position
-	* \param rst Pointer to store Rise, Set and Transit time in JD
-	* \return 0 for success, 1 for circumpolar (above the horizon), -1 for circumpolar (bellow the horizon)
-	*
-	* Calculate the time of next rise, set and transit (crosses the local meridian at upper culmination)
-	* time of the object for the given Julian day and horizon.
-	*
-	* This function guarantee, that rise, set and transit will be in <JD, JD+1> range.
-	*
-	* Note: this functions returns 1 if the object is circumpolar, that is it remains the whole
-	* day above the horizon. Returns -1 when it remains whole day bellow the horizon.
-	*/
+	/*
+	 * ! \fn int ln_get_object_next_rst(double JD, LnLnlatPosn observer,
+	 * LnEquPosn object, LnRstTime rst); \param JD Julian day \param observer
+	 * Observers position \param object Object position \param rst Pointer to
+	 * store Rise, Set and Transit time in JD \return 0 for success, 1 for
+	 * circumpolar (above the horizon), -1 for circumpolar (bellow the horizon)
+	 * 
+	 * Calculate the time of next rise, set and transit (crosses the local
+	 * meridian at upper culmination) time of the object for the given Julian
+	 * day and horizon.
+	 * 
+	 * This function guarantee, that rise, set and transit will be in <JD, JD+1>
+	 * range.
+	 * 
+	 * Note: this functions returns 1 if the object is circumpolar, that is it
+	 * remains the whole day above the horizon. Returns -1 when it remains whole
+	 * day bellow the horizon.
+	 */
 	int ln_get_object_next_rst(double JD, LnLnlatPosn observer,
-		LnEquPosn object, LnRstTime rst)
-	{
+			LnEquPosn object, LnRstTime rst) {
 		return ln_get_object_next_rst_horizon(JD, observer, object,
-			LN_STAR_STANDART_HORIZON, rst);
+				LN_STAR_STANDART_HORIZON, rst);
 	}
 
-	//helper functions for ln_get_object_next_rst_horizon
-	static void set_next_rst(LnRstTime rst, double diff,
-			LnRstTime out)
-	{
+	// helper functions for ln_get_object_next_rst_horizon
+	static void set_next_rst(LnRstTime rst, double diff, LnRstTime out) {
 		out.rise = rst.rise + diff;
 		out.transit = rst.transit + diff;
 		out.set = rst.set + diff;
 	}
 
-	static double find_next(double JD, double jd1, double jd2, double jd3)
-	{
+	static double find_next(double JD, double jd1, double jd2, double jd3) {
 		if (Double.isNaN(jd1) && Double.isNaN(jd2))
 			return jd3;
 
-		if(JD < jd1)
+		if (JD < jd1)
 			return jd1;
 
-		if(JD < jd2)
+		if (JD < jd2)
 			return jd2;
 
 		return jd3;
 	}
 
-	/*! \fn int ln_get_object_next_rst_horizon(double JD, LnLnlatPosn observer, LnEquPosn object, double horizon, LnRstTime rst);
-	* \param JD Julian day
-	* \param observer Observers position
-	* \param object Object position
-	* \param horizon Horizon height
-	* \param rst Pointer to store Rise, Set and Transit time in JD
-	* \return 0 for success, 1 for circumpolar (above the horizon), -1 for circumpolar (bellow the horizon)
-	*
-	* Calculate the time of next rise, set and transit (crosses the local meridian at upper culmination)
-	* time of the object for the given Julian day and horizon.
-	*
-	* This function guarantee, that rise, set and transit will be in <JD, JD+1> range.
-	*
-	* Note: this functions returns 1 if the object is circumpolar, that is it remains the whole
-	* day above the horizon. Returns -1 when it remains whole day bellow the horizon.
-	*/
+	/*
+	 * ! \fn int ln_get_object_next_rst_horizon(double JD, LnLnlatPosn observer,
+	 * LnEquPosn object, double horizon, LnRstTime rst); \param JD Julian day
+	 * \param observer Observers position \param object Object position \param
+	 * horizon Horizon height \param rst Pointer to store Rise, Set and Transit
+	 * time in JD \return 0 for success, 1 for circumpolar (above the horizon),
+	 * -1 for circumpolar (bellow the horizon)
+	 * 
+	 * Calculate the time of next rise, set and transit (crosses the local
+	 * meridian at upper culmination) time of the object for the given Julian
+	 * day and horizon.
+	 * 
+	 * This function guarantee, that rise, set and transit will be in <JD, JD+1>
+	 * range.
+	 * 
+	 * Note: this functions returns 1 if the object is circumpolar, that is it
+	 * remains the whole day above the horizon. Returns -1 when it remains whole
+	 * day bellow the horizon.
+	 */
 	int ln_get_object_next_rst_horizon(double JD, LnLnlatPosn observer,
 		LnEquPosn object, double horizon, LnRstTime rst)
 	{
@@ -352,44 +355,43 @@ public class RiseSet {
 		return 0;
 	}
 
-	/*! \fn int ln_get_body_rst_horizon(double JD, LnLnlatPosn observer, void (*get_equ_body_coords) (double, LnEquPosn ), double horizon, LnRstTime rst); 
-	* \param JD Julian day 
-	* \param observer Observers position 
-	* \param get_equ_body_coords Pointer to get_equ_body_coords() function
-	* \param horizon Horizon, see LN_XXX_HORIZON constants
-	* \param rst Pointer to store Rise, Set and Transit time in JD 
-	* \return 0 for success, 1 for circumpolar (above the horizon), -1 for circumpolar (bellow the horizon)
-	*
-	* Calculate the time the rise, set and transit (crosses the local meridian at
-	* upper culmination) time of the body for the given Julian day and given
-	* horizon.
-	*
-	*
-	* Note 1: this functions returns 1 if the object is circumpolar, that is it remains the whole
-	* day above the horizon. Returns -1 when it remains whole day bellow the horizon.
-	*
-	* Note 2: this function will not work for body, which ra changes more
-	* then 180 deg in one day (get_equ_body_coords changes so much). But
-	* you should't use that function for any body which moves to fast..use
-	* some special function for such things.
-	*/
+	/*
+	 * ! \fn int ln_get_body_rst_horizon(double JD, LnLnlatPosn observer, void
+	 * (*get_equ_body_coords) (double, LnEquPosn ), double horizon, LnRstTime
+	 * rst); \param JD Julian day \param observer Observers position \param
+	 * get_equ_body_coords Pointer to get_equ_body_coords() function \param
+	 * horizon Horizon, see LN_XXX_HORIZON constants \param rst Pointer to store
+	 * Rise, Set and Transit time in JD \return 0 for success, 1 for circumpolar
+	 * (above the horizon), -1 for circumpolar (bellow the horizon)
+	 * 
+	 * Calculate the time the rise, set and transit (crosses the local meridian
+	 * at upper culmination) time of the body for the given Julian day and given
+	 * horizon.
+	 * 
+	 * 
+	 * Note 1: this functions returns 1 if the object is circumpolar, that is it
+	 * remains the whole day above the horizon. Returns -1 when it remains whole
+	 * day bellow the horizon.
+	 * 
+	 * Note 2: this function will not work for body, which ra changes more then
+	 * 180 deg in one day (get_equ_body_coords changes so much). But you
+	 * should't use that function for any body which moves to fast..use some
+	 * special function for such things.
+	 */
 	int ln_get_body_rst_horizon(double JD, LnLnlatPosn observer,
-		void (*get_equ_body_coords) (double,LnEquPosn ), double horizon,
-		LnRstTime rst)
-	{
-		return ln_get_body_rst_horizon_offset(JD, observer, get_equ_body_coords,
-			horizon, rst, 0.5);
+			Method get_equ_body_coords, double horizon, LnRstTime rst) {
+		return ln_get_body_rst_horizon_offset(JD, observer,
+				get_equ_body_coords, horizon, rst, 0.5);
 	}
 
 	int ln_get_body_rst_horizon_offset(double JD, LnLnlatPosn observer,
-		void (*get_equ_body_coords) (double,LnEquPosn ), double horizon,
-		LnRstTime rst, double ut_offset)
-	{
+			Method get_equ_body_coords, double horizon, LnRstTime rst,
+			double ut_offset) {
 		int jd;
 		double T, O, JD_UT, H0, H1;
 		double Hat, Har, Has, altr, alts;
 		double mt, mr, ms, mst, msr, mss, nt, nr, ns;
-		struct ln_equ_posn sol1, sol2, sol3, post, posr, poss;
+		LnEquPosn sol1, sol2, sol3, post, posr, poss;
 		double dmt, dmr, dms;
 		int ret, i;
 
@@ -399,36 +401,39 @@ public class RiseSet {
 		if (Double.isNaN(ut_offset)) {
 			JD_UT = JD;
 		} else {
-			jd = (int)JD;
+			jd = (int) JD;
 			JD_UT = jd + ut_offset;
 		}
-		/* convert local sidereal time into degrees
-			 for 0h of UT on day JD */
+		/*
+		 * convert local sidereal time into degrees for 0h of UT on day JD
+		 */
 		JD_UT = JD;
 		O = ln_get_apparent_sidereal_time(JD_UT);
 		O *= 15.0;
 
 		/* get body coords for JD_UT -1, JD_UT and JD_UT + 1 */
-		get_equ_body_coords(JD_UT - 1.0, &sol1);
-		get_equ_body_coords(JD_UT, &sol2);
-		get_equ_body_coords(JD_UT + 1.0, &sol3);
+		get_equ_body_coords(JD_UT - 1.0, sol1);
+		get_equ_body_coords(JD_UT, sol2);
+		get_equ_body_coords(JD_UT + 1.0, sol3);
 
 		/* equ 15.1 */
-		H0 =
-			(sin(ln_deg_to_rad(horizon)) -
-			 sin(ln_deg_to_rad(observer.lat)) * sin(ln_deg_to_rad(sol2.dec)));
+		H0 = (sin(ln_deg_to_rad(horizon)) - sin(ln_deg_to_rad(observer.lat))
+				* sin(ln_deg_to_rad(sol2.dec)));
 		H1 = (cos(ln_deg_to_rad(observer.lat)) * cos(ln_deg_to_rad(sol2.dec)));
 
 		H1 = H0 / H1;
 
-		ret = check_coords (observer, H1, horizon, &sol2);
+		ret = check_coords(observer, H1, horizon, sol2);
 		if (ret)
 			return ret;
 
 		H0 = acos(H1);
 		H0 = ln_rad_to_deg(H0);
 
-		/* correct ra values for interpolation	- put them to the same side of circle */
+		/*
+		 * correct ra values for interpolation - put them to the same side of
+		 * circle
+		 */
 		if ((sol1.ra - sol2.ra) > 180.0)
 			sol2.ra += 360.0;
 
@@ -465,7 +470,7 @@ public class RiseSet {
 			mst = O + 360.985647 * mt;
 			msr = O + 360.985647 * mr;
 			mss = O + 360.985647 * ms;
-		
+
 			nt = mt + T / 86400.0;
 			nr = mr + T / 86400.0;
 			ns = ms + T / 86400.0;
@@ -483,16 +488,14 @@ public class RiseSet {
 			Has = mss + observer.lng - poss.ra;
 
 			/* find altitude for rise and set */
-			altr = sin(ln_deg_to_rad(observer.lat)) *
-					sin(ln_deg_to_rad(posr.dec)) +
-					cos(ln_deg_to_rad(observer.lat)) *
-					cos(ln_deg_to_rad(posr.dec)) *
-					cos(ln_deg_to_rad(Har));
-			alts = sin(ln_deg_to_rad(observer.lat)) *
-					sin(ln_deg_to_rad(poss.dec)) +
-					cos(ln_deg_to_rad(observer.lat)) *
-					cos(ln_deg_to_rad(poss.dec)) *
-					cos(ln_deg_to_rad(Has));
+			altr = sin(ln_deg_to_rad(observer.lat))
+					* sin(ln_deg_to_rad(posr.dec))
+					+ cos(ln_deg_to_rad(observer.lat))
+					* cos(ln_deg_to_rad(posr.dec)) * cos(ln_deg_to_rad(Har));
+			alts = sin(ln_deg_to_rad(observer.lat))
+					* sin(ln_deg_to_rad(poss.dec))
+					+ cos(ln_deg_to_rad(observer.lat))
+					* cos(ln_deg_to_rad(poss.dec)) * cos(ln_deg_to_rad(Has));
 
 			/* must be in degrees */
 			altr = ln_rad_to_deg(altr);
@@ -504,19 +507,20 @@ public class RiseSet {
 				Hat -= 360;
 
 			dmt = -(Hat / 360.0);
-			dmr = (altr - horizon) / (360.0 * cos(ln_deg_to_rad(posr.dec)) *
-				cos(ln_deg_to_rad(observer.lat)) * sin(ln_deg_to_rad(Har)));
-			dms = (alts - horizon) / (360.0 * cos(ln_deg_to_rad(poss.dec)) *
-				cos(ln_deg_to_rad(observer.lat)) * sin(ln_deg_to_rad(Has)));
+			dmr = (altr - horizon)
+					/ (360.0 * cos(ln_deg_to_rad(posr.dec))
+							* cos(ln_deg_to_rad(observer.lat)) * sin(ln_deg_to_rad(Har)));
+			dms = (alts - horizon)
+					/ (360.0 * cos(ln_deg_to_rad(poss.dec))
+							* cos(ln_deg_to_rad(observer.lat)) * sin(ln_deg_to_rad(Has)));
 
 			/* add corrections and change to JD */
 			mt += dmt;
 			mr += dmr;
 			ms += dms;
 
-			if (mt <= 1.0 && mt >= 0.0 &&
-				mr <= 1.0 && mr >= 0.0 &&
-				ms <= 1.0 && ms >= 0.0)
+			if (mt <= 1.0 && mt >= 0.0 && mr <= 1.0 && mr >= 0.0 && ms <= 1.0
+					&& ms >= 0.0)
 				break;
 		}
 
@@ -528,66 +532,69 @@ public class RiseSet {
 		return 0;
 	}
 
-	/*! \fn int ln_get_body_next_rst_horizon(double JD, LnLnlatPosn observer, LnEquPosn object, double horizon, LnRstTime rst);
-	* \param JD Julian day 
-	* \param observer Observers position 
-	* \param get_equ_body_coords Pointer to get_equ_body_coords() function
-	* \param horizon Horizon, see LN_XXX_HORIZON constants
-	* \param rst Pointer to store Rise, Set and Transit time in JD 
-	* \return 0 for success, 1 for circumpolar (above the horizon), -1 for circumpolar (bellow the horizon)
-	*
-	* Calculate the time of next rise, set and transit (crosses the local meridian at
-	* upper culmination) time of the body for the given Julian day and given
-	* horizon.
-	*
-	* This function guarantee, that rise, set and transit will be in <JD, JD+1> range.
-	*
-	* Note 1: this functions returns 1 if the body is circumpolar, that is it remains
-	* the whole day either above or below the horizon.
-	*
-	* Note 2: This function will not work for body, which ra changes more
-	* then 180 deg in one day (get_equ_body_coords changes so much). But
-	* you should't use that function for any body which moves to fast..use
-	* some special function for such things.
-	*/
+	/*
+	 * ! \fn int ln_get_body_next_rst_horizon(double JD, LnLnlatPosn observer,
+	 * LnEquPosn object, double horizon, LnRstTime rst); \param JD Julian day
+	 * \param observer Observers position \param get_equ_body_coords Pointer to
+	 * get_equ_body_coords() function \param horizon Horizon, see LN_XXX_HORIZON
+	 * constants \param rst Pointer to store Rise, Set and Transit time in JD
+	 * \return 0 for success, 1 for circumpolar (above the horizon), -1 for
+	 * circumpolar (bellow the horizon)
+	 * 
+	 * Calculate the time of next rise, set and transit (crosses the local
+	 * meridian at upper culmination) time of the body for the given Julian day
+	 * and given horizon.
+	 * 
+	 * This function guarantee, that rise, set and transit will be in <JD, JD+1>
+	 * range.
+	 * 
+	 * Note 1: this functions returns 1 if the body is circumpolar, that is it
+	 * remains the whole day either above or below the horizon.
+	 * 
+	 * Note 2: This function will not work for body, which ra changes more then
+	 * 180 deg in one day (get_equ_body_coords changes so much). But you
+	 * should't use that function for any body which moves to fast..use some
+	 * special function for such things.
+	 */
 	int ln_get_body_next_rst_horizon(double JD, LnLnlatPosn observer,
-		void (*get_equ_body_coords) (double,LnEquPosn ), double horizon,
-		LnRstTime rst)
-	{
+			Method get_equ_body_coords, double horizon, LnRstTime rst) {
 		return ln_get_body_next_rst_horizon_future(JD, observer,
-			get_equ_body_coords, horizon, 1, rst);
+				get_equ_body_coords, horizon, 1, rst);
 	}
 
-	/*! \fn int ln_get_body_next_rst_horizon_future(double JD, LnLnlatPosn observer, void (*get_equ_body_coords) (double,LnEquPosn ), double horizon, int day_limit, LnRstTime rst);
-	* \param JD Julian day 
-	* \param observer Observers position 
-	* \param get_equ_body_coords Pointer to get_equ_body_coords() function
-	* \param horizon Horizon, see LN_XXX_HORIZON constants
-	* \param day_limit Maximal number of days that will be searched for next rise and set
-	* \param rst Pointer to store Rise, Set and Transit time in JD 
-	* \return 0 for success, 1 for circumpolar (above the horizon), -1 for circumpolar (bellow the horizon)
-	*
-	* Calculate the time of next rise, set and transit (crosses the local meridian at
-	* upper culmination) time of the body for the given Julian day and given
-	* horizon.
-	*
-	* This function guarantee, that rise, set and transit will be in <JD, JD + day_limit> range.
-	*
-	* Note 1: this functions returns 1 if the body is circumpolar, that is it remains
-	* the whole day either above or below the horizon.
-	*
-	* Note 2: This function will not work for body, which ra changes more
-	* than 180 deg in one day (get_equ_body_coords changes so much). But
-	* you should't use that function for any body which moves to fast..use
-	* some special function for such things.
-	*/
+	/*
+	 * ! \fn int ln_get_body_next_rst_horizon_future(double JD, LnLnlatPosn
+	 * observer, void (*get_equ_body_coords) (double,LnEquPosn ), double
+	 * horizon, int day_limit, LnRstTime rst); \param JD Julian day \param
+	 * observer Observers position \param get_equ_body_coords Pointer to
+	 * get_equ_body_coords() function \param horizon Horizon, see LN_XXX_HORIZON
+	 * constants \param day_limit Maximal number of days that will be searched
+	 * for next rise and set \param rst Pointer to store Rise, Set and Transit
+	 * time in JD \return 0 for success, 1 for circumpolar (above the horizon),
+	 * -1 for circumpolar (bellow the horizon)
+	 * 
+	 * Calculate the time of next rise, set and transit (crosses the local
+	 * meridian at upper culmination) time of the body for the given Julian day
+	 * and given horizon.
+	 * 
+	 * This function guarantee, that rise, set and transit will be in <JD, JD +
+	 * day_limit> range.
+	 * 
+	 * Note 1: this functions returns 1 if the body is circumpolar, that is it
+	 * remains the whole day either above or below the horizon.
+	 * 
+	 * Note 2: This function will not work for body, which ra changes more than
+	 * 180 deg in one day (get_equ_body_coords changes so much). But you
+	 * should't use that function for any body which moves to fast..use some
+	 * special function for such things.
+	 */
 	int ln_get_body_next_rst_horizon_future(double JD,
 		LnLnlatPosn observer,
-		void (*get_equ_body_coords) (double,LnEquPosn ),
+		Method get_equ_body_coords ,
 		double horizon, int day_limit, LnRstTime rst)
 	{
 		int ret;
-		struct ln_rst_time rst_1, rst_2;
+		LnRstTime rst_1, rst_2;
 
 		ret = ln_get_body_rst_horizon_offset(JD, observer, get_equ_body_coords,
 			horizon, rst, nan("0"));
@@ -600,15 +607,15 @@ public class RiseSet {
 			rst.set >(JD + 0.5))) {
 
 			ret = ln_get_body_rst_horizon_offset(JD - 1, observer,
-				get_equ_body_coords, horizon, &rst_1, nan ("0"));
+				get_equ_body_coords, horizon, rst_1, nan ("0"));
 			if (ret)
-				set_next_rst (rst, -1, &rst_1);
+				set_next_rst (rst, -1, rst_1);
 		} else {
 			rst.rise = nan("0");
 			rst.transit = nan("0");
 			rst.set = nan("0");
 
-			set_next_rst(rst, -1, &rst_1);
+			set_next_rst(rst, -1, rst_1);
 		}
 
 		if (ret || (rst.rise < JD || rst.transit < JD || rst.set < JD)) {
@@ -629,7 +636,7 @@ public class RiseSet {
 				// it's then really circumpolar in searched period
 				return ret;
 		} else {
-			set_next_rst(rst, +1, &rst_2);
+			set_next_rst(rst, +1, rst_2);
 		}
 
 		rst.rise = find_next(JD, rst_1.rise, rst.rise, rst_2.rise);
@@ -641,74 +648,76 @@ public class RiseSet {
 		return 0;
 	}
 
-	/*! \fn int ln_get_body_rst_horizon(double JD, LnLnlatPosn observer, void (*get_equ_body_coords) (double, LnEquPosn ), double horizon, LnRstTime rst); 
-	* \param JD Julian day 
-	* \param observer Observers position 
-	* \param get_motion_body_coords Pointer to ln_get_ell_body_equ_coords. ln_get_para_body_equ_coords or ln_get_hyp_body_equ_coords function
-	* \param horizon Horizon, see LN_XXX_HORIZON constants
-	* \param rst Pointer to store Rise, Set and Transit time in JD 
-	* \return 0 for success, 1 for circumpolar (above the horizon), -1 for circumpolar (bellow the horizon)
-	*
-	* Calculate the time the rise, set and transit (crosses the local meridian at
-	* upper culmination) time of the body for the given Julian day and given
-	* horizon.
-	*
-	* Note 1: this functions returns 1 if the body is circumpolar, that is it remains
-	* the whole day either above or below the horizon.
-	*/
+	/*
+	 * ! \fn int ln_get_body_rst_horizon(double JD, LnLnlatPosn observer, void
+	 * (*get_equ_body_coords) (double, LnEquPosn ), double horizon, LnRstTime
+	 * rst); \param JD Julian day \param observer Observers position \param
+	 * get_motion_body_coords Pointer to ln_get_ell_body_equ_coords.
+	 * ln_get_para_body_equ_coords or ln_get_hyp_body_equ_coords function \param
+	 * horizon Horizon, see LN_XXX_HORIZON constants \param rst Pointer to store
+	 * Rise, Set and Transit time in JD \return 0 for success, 1 for circumpolar
+	 * (above the horizon), -1 for circumpolar (bellow the horizon)
+	 * 
+	 * Calculate the time the rise, set and transit (crosses the local meridian
+	 * at upper culmination) time of the body for the given Julian day and given
+	 * horizon.
+	 * 
+	 * Note 1: this functions returns 1 if the body is circumpolar, that is it
+	 * remains the whole day either above or below the horizon.
+	 */
 	int ln_get_motion_body_rst_horizon(double JD, LnLnlatPosn observer,
-		get_motion_body_coords_t get_motion_body_coords,
-		void * orbit, double horizon, LnRstTime rst)
-	{
+			get_motion_body_coords_t get_motion_body_coords, Object orbit,
+			double horizon, LnRstTime rst) {
 		return ln_get_motion_body_rst_horizon_offset(JD, observer,
-			get_motion_body_coords, orbit, horizon, rst, 0.5);
+				get_motion_body_coords, orbit, horizon, rst, 0.5);
 	}
 
-	int ln_get_motion_body_rst_horizon_offset(double JD,
-		LnLnlatPosn observer,
-		get_motion_body_coords_t get_motion_body_coords, void *orbit,
-		double horizon, LnRstTime rst, double ut_offset)
-	{
+	int ln_get_motion_body_rst_horizon_offset(double JD, LnLnlatPosn observer,
+			get_motion_body_coords_t get_motion_body_coords, Object orbit,
+			double horizon, LnRstTime rst, double ut_offset) {
 		int jd;
 		double T, O, JD_UT, H0, H1;
 		double Hat, Har, Has, altr, alts;
 		double mt, mr, ms, mst, msr, mss, nt, nr, ns;
-		struct ln_equ_posn sol1, sol2, sol3, post, posr, poss;
+		LnEquPosn sol1, sol2, sol3, post, posr, poss;
 		double dmt, dmr, dms;
 		int ret, i;
-			
+
 		/* dynamical time diff */
 		T = ln_get_dynamical_time_diff(JD);
 
 		if (Double.isNaN(ut_offset)) {
 			JD_UT = JD;
 		} else {
-			jd = (int)JD;
+			jd = (int) JD;
 			JD_UT = jd + ut_offset;
 		}
 		O = ln_get_apparent_sidereal_time(JD_UT);
 		O *= 15.0;
-		
+
 		/* get body coords for JD_UT -1, JD_UT and JD_UT + 1 */
-		get_motion_body_coords(JD_UT - 1.0, orbit, &sol1);
-		get_motion_body_coords(JD_UT, orbit, &sol2);
-		get_motion_body_coords(JD_UT + 1.0, orbit, &sol3);
-		
+		get_motion_body_coords(JD_UT - 1.0, orbit, sol1);
+		get_motion_body_coords(JD_UT, orbit, sol2);
+		get_motion_body_coords(JD_UT + 1.0, orbit, sol3);
+
 		/* equ 15.1 */
-		H0 = (sin(ln_deg_to_rad(horizon)) - sin(ln_deg_to_rad(observer.lat)) *
-				sin(ln_deg_to_rad(sol2.dec)));
+		H0 = (sin(ln_deg_to_rad(horizon)) - sin(ln_deg_to_rad(observer.lat))
+				* sin(ln_deg_to_rad(sol2.dec)));
 		H1 = (cos(ln_deg_to_rad(observer.lat)) * cos(ln_deg_to_rad(sol2.dec)));
 
 		H1 = H0 / H1;
 
-		ret = check_coords(observer, H1, horizon, &sol2);
+		ret = check_coords(observer, H1, horizon, sol2);
 		if (ret)
 			return ret;
 
 		H0 = acos(H1);
 		H0 = ln_rad_to_deg(H0);
 
-		/* correct ra values for interpolation	- put them to the same side of circle */
+		/*
+		 * correct ra values for interpolation - put them to the same side of
+		 * circle
+		 */
 		if ((sol1.ra - sol2.ra) > 180.0)
 			sol2.ra += 360.0;
 
@@ -728,20 +737,20 @@ public class RiseSet {
 			ms = mt + H0 / 360.0;
 
 			/* put in correct range */
-			if (mt > 1.0 )
+			if (mt > 1.0)
 				mt--;
 			else if (mt < 0.0)
 				mt++;
-			if (mr > 1.0 )
+			if (mr > 1.0)
 				mr--;
 			else if (mr < 0.0)
 				mr++;
-			if (ms > 1.0 )
+			if (ms > 1.0)
 				ms--;
 			else if (ms < 0.0)
 				ms++;
-		
-			/* find sidereal time at Greenwich, in degrees, for each m*/
+
+			/* find sidereal time at Greenwich, in degrees, for each m */
 			mst = O + 360.985647 * mt;
 			msr = O + 360.985647 * mr;
 			mss = O + 360.985647 * ms;
@@ -749,108 +758,112 @@ public class RiseSet {
 			nt = mt + T / 86400.0;
 			nr = mr + T / 86400.0;
 			ns = ms + T / 86400.0;
-		
+
 			/* interpolate ra and dec for each m, except for transit dec (dec2) */
 			posr.ra = ln_interpolate3(nr, sol1.ra, sol2.ra, sol3.ra);
 			posr.dec = ln_interpolate3(nr, sol1.dec, sol2.dec, sol3.dec);
 			post.ra = ln_interpolate3(nt, sol1.ra, sol2.ra, sol3.ra);
 			poss.ra = ln_interpolate3(ns, sol1.ra, sol2.ra, sol3.ra);
 			poss.dec = ln_interpolate3(ns, sol1.dec, sol2.dec, sol3.dec);
-		
+
 			/* find local hour angle */
 			Hat = mst + observer.lng - post.ra;
 			Har = msr + observer.lng - posr.ra;
 			Has = mss + observer.lng - poss.ra;
 
 			/* find altitude for rise and set */
-			altr = sin(ln_deg_to_rad(observer.lat)) *
-					sin(ln_deg_to_rad(posr.dec)) +
-					cos(ln_deg_to_rad(observer.lat)) *
-					cos(ln_deg_to_rad(posr.dec)) *
-					cos(ln_deg_to_rad(Har));
-			alts = sin(ln_deg_to_rad(observer.lat)) *
-					sin(ln_deg_to_rad(poss.dec)) +
-					cos(ln_deg_to_rad(observer.lat)) *
-					cos(ln_deg_to_rad(poss.dec)) *
-					cos(ln_deg_to_rad(Has));
+			altr = sin(ln_deg_to_rad(observer.lat))
+					* sin(ln_deg_to_rad(posr.dec))
+					+ cos(ln_deg_to_rad(observer.lat))
+					* cos(ln_deg_to_rad(posr.dec)) * cos(ln_deg_to_rad(Har));
+			alts = sin(ln_deg_to_rad(observer.lat))
+					* sin(ln_deg_to_rad(poss.dec))
+					+ cos(ln_deg_to_rad(observer.lat))
+					* cos(ln_deg_to_rad(poss.dec)) * cos(ln_deg_to_rad(Has));
 
 			/* corrections for m */
-			dmt = - (Hat / 360.0);
-			dmr = (altr - horizon) / (360.0 * cos(ln_deg_to_rad(posr.dec)) *
-				cos(ln_deg_to_rad(observer.lat)) * sin(ln_deg_to_rad(Har)));
-			dms = (alts - horizon) / (360.0 * cos(ln_deg_to_rad(poss.dec)) *
-				cos(ln_deg_to_rad(observer.lat)) * sin(ln_deg_to_rad(Has)));
+			dmt = -(Hat / 360.0);
+			dmr = (altr - horizon)
+					/ (360.0 * cos(ln_deg_to_rad(posr.dec))
+							* cos(ln_deg_to_rad(observer.lat)) * sin(ln_deg_to_rad(Har)));
+			dms = (alts - horizon)
+					/ (360.0 * cos(ln_deg_to_rad(poss.dec))
+							* cos(ln_deg_to_rad(observer.lat)) * sin(ln_deg_to_rad(Has)));
 
 			/* add corrections and change to JD */
 			mt += dmt;
 			mr += dmr;
 			ms += dms;
 
-			if (mt <= 1.0 && mt >= 0.0 &&
-				mr <= 1.0 && mr >= 0.0 &&
-				ms <= 1.0 && ms >= 0.0)
+			if (mt <= 1.0 && mt >= 0.0 && mr <= 1.0 && mr >= 0.0 && ms <= 1.0
+					&& ms >= 0.0)
 				break;
 		}
 
 		rst.rise = JD_UT + mr;
 		rst.transit = JD_UT + mt;
 		rst.set = JD_UT + ms;
-		
+
 		/* not circumpolar */
 		return 0;
 	}
 
-	/*! \fn int ln_get_body_next_rst_horizon(double JD, LnLnlatPosn observer, void (*get_equ_body_coords) (double, LnEquPosn ), double horizon, LnRstTime rst); 
-	* \param JD Julian day 
-	* \param observer Observers position 
-	* \param get_motion_body_coords Pointer to ln_get_ell_body_equ_coords. ln_get_para_body_equ_coords or ln_get_hyp_body_equ_coords function
-	* \param horizon Horizon, see LN_XXX_HORIZON constants
-	* \param rst Pointer to store Rise, Set and Transit time in JD 
-	* \return 0 for success, 1 for circumpolar (above the horizon), -1 for circumpolar (bellow the horizon)
-	*
-	* Calculate the time of next rise, set and transit (crosses the local meridian at
-	* upper culmination) time of the body for the given Julian day and given
-	* horizon.
-	*
-	* This function guarantee, that rise, set and transit will be in <JD, JD+1> range.
-	*
-	* Note 1: this functions returns 1 if the body is circumpolar, that is it remains
-	* the whole day either above or below the horizon.
-	*/
-	int ln_get_motion_body_next_rst_horizon(double JD,
-		LnLnlatPosn observer,
-		get_motion_body_coords_t get_motion_body_coords, void *orbit,
-		double horizon, LnRstTime rst)
-	{
+	/*
+	 * ! \fn int ln_get_body_next_rst_horizon(double JD, LnLnlatPosn observer,
+	 * void (*get_equ_body_coords) (double, LnEquPosn ), double horizon,
+	 * LnRstTime rst); \param JD Julian day \param observer Observers position
+	 * \param get_motion_body_coords Pointer to ln_get_ell_body_equ_coords.
+	 * ln_get_para_body_equ_coords or ln_get_hyp_body_equ_coords function \param
+	 * horizon Horizon, see LN_XXX_HORIZON constants \param rst Pointer to store
+	 * Rise, Set and Transit time in JD \return 0 for success, 1 for circumpolar
+	 * (above the horizon), -1 for circumpolar (bellow the horizon)
+	 * 
+	 * Calculate the time of next rise, set and transit (crosses the local
+	 * meridian at upper culmination) time of the body for the given Julian day
+	 * and given horizon.
+	 * 
+	 * This function guarantee, that rise, set and transit will be in <JD, JD+1>
+	 * range.
+	 * 
+	 * Note 1: this functions returns 1 if the body is circumpolar, that is it
+	 * remains the whole day either above or below the horizon.
+	 */
+	int ln_get_motion_body_next_rst_horizon(double JD, LnLnlatPosn observer,
+			get_motion_body_coords_t get_motion_body_coords, Object orbit,
+			double horizon, LnRstTime rst) {
 		return ln_get_motion_body_next_rst_horizon_future(JD, observer,
-			get_motion_body_coords, orbit, horizon, 1, rst);
+				get_motion_body_coords, orbit, horizon, 1, rst);
 	}
 
-	/*! \fn int ln_get_motion_body_next_rst_horizon_future(double JD, LnLnlatPosn observer, void (*get_equ_body_coords) (double, LnEquPosn ), double horizon, int day_limit, LnRstTime rst); 
-	* \param JD Julian day 
-	* \param observer Observers position 
-	* \param get_motion_body_coords Pointer to ln_get_ell_body_equ_coords. ln_get_para_body_equ_coords or ln_get_hyp_body_equ_coords function
-	* \param horizon Horizon, see LN_XXX_HORIZON constants
-	* \param day_limit Maximal number of days that will be searched for next rise and set
-	* \param rst Pointer to store Rise, Set and Transit time in JD 
-	* \return 0 for success, 1 for circumpolar (above the horizon), -1 for circumpolar (bellow the horizon)
-	*
-	* Calculate the time of next rise, set and transit (crosses the local meridian at
-	* upper culmination) time of the body for the given Julian day and given
-	* horizon.
-	*
-	* This function guarantee, that rise, set and transit will be in <JD, JD + day_limit> range.
-	*
-	* Note 1: this functions returns 1 if the body is circumpolar, that is it remains
-	* the whole day either above or below the horizon.
-	*/
+	/*
+	 * ! \fn int ln_get_motion_body_next_rst_horizon_future(double JD,
+	 * LnLnlatPosn observer, void (*get_equ_body_coords) (double, LnEquPosn ),
+	 * double horizon, int day_limit, LnRstTime rst); \param JD Julian day
+	 * \param observer Observers position \param get_motion_body_coords Pointer
+	 * to ln_get_ell_body_equ_coords. ln_get_para_body_equ_coords or
+	 * ln_get_hyp_body_equ_coords function \param horizon Horizon, see
+	 * LN_XXX_HORIZON constants \param day_limit Maximal number of days that
+	 * will be searched for next rise and set \param rst Pointer to store Rise,
+	 * Set and Transit time in JD \return 0 for success, 1 for circumpolar
+	 * (above the horizon), -1 for circumpolar (bellow the horizon)
+	 * 
+	 * Calculate the time of next rise, set and transit (crosses the local
+	 * meridian at upper culmination) time of the body for the given Julian day
+	 * and given horizon.
+	 * 
+	 * This function guarantee, that rise, set and transit will be in <JD, JD +
+	 * day_limit> range.
+	 * 
+	 * Note 1: this functions returns 1 if the body is circumpolar, that is it
+	 * remains the whole day either above or below the horizon.
+	 */
 	int ln_get_motion_body_next_rst_horizon_future(double JD,
 		LnLnlatPosn observer,
-		get_motion_body_coords_t get_motion_body_coords, void *orbit,
+		get_motion_body_coords_t get_motion_body_coords, Object orbit,
 		double horizon, int day_limit, LnRstTime rst)
 	{
 		int ret;
-		struct ln_rst_time rst_1, rst_2;
+		LnRstTime rst_1, rst_2;
 
 		ret = ln_get_motion_body_rst_horizon_offset(JD, observer,
 			get_motion_body_coords, orbit, horizon, rst, nan("0"));
@@ -863,7 +876,7 @@ public class RiseSet {
 			rst.set >(JD + 0.5))) {
 
 			ret = ln_get_motion_body_rst_horizon_offset(JD - 1.0, observer,
-				get_motion_body_coords, orbit, horizon, &rst_1, nan ("0"));
+				get_motion_body_coords, orbit, horizon, rst_1, nan ("0"));
 			if (ret)
 				set_next_rst(rst, -1.0, &rst_1);
 		} else {
@@ -881,7 +894,7 @@ public class RiseSet {
 			while (day <= day_limit) {
 
 				ret = ln_get_motion_body_rst_horizon_offset(JD + day, observer,
-					get_motion_body_coords, orbit, horizon, &rst_2, nan ("0"));
+					get_motion_body_coords, orbit, horizon, rst_2, nan ("0"));
 
 				if (!ret) {
 					day = day_limit + 2;
@@ -895,7 +908,7 @@ public class RiseSet {
 				// it's then really circumpolar in searched period
 				return ret;
 		} else {
-			set_next_rst(rst, +1.0, &rst_2);
+			set_next_rst(rst, +1.0, rst_2);
 		}
 
 		rst.rise = find_next(JD, rst_1.rise, rst.rise, rst_2.rise);
@@ -907,5 +920,4 @@ public class RiseSet {
 
 		return 0;
 	}
-
 }
