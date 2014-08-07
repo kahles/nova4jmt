@@ -12,9 +12,15 @@ public class Vsop87 {
 		public double A;
 		public double B;
 		public double C;
+		public LnVsop(double a, double b, double c) {
+			A = a;
+			B = b;
+			C = c;
+		}
+		
 	};
 
-	double ln_calc_series(LnVsop[] data, double t) {
+	public static double ln_calc_series(LnVsop[] data, double t) {
 		double value = 0.0;
 		int i;
 

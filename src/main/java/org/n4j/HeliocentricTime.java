@@ -1,14 +1,15 @@
 package org.n4j;
 
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+import static org.n4j.Earth.ln_get_earth_helio_coords;
+import static org.n4j.Nutation.ln_get_nutation;
+import static org.n4j.Utility.ln_deg_to_rad;
+import static org.n4j.Utility.ln_range_degrees;
+
 import org.n4j.api.LnEquPosn;
 import org.n4j.api.LnHelioPosn;
 import org.n4j.api.LnNutation;
-
-import static java.lang.Math.sin;
-import static java.lang.Math.cos;
-import static org.n4j.Nutation.ln_get_nutation;
-import static org.n4j.Utility.ln_range_degrees;
-import static org.n4j.Utility.ln_deg_to_rad;
 
 public class HeliocentricTime {
 
@@ -25,8 +26,8 @@ public class HeliocentricTime {
 	public static double ln_get_heliocentric_time_diff(double JD,
 			LnEquPosn object) {
 		double theta, ra, dec, c_dec, obliq;
-		LnNutation nutation;
-		LnHelioPosn earth;
+		LnNutation nutation = new LnNutation();
+		LnHelioPosn earth = new LnHelioPosn();
 
 		ln_get_nutation(JD, nutation);
 		ln_get_earth_helio_coords(JD, earth);
