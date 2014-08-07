@@ -10,7 +10,7 @@ package org.n4j.api;
 */
 public class LnRstTime {
 
-    double rise;        /*!< Rise time in JD */
-    double set;         /*!< Set time in JD */
-    double transit;     /*!< Transit time in JD */
+	public     double rise;        /*!< Rise time in JD */
+	public double set;         /*!< Set time in JD */
+	public double transit;     /*!< Transit time in JD */
 }

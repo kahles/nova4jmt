@@ -9,9 +9,9 @@ package org.n4j.api;
 */
 public class LnParOrbit {
 
-    double q;   /*!< Perihelion distance in AU */
-    double i;   /*!< Inclination in degrees */
-    double w;   /*!< Argument of perihelion in degrees */
-    double omega;   /*!< Longitude of ascending node in degrees*/
-    double JD;  /*!< Time of last passage in Perihelion, in julian day */
+	public double q;   /*!< Perihelion distance in AU */
+	public double i;   /*!< Inclination in degrees */
+	public double w;   /*!< Argument of perihelion in degrees */
+	public double omega;   /*!< Longitude of ascending node in degrees*/
+	public double JD;  /*!< Time of last passage in Perihelion, in julian day */
 }

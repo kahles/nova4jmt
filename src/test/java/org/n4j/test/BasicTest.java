@@ -21,6 +21,7 @@ import org.n4j.api.LnhEquPosn;
 import org.n4j.api.LnhLnlatPosn;
 import org.n4j.api.TimeVal;
 
+import static org.n4j.DynamicalTime.ln_get_jde;
 import static org.n4j.Nutation.ln_get_nutation;
 import static org.n4j.Utility.ln_deg_to_rad;
 import static org.n4j.Utility.ln_range_degrees;
@@ -71,11 +72,16 @@ import static org.n4j.JulianDay.ln_get_date;
 import static org.n4j.JulianDay.ln_get_date_from_sys;
 import static org.n4j.JulianDay.ln_get_julian_from_sys;
 import static org.n4j.JulianDay.ln_get_julian_local_date;
-import static org.n4j.JulianDay.ln_get_local_date;
 import static org.n4j.JulianDay.ln_get_date_from_mpc;
 import static org.n4j.JulianDay.ln_get_julian_from_mpc;
 import static org.n4j.JulianDay.ln_date_to_zonedate;
 import static org.n4j.JulianDay.ln_zonedate_to_date;
+import static org.n4j.JulianDay.ln_get_tms_from_julian;
+import static org.n4j.JulianDay.ln_get_julian_from_tms;
+import static org.n4j.api.Constants.JD2000;
+import static org.n4j.api.Constants.B1900;
+import static org.n4j.api.Constants.B1950;
+import static org.n4j.api.Constants.JD2050;
 
 public class BasicTest {
     void usleep(int miliseconds)
@@ -150,11 +156,11 @@ public class BasicTest {
     { 
         double JD, JD2;
         int wday, failed = 0;
-        LnDate date, pdate;
-        LnZoneDate zonedate;
+        LnDate date= new LnDate(), pdate= new LnDate();
+        LnZoneDate zonedate= new LnZoneDate();
 
-        time_t now;
-        time_t now_jd;
+        long now;
+        long now_jd;
 
         /* Get julian day for 04/10/1957 19:00:00 */
         date.years = 1957;
@@ -233,18 +239,18 @@ public class BasicTest {
          * machines which doesn't run in UTC).
          */
 
-        time(now);
-        ln_get_timet_from_julian(ln_get_julian_from_timet(now), now_jd);
+        now = System.currentTimeMillis();
+        now_jd = ln_get_tms_from_julian(ln_get_julian_from_tms(now));
 
         failed += test_result("(Julian Day) Difference between time_t from system"+
-            "and from JD", difftime(now, now_jd), 0, 0);
+            "and from JD", now - now_jd, 0, 0);
 
         return failed;
     }
 
     int dynamical_test()
     {
-        LnDate date;
+        LnDate date=new LnDate();
         double TD,JD;
         int failed = 0;
      
@@ -465,7 +471,7 @@ public class BasicTest {
 
     int sidereal_test()
     {
-        LnDate date;
+        LnDate date= new LnDate();
         double sd;
         double JD;
         int failed = 0;
@@ -899,10 +905,10 @@ public class BasicTest {
     {
         double r,v,l,V,dist;
         double E, e_JD, o_JD;
-        struct ln_ell_orbit orbit;
-        struct ln_rect_posn posn;
-        struct ln_date epoch_date, obs_date;
-        struct ln_equ_posn equ_posn;
+        LnEllOrbit orbit;
+        LnRectPosn posn;
+        LnDate epoch_date, obs_date;
+        LnEquPosn equ_posn;
         int failed = 0;
             
         obs_date.years = 1990;
@@ -1077,9 +1083,9 @@ public class BasicTest {
     { 
         double r,v,dist;
         double e_JD, o_JD;
-        struct ln_hyp_orbit orbit;
-        struct ln_date epoch_date, obs_date;
-        struct ln_equ_posn equ_posn;
+        LnHypOrbit orbit;
+        LnDate epoch_date, obs_date;
+        LnEquPosn equ_posn;
         int failed = 0;
             
         orbit.q = 3.363943; 
