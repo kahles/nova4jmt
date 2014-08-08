@@ -1,5 +1,16 @@
 package org.n4j;
 
+import static java.lang.Math.acos;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+import static org.n4j.DynamicalTime.ln_get_dynamical_time_diff;
+import static org.n4j.SiderealTime.ln_get_apparent_sidereal_time;
+import static org.n4j.Utility.ln_deg_to_rad;
+import static org.n4j.Utility.ln_interpolate3;
+import static org.n4j.Utility.ln_rad_to_deg;
+import static org.n4j.Utility.ln_range_degrees;
+import static org.n4j.Utility.nan;
+
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 
@@ -7,77 +18,13 @@ import org.n4j.api.LnEquPosn;
 import org.n4j.api.LnLnlatPosn;
 import org.n4j.api.LnRstTime;
 
-import static java.lang.Math.sin;
-import static java.lang.Math.cos;
-import static java.lang.Math.tan;
-import static java.lang.Math.asin;
-import static java.lang.Math.acos;
-import static java.lang.Math.atan;
-import static java.lang.Math.abs;
-import static org.n4j.DynamicalTime.ln_get_jde;
-import static org.n4j.Nutation.ln_get_nutation;
-import static org.n4j.Utility.ln_deg_to_rad;
-import static org.n4j.Utility.ln_range_degrees;
-
-import static org.n4j.Utility.ln_get_version;
-import static org.n4j.Utility.ln_rad_to_deg;
-import static org.n4j.Utility.ln_deg_to_rad;
-import static org.n4j.Utility.ln_hms_to_deg;
-import static org.n4j.Utility.ln_hms_to_rad;
-import static org.n4j.Utility.ln_deg_to_hms;
-import static org.n4j.Utility.ln_rad_to_hms;
-import static org.n4j.Utility.ln_dms_to_deg;
-import static org.n4j.Utility.ln_dms_to_rad;
-import static org.n4j.Utility.ln_deg_to_dms;
-import static org.n4j.Utility.ln_rad_to_dms;
-import static org.n4j.Utility.ln_range_degrees;
-import static org.n4j.Utility.ln_range_radians;
-import static org.n4j.Utility.ln_range_radians2;
-import static org.n4j.Utility.ln_add_secs_hms;
-import static org.n4j.Utility.ln_add_hms;
-import static org.n4j.Utility.ln_hequ_to_equ;
-import static org.n4j.Utility.ln_equ_to_hequ;
-import static org.n4j.Utility.ln_hhrz_to_hrz;
-import static org.n4j.Utility.ln_hrz_to_hhrz;
-import static org.n4j.Utility.ln_hrz_to_nswe;
-import static org.n4j.Utility.ln_hlnlat_to_lnlat;
-import static org.n4j.Utility.ln_lnlat_to_hlnlat;
-import static org.n4j.Utility.ln_get_rect_distance;
-import static org.n4j.Utility.ln_get_light_time;
-import static org.n4j.Utility.trim;
-import static org.n4j.Utility.ln_get_dec_location;
-import static org.n4j.Utility.ln_get_humanr_location;
-import static org.n4j.Utility.ln_interpolate3;
-import static org.n4j.Utility.ln_interpolate5;
-import static org.n4j.Utility.gettimeofday;
-import static org.n4j.Utility.cbrt;
-import static org.n4j.Utility.nan;
-import static org.n4j.SiderealTime.ln_get_mean_sidereal_time;
-import static org.n4j.SiderealTime.ln_get_apparent_sidereal_time;
-import static org.n4j.Nutation.ln_get_nutation;
-import static org.n4j.Precession.ln_get_equ_prec2;
-import static org.n4j.Utility.ln_deg_to_rad;
-import static org.n4j.Utility.ln_rad_to_deg;
-import static org.n4j.Utility.ln_range_degrees;
-import static org.n4j.JulianDay.ln_get_julian_day;
-import static org.n4j.JulianDay.ln_get_day_of_week;
-import static org.n4j.JulianDay.ln_get_date;
-import static org.n4j.JulianDay.ln_get_date_from_sys;
-import static org.n4j.JulianDay.ln_get_julian_from_sys;
-import static org.n4j.JulianDay.ln_get_julian_local_date;
-import static org.n4j.JulianDay.ln_get_date_from_mpc;
-import static org.n4j.JulianDay.ln_get_julian_from_mpc;
-import static org.n4j.JulianDay.ln_date_to_zonedate;
-import static org.n4j.JulianDay.ln_zonedate_to_date;
-import static org.n4j.JulianDay.ln_get_tms_from_julian;
-import static org.n4j.JulianDay.ln_get_julian_from_tms;
-import static org.n4j.api.Constants.JD2000;
-import static org.n4j.api.Constants.B1900;
-import static org.n4j.api.Constants.B1950;
-import static org.n4j.api.Constants.JD2050;
-
 public class RiseSet {
-	static final double LN_STAR_STANDART_HORIZON = -0.5667;
+	static final BigDecimal LN_STAR_STANDART_HORIZON = new BigDecimal(-0.5667);
+
+	public static int check_coords(LnLnlatPosn observer, double H1,
+			BigDecimal horizon, LnEquPosn object) {
+		return check_coords(observer, H1, horizon.doubleValue(), object);
+	}
 
 	// helper function to check if object can be visible
 	public static int check_coords(LnLnlatPosn observer, double H1,
@@ -177,7 +124,7 @@ public class RiseSet {
 		H1 = H0 / H1;
 
 		ret = check_coords(observer, H1, horizon, object);
-		if (ret)
+		if (ret != 0)
 			return ret;
 
 		H0 = acos(H1);
@@ -276,20 +223,20 @@ public class RiseSet {
 	 * remains the whole day above the horizon. Returns -1 when it remains whole
 	 * day bellow the horizon.
 	 */
-	int ln_get_object_next_rst(double JD, LnLnlatPosn observer,
+	public static int ln_get_object_next_rst(double JD, LnLnlatPosn observer,
 			LnEquPosn object, LnRstTime rst) {
 		return ln_get_object_next_rst_horizon(JD, observer, object,
 				LN_STAR_STANDART_HORIZON, rst);
 	}
 
 	// helper functions for ln_get_object_next_rst_horizon
-	static void set_next_rst(LnRstTime rst, double diff, LnRstTime out) {
+	public static void set_next_rst(LnRstTime rst, double diff, LnRstTime out) {
 		out.rise = rst.rise + diff;
 		out.transit = rst.transit + diff;
 		out.set = rst.set + diff;
 	}
 
-	static double find_next(double JD, double jd1, double jd2, double jd3) {
+	public static double find_next(double JD, double jd1, double jd2, double jd3) {
 		if (Double.isNaN(jd1) && Double.isNaN(jd2))
 			return jd3;
 
@@ -321,35 +268,36 @@ public class RiseSet {
 	 * remains the whole day above the horizon. Returns -1 when it remains whole
 	 * day bellow the horizon.
 	 */
-	int ln_get_object_next_rst_horizon(double JD, LnLnlatPosn observer,
-		LnEquPosn object, double horizon, LnRstTime rst)
-	{
+	public static int ln_get_object_next_rst_horizon(double JD,
+			LnLnlatPosn observer, LnEquPosn object, BigDecimal horizon,
+			LnRstTime rst) {
 		int ret;
-		LnRstTime rst_1, rst_2;
+		LnRstTime rst_1 = new LnRstTime(), rst_2 = new LnRstTime();
 
-		ret = ln_get_object_rst_horizon_offset(JD, observer, object, horizon, rst, nan("0"));
-		if (ret)
+		ret = ln_get_object_rst_horizon_offset(JD, observer, object, horizon,
+				rst, nan("0"));
+		if (ret != 0)
 			// circumpolar
 			return ret;
 
 		if (rst.rise > (JD + 0.5) || rst.transit > (JD + 0.5)
 				|| rst.set > (JD + 0.5))
-			ln_get_object_rst_horizon_offset(JD - 1.0, observer, object, horizon,
-					rst_1, nan("0"));
+			ln_get_object_rst_horizon_offset(JD - 1.0, observer, object,
+					horizon, rst_1, nan("0"));
 		else
-			set_next_rst(rst, -1.0, &rst_1);
+			set_next_rst(rst, -1.0, rst_1);
 
 		if (rst.rise < JD || rst.transit < JD || rst.set < JD)
-			ln_get_object_rst_horizon_offset(JD + 1.0, observer, object, horizon,
-					rst_2, nan("0"));
+			ln_get_object_rst_horizon_offset(JD + 1.0, observer, object,
+					horizon, rst_2, nan("0"));
 		else
-			set_next_rst (rst, 1.0, rst_2);
+			set_next_rst(rst, 1.0, rst_2);
 
 		rst.rise = find_next(JD, rst_1.rise, rst.rise, rst_2.rise);
 		rst.transit = find_next(JD, rst_1.transit, rst.transit, rst_2.transit);
 		rst.set = find_next(JD, rst_1.set, rst.set, rst_2.set);
 
-		if (Double.isNaN (rst.rise))
+		if (Double.isNaN(rst.rise))
 			return ret;
 
 		return 0;
@@ -378,20 +326,20 @@ public class RiseSet {
 	 * should't use that function for any body which moves to fast..use some
 	 * special function for such things.
 	 */
-	int ln_get_body_rst_horizon(double JD, LnLnlatPosn observer,
+	public static int ln_get_body_rst_horizon(double JD, LnLnlatPosn observer,
 			Method get_equ_body_coords, double horizon, LnRstTime rst) {
 		return ln_get_body_rst_horizon_offset(JD, observer,
 				get_equ_body_coords, horizon, rst, 0.5);
 	}
 
-	int ln_get_body_rst_horizon_offset(double JD, LnLnlatPosn observer,
-			Method get_equ_body_coords, double horizon, LnRstTime rst,
-			double ut_offset) {
+	public static int ln_get_body_rst_horizon_offset(double JD,
+			LnLnlatPosn observer, Method get_equ_body_coords, double horizon,
+			LnRstTime rst, double ut_offset) {
 		int jd;
 		double T, O, JD_UT, H0, H1;
 		double Hat, Har, Has, altr, alts;
 		double mt, mr, ms, mst, msr, mss, nt, nr, ns;
-		LnEquPosn sol1, sol2, sol3, post, posr, poss;
+		LnEquPosn sol1 = new LnEquPosn(), sol2 = new LnEquPosn(), sol3 = new LnEquPosn(), post = new LnEquPosn(), posr = new LnEquPosn(), poss = new LnEquPosn();
 		double dmt, dmr, dms;
 		int ret, i;
 
@@ -412,9 +360,9 @@ public class RiseSet {
 		O *= 15.0;
 
 		/* get body coords for JD_UT -1, JD_UT and JD_UT + 1 */
-		get_equ_body_coords(JD_UT - 1.0, sol1);
-		get_equ_body_coords(JD_UT, sol2);
-		get_equ_body_coords(JD_UT + 1.0, sol3);
+		get_equ_body_coords(get_equ_body_coords, JD_UT - 1.0, sol1);
+		get_equ_body_coords(get_equ_body_coords, JD_UT, sol2);
+		get_equ_body_coords(get_equ_body_coords, JD_UT + 1.0, sol3);
 
 		/* equ 15.1 */
 		H0 = (sin(ln_deg_to_rad(horizon)) - sin(ln_deg_to_rad(observer.lat))
@@ -424,7 +372,7 @@ public class RiseSet {
 		H1 = H0 / H1;
 
 		ret = check_coords(observer, H1, horizon, sol2);
-		if (ret)
+		if (ret != 0)
 			return ret;
 
 		H0 = acos(H1);
@@ -532,6 +480,16 @@ public class RiseSet {
 		return 0;
 	}
 
+	private static void get_equ_body_coords(Method get_equ_body_coords,
+			double d, LnEquPosn sol1) {
+		try {
+			get_equ_body_coords.invoke(get_equ_body_coords.getDeclaringClass(),
+					d, sol1);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	/*
 	 * ! \fn int ln_get_body_next_rst_horizon(double JD, LnLnlatPosn observer,
 	 * LnEquPosn object, double horizon, LnRstTime rst); \param JD Julian day
@@ -556,8 +514,9 @@ public class RiseSet {
 	 * should't use that function for any body which moves to fast..use some
 	 * special function for such things.
 	 */
-	int ln_get_body_next_rst_horizon(double JD, LnLnlatPosn observer,
-			Method get_equ_body_coords, double horizon, LnRstTime rst) {
+	public static int ln_get_body_next_rst_horizon(double JD,
+			LnLnlatPosn observer, Method get_equ_body_coords, double horizon,
+			LnRstTime rst) {
 		return ln_get_body_next_rst_horizon_future(JD, observer,
 				get_equ_body_coords, horizon, 1, rst);
 	}
@@ -588,28 +547,25 @@ public class RiseSet {
 	 * should't use that function for any body which moves to fast..use some
 	 * special function for such things.
 	 */
-	int ln_get_body_next_rst_horizon_future(double JD,
-		LnLnlatPosn observer,
-		Method get_equ_body_coords ,
-		double horizon, int day_limit, LnRstTime rst)
-	{
+	public static int ln_get_body_next_rst_horizon_future(double JD,
+			LnLnlatPosn observer, Method get_equ_body_coords, double horizon,
+			int day_limit, LnRstTime rst) {
 		int ret;
-		LnRstTime rst_1, rst_2;
+		LnRstTime rst_1 = new LnRstTime(), rst_2 = new LnRstTime();
 
 		ret = ln_get_body_rst_horizon_offset(JD, observer, get_equ_body_coords,
-			horizon, rst, nan("0"));
-		if (ret && day_limit == 1)
+				horizon, rst, nan("0"));
+		if (ret != 0 && day_limit == 1)
 			// circumpolar
 			return ret;
 
-		if (!ret &&
-			(rst.rise >(JD + 0.5) || rst.transit >(JD + 0.5) ||
-			rst.set >(JD + 0.5))) {
+		if (ret == 0
+				&& (rst.rise > (JD + 0.5) || rst.transit > (JD + 0.5) || rst.set > (JD + 0.5))) {
 
 			ret = ln_get_body_rst_horizon_offset(JD - 1, observer,
-				get_equ_body_coords, horizon, rst_1, nan ("0"));
-			if (ret)
-				set_next_rst (rst, -1, rst_1);
+					get_equ_body_coords, horizon, rst_1, nan("0"));
+			if (ret != 0)
+				set_next_rst(rst, -1, rst_1);
 		} else {
 			rst.rise = nan("0");
 			rst.transit = nan("0");
@@ -618,15 +574,15 @@ public class RiseSet {
 			set_next_rst(rst, -1, rst_1);
 		}
 
-		if (ret || (rst.rise < JD || rst.transit < JD || rst.set < JD)) {
-		  	// find next day when it will rise, up to day_limit days
+		if (ret != 0 || (rst.rise < JD || rst.transit < JD || rst.set < JD)) {
+			// find next day when it will rise, up to day_limit days
 			int day = 1;
 
 			while (day <= day_limit) {
 				ret = ln_get_body_rst_horizon_offset(JD + day, observer,
-					get_equ_body_coords, horizon, &rst_2, nan ("0"));
+						get_equ_body_coords, horizon, rst_2, nan("0"));
 
-				if (!ret) {
+				if (ret == 0) {
 					day = day_limit + 2;
 					break;
 				}
@@ -642,7 +598,7 @@ public class RiseSet {
 		rst.rise = find_next(JD, rst_1.rise, rst.rise, rst_2.rise);
 		rst.transit = find_next(JD, rst_1.transit, rst.transit, rst_2.transit);
 		rst.set = find_next(JD, rst_1.set, rst.set, rst_2.set);
-		if (Double.isNaN (rst.rise))
+		if (Double.isNaN(rst.rise))
 			return ret;
 
 		return 0;
@@ -665,21 +621,21 @@ public class RiseSet {
 	 * Note 1: this functions returns 1 if the body is circumpolar, that is it
 	 * remains the whole day either above or below the horizon.
 	 */
-	int ln_get_motion_body_rst_horizon(double JD, LnLnlatPosn observer,
-			get_motion_body_coords_t get_motion_body_coords, Object orbit,
+	public static int ln_get_motion_body_rst_horizon(double JD,
+			LnLnlatPosn observer, Method get_motion_body_coords, Object orbit,
 			double horizon, LnRstTime rst) {
 		return ln_get_motion_body_rst_horizon_offset(JD, observer,
 				get_motion_body_coords, orbit, horizon, rst, 0.5);
 	}
 
-	int ln_get_motion_body_rst_horizon_offset(double JD, LnLnlatPosn observer,
-			get_motion_body_coords_t get_motion_body_coords, Object orbit,
+	public static int ln_get_motion_body_rst_horizon_offset(double JD,
+			LnLnlatPosn observer, Method get_motion_body_coords, Object orbit,
 			double horizon, LnRstTime rst, double ut_offset) {
 		int jd;
 		double T, O, JD_UT, H0, H1;
 		double Hat, Har, Has, altr, alts;
-		double mt, mr, ms, mst, msr, mss, nt, nr, ns;
-		LnEquPosn sol1, sol2, sol3, post, posr, poss;
+		double mt = 0d, mr = 0d, ms = 0d, mst, msr, mss, nt, nr, ns;
+		LnEquPosn sol1 = new LnEquPosn(), sol2 = new LnEquPosn(), sol3 = new LnEquPosn(), post = new LnEquPosn(), posr = new LnEquPosn(), poss = new LnEquPosn();
 		double dmt, dmr, dms;
 		int ret, i;
 
@@ -696,9 +652,9 @@ public class RiseSet {
 		O *= 15.0;
 
 		/* get body coords for JD_UT -1, JD_UT and JD_UT + 1 */
-		get_motion_body_coords(JD_UT - 1.0, orbit, sol1);
-		get_motion_body_coords(JD_UT, orbit, sol2);
-		get_motion_body_coords(JD_UT + 1.0, orbit, sol3);
+		get_motion_body_coords(get_motion_body_coords, JD_UT - 1.0, orbit, sol1);
+		get_motion_body_coords(get_motion_body_coords, JD_UT, orbit, sol2);
+		get_motion_body_coords(get_motion_body_coords, JD_UT + 1.0, orbit, sol3);
 
 		/* equ 15.1 */
 		H0 = (sin(ln_deg_to_rad(horizon)) - sin(ln_deg_to_rad(observer.lat))
@@ -708,7 +664,7 @@ public class RiseSet {
 		H1 = H0 / H1;
 
 		ret = check_coords(observer, H1, horizon, sol2);
-		if (ret)
+		if (ret != 0)
 			return ret;
 
 		H0 = acos(H1);
@@ -808,6 +764,16 @@ public class RiseSet {
 		return 0;
 	}
 
+	private static void get_motion_body_coords(Method get_motion_body_coords,
+			double d, Object orbit, LnEquPosn sol1) {
+		try {
+			get_motion_body_coords.invoke(
+					get_motion_body_coords.getDeclaringClass(), d, orbit, sol1);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	/*
 	 * ! \fn int ln_get_body_next_rst_horizon(double JD, LnLnlatPosn observer,
 	 * void (*get_equ_body_coords) (double, LnEquPosn ), double horizon,
@@ -828,8 +794,8 @@ public class RiseSet {
 	 * Note 1: this functions returns 1 if the body is circumpolar, that is it
 	 * remains the whole day either above or below the horizon.
 	 */
-	int ln_get_motion_body_next_rst_horizon(double JD, LnLnlatPosn observer,
-			get_motion_body_coords_t get_motion_body_coords, Object orbit,
+	public static int ln_get_motion_body_next_rst_horizon(double JD,
+			LnLnlatPosn observer, Method get_motion_body_coords, Object orbit,
 			double horizon, LnRstTime rst) {
 		return ln_get_motion_body_next_rst_horizon_future(JD, observer,
 				get_motion_body_coords, orbit, horizon, 1, rst);
@@ -857,46 +823,43 @@ public class RiseSet {
 	 * Note 1: this functions returns 1 if the body is circumpolar, that is it
 	 * remains the whole day either above or below the horizon.
 	 */
-	int ln_get_motion_body_next_rst_horizon_future(double JD,
-		LnLnlatPosn observer,
-		get_motion_body_coords_t get_motion_body_coords, Object orbit,
-		double horizon, int day_limit, LnRstTime rst)
-	{
+	public static int ln_get_motion_body_next_rst_horizon_future(double JD,
+			LnLnlatPosn observer, Method get_motion_body_coords, Object orbit,
+			double horizon, int day_limit, LnRstTime rst) {
 		int ret;
-		LnRstTime rst_1, rst_2;
+		LnRstTime rst_1 = new LnRstTime(), rst_2 = new LnRstTime();
 
 		ret = ln_get_motion_body_rst_horizon_offset(JD, observer,
-			get_motion_body_coords, orbit, horizon, rst, nan("0"));
-		if (ret && day_limit == 1)
+				get_motion_body_coords, orbit, horizon, rst, nan("0"));
+		if (ret != 0 && day_limit == 1)
 			// circumpolar
 			return ret;
 
-		if (!ret &&
-			(rst.rise >(JD + 0.5) || rst.transit >(JD + 0.5) ||
-			rst.set >(JD + 0.5))) {
+		if (ret == 0
+				&& (rst.rise > (JD + 0.5) || rst.transit > (JD + 0.5) || rst.set > (JD + 0.5))) {
 
 			ret = ln_get_motion_body_rst_horizon_offset(JD - 1.0, observer,
-				get_motion_body_coords, orbit, horizon, rst_1, nan ("0"));
-			if (ret)
-				set_next_rst(rst, -1.0, &rst_1);
+					get_motion_body_coords, orbit, horizon, rst_1, nan("0"));
+			if (ret != 0)
+				set_next_rst(rst, -1.0, rst_1);
 		} else {
 			rst.rise = nan("0");
 			rst.transit = nan("0");
 			rst.set = nan("0");
 
-			set_next_rst(rst, -1.0, &rst_1);
+			set_next_rst(rst, -1.0, rst_1);
 		}
 
-		if (ret || (rst.rise < JD || rst.transit < JD || rst.set < JD)) {
-		  	// find next day when it will rise, up to day_limit days
+		if (ret != 0 || (rst.rise < JD || rst.transit < JD || rst.set < JD)) {
+			// find next day when it will rise, up to day_limit days
 			int day = 1;
 
 			while (day <= day_limit) {
 
 				ret = ln_get_motion_body_rst_horizon_offset(JD + day, observer,
-					get_motion_body_coords, orbit, horizon, rst_2, nan ("0"));
+						get_motion_body_coords, orbit, horizon, rst_2, nan("0"));
 
-				if (!ret) {
+				if (ret == 0) {
 					day = day_limit + 2;
 					break;
 				}
@@ -915,7 +878,7 @@ public class RiseSet {
 		rst.transit = find_next(JD, rst_1.transit, rst.transit, rst_2.transit);
 		rst.set = find_next(JD, rst_1.set, rst.set, rst_2.set);
 
-		if (Double.isNaN (rst.rise))
+		if (Double.isNaN(rst.rise))
 			return ret;
 
 		return 0;
