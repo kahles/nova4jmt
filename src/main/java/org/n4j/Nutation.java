@@ -1,9 +1,10 @@
 package org.n4j;
 
+import static org.n4j.Utility.ln_deg_to_rad;
+
 import java.math.BigDecimal;
 
 import org.n4j.api.LnNutation;
-import static org.n4j.Utility.ln_deg_to_rad;
 
 public class Nutation {
 	static class NutationArguments {

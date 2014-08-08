@@ -1,57 +1,13 @@
 package org.n4j;
 
+import static org.n4j.Utility.gettimeofday;
+
 import java.util.Calendar;
-import java.util.TimeZone;
 
 import org.n4j.api.LnDate;
 import org.n4j.api.LnZoneDate;
 import org.n4j.api.TimeVal;
 import org.n4j.api.Timezone;
-
-import static org.n4j.Nutation.ln_get_nutation;
-import static org.n4j.Utility.ln_deg_to_rad;
-import static org.n4j.Utility.ln_range_degrees;
-
-import static org.n4j.Utility.ln_get_version;
-import static org.n4j.Utility.ln_rad_to_deg;
-import static org.n4j.Utility.ln_deg_to_rad;
-import static org.n4j.Utility.ln_hms_to_deg;
-import static org.n4j.Utility.ln_hms_to_rad;
-import static org.n4j.Utility.ln_deg_to_hms;
-import static org.n4j.Utility.ln_rad_to_hms;
-import static org.n4j.Utility.ln_dms_to_deg;
-import static org.n4j.Utility.ln_dms_to_rad;
-import static org.n4j.Utility.ln_deg_to_dms;
-import static org.n4j.Utility.ln_rad_to_dms;
-import static org.n4j.Utility.ln_range_degrees;
-import static org.n4j.Utility.ln_range_radians;
-import static org.n4j.Utility.ln_range_radians2;
-import static org.n4j.Utility.ln_add_secs_hms;
-import static org.n4j.Utility.ln_add_hms;
-import static org.n4j.Utility.ln_hequ_to_equ;
-import static org.n4j.Utility.ln_equ_to_hequ;
-import static org.n4j.Utility.ln_hhrz_to_hrz;
-import static org.n4j.Utility.ln_hrz_to_hhrz;
-import static org.n4j.Utility.ln_hrz_to_nswe;
-import static org.n4j.Utility.ln_hlnlat_to_lnlat;
-import static org.n4j.Utility.ln_lnlat_to_hlnlat;
-import static org.n4j.Utility.ln_get_rect_distance;
-import static org.n4j.Utility.ln_get_light_time;
-import static org.n4j.Utility.trim;
-import static org.n4j.Utility.ln_get_dec_location;
-import static org.n4j.Utility.ln_get_humanr_location;
-import static org.n4j.Utility.ln_interpolate3;
-import static org.n4j.Utility.ln_interpolate5;
-import static org.n4j.Utility.gettimeofday;
-import static org.n4j.Utility.cbrt;
-import static org.n4j.Utility.nan;
-import static org.n4j.SiderealTime.ln_get_mean_sidereal_time;
-import static org.n4j.SiderealTime.ln_get_apparent_sidereal_time;
-import static org.n4j.Nutation.ln_get_nutation;
-import static org.n4j.Precession.ln_get_equ_prec2;
-import static org.n4j.Utility.ln_deg_to_rad;
-import static org.n4j.Utility.ln_rad_to_deg;
-import static org.n4j.Utility.ln_range_degrees;
 
 public class JulianDay {
 
@@ -349,11 +305,12 @@ public class JulianDay {
 
 	/**
 	 * tms = time in ms as in System.currentTimeMillis()
+	 * 
 	 * @param JD
 	 * @return
 	 */
 	public static long ln_get_tms_from_julian(double JD) {
-		
+
 		return -1;
 	}
 

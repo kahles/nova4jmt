@@ -1,10 +1,11 @@
 package org.n4j;
 
-import org.n4j.api.LnHelioPosn;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static java.lang.Math.tan;
 import static org.n4j.Utility.ln_deg_to_rad;
+
+import org.n4j.api.LnHelioPosn;
 
 public class Vsop87 {
 
@@ -12,12 +13,13 @@ public class Vsop87 {
 		public double A;
 		public double B;
 		public double C;
+
 		public LnVsop(double a, double b, double c) {
 			A = a;
 			B = b;
 			C = c;
 		}
-		
+
 	};
 
 	public static double ln_calc_series(LnVsop[] data, double t) {

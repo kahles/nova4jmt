@@ -13,10 +13,9 @@ import org.n4j.api.LnLnlatPosn;
 public class Precession {
 
 	/**
-	 * void ln_get_equ_prec(struct ln_equ_posn *mean_position, double JD,
-	 * struct ln_equ_posn *position) \param mean_position Mean object position
-	 * \param JD Julian day \param position Pointer to store new object
-	 * position.
+	 * void ln_get_equ_prec(struct ln_equ_posn *mean_position, double JD, struct
+	 * ln_equ_posn *position) \param mean_position Mean object position \param
+	 * JD Julian day \param position Pointer to store new object position.
 	 * 
 	 * Calculate equatorial coordinates with the effects of precession for a
 	 * given Julian Day. Uses mean equatorial coordinates and is only for
@@ -24,9 +23,10 @@ public class Precession {
 	 * 
 	 * Equ 20.3, 20.4 pg 126
 	 */
-public static	void ln_get_equ_prec(LnEquPosn mean_position, double JD, LnEquPosn position) {
+	public static void ln_get_equ_prec(LnEquPosn mean_position, double JD,
+			LnEquPosn position) {
 		double t, t2, t3, A, B, C, zeta, eta, theta, ra, dec, mean_ra, mean_dec;
-//TODO BigDecimal
+		// TODO BigDecimal
 		/* change original ra and dec to radians */
 		mean_ra = ln_deg_to_rad(mean_position.ra);
 		mean_dec = ln_deg_to_rad(mean_position.dec);
@@ -69,8 +69,8 @@ public static	void ln_get_equ_prec(LnEquPosn mean_position, double JD, LnEquPosn
 	}
 
 	/**
-	 * void ln_get_equ_prec2(struct ln_equ_posn *mean_position, double
-	 * fromJD, double toJD, struct ln_equ_posn *position);
+	 * void ln_get_equ_prec2(struct ln_equ_posn *mean_position, double fromJD,
+	 * double toJD, struct ln_equ_posn *position);
 	 * 
 	 * \param mean_position Mean object position \param fromJD Julian day
 	 * (start) \param toJD Julian day (end) \param position Pointer to store new
@@ -80,10 +80,10 @@ public static	void ln_get_equ_prec(LnEquPosn mean_position, double JD, LnEquPosn
 	 * arbitary Jxxxx epochs. Use fromJD and toJD parameters to specify required
 	 * Jxxxx epochs.
 	 *
-	 *  Equ 20.2, 20.4 pg 126 
+	 * Equ 20.2, 20.4 pg 126
 	 */
-public static	void ln_get_equ_prec2(LnEquPosn mean_position, double fromJD, double toJD,
-			LnEquPosn position) {
+	public static void ln_get_equ_prec2(LnEquPosn mean_position, double fromJD,
+			double toJD, LnEquPosn position) {
 		// TODO BigDecimal
 		double t, t2, t3, A, B, C, zeta, eta, theta, ra, dec, mean_ra, mean_dec, T, T2;
 
@@ -135,18 +135,18 @@ public static	void ln_get_equ_prec2(LnEquPosn mean_position, double fromJD, doub
 	}
 
 	/**
-	 * void ln_get_ecl_prec(struct ln_lnlat_posn *mean_position, double
-	 * JD, struct ln_lnlat_posn *position) \param mean_position Mean object
-	 * position \param JD Julian day \param position Pointer to store new object
+	 * void ln_get_ecl_prec(struct ln_lnlat_posn *mean_position, double JD,
+	 * struct ln_lnlat_posn *position) \param mean_position Mean object position
+	 * \param JD Julian day \param position Pointer to store new object
 	 * position.
 	 * 
 	 * Calculate ecliptical coordinates with the effects of precession for a
 	 * given Julian Day. Uses mean ecliptical coordinates and is only for
 	 * initial epoch J2000.0 \todo To be implemented.
-     *
+	 *
 	 * Equ 20.5, 20.6 pg 128
 	 */
-public static	void ln_get_ecl_prec(LnLnlatPosn mean_position, double JD,
+	public static void ln_get_ecl_prec(LnLnlatPosn mean_position, double JD,
 			LnLnlatPosn position) {
 
 	}

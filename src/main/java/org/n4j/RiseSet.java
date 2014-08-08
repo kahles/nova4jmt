@@ -19,7 +19,8 @@ import org.n4j.api.LnLnlatPosn;
 import org.n4j.api.LnRstTime;
 
 public class RiseSet {
-	static final BigDecimal LN_STAR_STANDART_HORIZON = new BigDecimal(-0.5667);
+	public static final BigDecimal LN_STAR_STANDART_HORIZON = new BigDecimal(
+			-0.5667);
 
 	public static int check_coords(LnLnlatPosn observer, double H1,
 			BigDecimal horizon, LnEquPosn object) {
