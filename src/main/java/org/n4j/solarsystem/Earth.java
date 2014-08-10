@@ -12,7 +12,6 @@ import static org.n4j.Vsop87.ln_calc_series;
 import static org.n4j.Vsop87.ln_vsop87_to_fk5;
 
 import org.n4j.Vsop87;
-import org.n4j.Vsop87.LnVsop;
 import org.n4j.api.DoubleRef;
 import org.n4j.api.LnHelioPosn;
 import org.n4j.api.LnRectPosn;

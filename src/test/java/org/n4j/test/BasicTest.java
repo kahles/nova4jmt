@@ -245,7 +245,7 @@ public class BasicTest {
 	/* test julian day calculations */
 
 	@Test
-	public int julian_test() {
+	public void julian_test() {
 		double JD, JD2;
 		int wday, failed = 0;
 		LnDate date = new LnDate(), pdate = new LnDate();
@@ -345,11 +345,11 @@ public class BasicTest {
 				"(Julian Day) Difference between time_t from system"
 						+ "and from JD", now - now_jd, 0, 0);
 
-		return failed;
+		Assert.assertEquals(0, failed);
 	}
 
 	@Test
-	public int dynamical_test() {
+	public void dynamical_test() {
 		LnDate date = new LnDate();
 		double TD, JD;
 		int failed = 0;
@@ -366,11 +366,11 @@ public class BasicTest {
 		TD = ln_get_jde(JD);
 		failed += test_result("(Dynamical Time) TD for 01/01/2000 00:00:00",
 				TD, 2451544.50073877, 0.000001);
-		return failed;
+		Assert.assertEquals(0, failed);
 	}
 
 	@Test
-	public int heliocentric_test() {
+	public void heliocentric_test() {
 		LnEquPosn object = new LnEquPosn();
 		LnDate date = new LnDate();
 		double JD;
@@ -415,7 +415,7 @@ public class BasicTest {
 				"(Heliocentric time) TD for 08/08, object on 18h +50", diff,
 				12.0 * 0.0001, 0.0001);
 
-		return failed;
+		Assert.assertEquals(0, failed);
 	}
 
 	@Test
@@ -437,8 +437,9 @@ public class BasicTest {
 				nutation.ecliptic, 23.44367936, 0.00000001);
 		Assert.assertEquals(0, failed);
 	}
-
-	int transform_test() {
+@Test
+public
+	void transform_test() {
 		LnhEquPosn hobject = new LnhEquPosn(), hpollux = new LnhEquPosn();
 		LnhLnlatPosn hobserver = new LnhLnlatPosn(), hecl = new LnhLnlatPosn();
 		LnEquPosn object = new LnEquPosn(), pollux = new LnEquPosn(), equ = new LnEquPosn();
@@ -568,11 +569,11 @@ public class BasicTest {
 		failed += test_result("(Transforms) Equ J2000 to Gal b", gal.b, 31.92,
 				0.005);
 
-		return failed;
+		Assert.assertEquals(0, failed);
 	}
 
 	@Test
-	public int sidereal_test() {
+	public void sidereal_test() {
 		LnDate date = new LnDate();
 		double sd;
 		double JD;
@@ -595,11 +596,11 @@ public class BasicTest {
 		failed += test_result(
 				"(Sidereal) apparent hours on 10/04/1987 19:21:00 ", sd,
 				8.58245327, 0.000001);
-		return failed;
+		Assert.assertEquals(0, failed);
 	}
 
 	@Test
-	public int solar_coord_test() {
+	public void solar_coord_test() {
 		LnHelioPosn pos = new LnHelioPosn();
 		int failed = 0;
 
@@ -613,11 +614,11 @@ public class BasicTest {
 		failed += test_result(
 				"(Solar Coords) radius vector (AU) on JD 2448908.5  ", pos.R,
 				0.99760852, 0.00000001);
-		return failed;
+		Assert.assertEquals(0, failed);
 	}
 
 	@Test
-	public int aberration_test() {
+	public void aberration_test() {
 		LnhEquPosn hobject = new LnhEquPosn();
 		LnEquPosn object = new LnEquPosn(), pos = new LnEquPosn();
 		LnDate date = new LnDate();
@@ -649,11 +650,11 @@ public class BasicTest {
 				0.00000001);
 		failed += test_result("(Aberration) DEC  ", pos.dec, 49.22962359,
 				0.00000001);
-		return failed;
+		Assert.assertEquals(0, failed);
 	}
 
 	@Test
-	public int precession_test() {
+	public void precession_test() {
 		double JD;
 		LnEquPosn object = new LnEquPosn(), pos = new LnEquPosn(), pos2 = new LnEquPosn(), pm = new LnEquPosn();
 		LnhEquPosn hobject = new LnhEquPosn();
@@ -763,11 +764,11 @@ public class BasicTest {
 		failed += test_result("(Precision 2) DEC on J2050  ", pos2.dec,
 				89.4542722222, 0.0001);
 
-		return failed;
+		Assert.assertEquals(0, failed);
 	}
 
 	@Test
-	public int apparent_position_test() {
+	public void apparent_position_test() {
 		double JD;
 		LnhEquPosn hobject = new LnhEquPosn(), hpm = new LnhEquPosn();
 		LnEquPosn object = new LnEquPosn(), pm = new LnEquPosn(), pos = new LnEquPosn();
@@ -800,11 +801,11 @@ public class BasicTest {
 				pos.ra, 41.55966517, 0.00000001);
 		failed += test_result("(Apparent Position) DEC on JD 2462088.69  ",
 				pos.dec, 49.34962340, 0.00000001);
-		return failed;
+		Assert.assertEquals(0, failed);
 	}
 
 	@Test
-	public int vsop87_test() {
+	public void vsop87_test() {
 		LnHelioPosn pos = new LnHelioPosn();
 		LnhEquPosn hequ = new LnhEquPosn();
 		LnEquPosn equ = new LnEquPosn();
@@ -999,11 +1000,11 @@ public class BasicTest {
 		au = ln_get_pluto_sdiam(JD);
 		System.out.format("pluto -> sdiam %f\n", au);
 
-		return failed;
+		Assert.assertEquals(0, failed);
 	}
 
 	@Test
-	public int lunar_test() {
+	public void lunar_test() {
 		double JD = 2448724.5;
 
 		LnRectPosn moon = new LnRectPosn();
@@ -1025,11 +1026,11 @@ public class BasicTest {
 		System.out.format("lunar phase %f\n", ln_get_lunar_phase(JD));
 		System.out.format("lunar bright limb %f\n",
 				ln_get_lunar_bright_limb(JD));
-		return failed;
+		Assert.assertEquals(0, failed);
 	}
 
 	@Test
-	public int elliptic_motion_test() {
+	public void elliptic_motion_test() {
 		double r, v, l, V, dist;
 		double E, e_JD, o_JD;
 		LnEllOrbit orbit = new LnEllOrbit();
@@ -1167,13 +1168,13 @@ public class BasicTest {
 		failed += test_result("(Dec) for TNO K05F09Y  ", equ_posn.dec,
 				30.3316666666, 0.001);
 
-		return failed;
+		Assert.assertEquals(0, failed);
 	}
 
 	/* need a proper parabolic orbit to properly test */
 
 	@Test
-	public int parabolic_motion_test() {
+	public void parabolic_motion_test() {
 		double r, v, dist;
 		double e_JD, o_JD;
 		LnParOrbit orbit = new LnParOrbit();
@@ -1253,13 +1254,13 @@ public class BasicTest {
 		failed += test_result(
 				"(Body Earth Dist) for comet C/2002 X5 (Kudo-Fujikawa) in AU   ",
 				dist, 1.01101362, 0.00001);
-		return failed;
+		Assert.assertEquals(0, failed);
 	}
 
 	/* data from Meeus, chapter 35 */
 
 	@Test
-	public int hyperbolic_motion_test() {
+	public void hyperbolic_motion_test() {
 		double r, v, dist;
 		double e_JD, o_JD;
 		LnHypOrbit orbit = new LnHypOrbit();
@@ -1336,11 +1337,11 @@ public class BasicTest {
 		failed += test_result("(Dec) for comet C/2001 Q4 (NEAT)   ",
 				equ_posn.dec, 58.6116666666, 0.001);
 
-		return failed;
+		Assert.assertEquals(0, failed);
 	}
 
 	@Test
-	public int rst_test() {
+	public void rst_test() {
 		LnLnlatPosn observer = new LnLnlatPosn();
 		LnRstTime rst = new LnRstTime();
 		LnHms hms = new LnHms();
@@ -1934,11 +1935,11 @@ public class BasicTest {
 					date.minutes, 55, 0);
 		}
 
-		return failed;
+		Assert.assertEquals(0, failed);
 	}
 
 	@Test
-	public int ell_rst_test() {
+	public void ell_rst_test() {
 		LnLnlatPosn observer = new LnLnlatPosn();
 		LnEllOrbit orbit = new LnEllOrbit();
 		LnDate date = new LnDate();
@@ -2076,11 +2077,11 @@ public class BasicTest {
 					date.minutes, 49, 0);
 		}
 
-		return failed;
+		Assert.assertEquals(0, failed);
 	}
 
 	@Test
-	public int hyp_future_rst_test() {
+	public void hyp_future_rst_test() {
 		LnLnlatPosn observer = new LnLnlatPosn();
 		LnHypOrbit orbit = new LnHypOrbit();
 		LnDate date = new LnDate();
@@ -2145,11 +2146,11 @@ public class BasicTest {
 		failed += test_result("McNaught does not rise above 15 degrees on"
 				+ "2007/01/17 at 15 E, 50 N", ret, -1, 0);
 
-		return failed;
+		Assert.assertEquals(0, failed);
 	}
 
 	@Test
-	public int body_future_rst_test() {
+	public void body_future_rst_test() {
 		LnLnlatPosn observer = new LnLnlatPosn();
 		LnDate date = new LnDate();
 		LnRstTime rst = new LnRstTime();
@@ -2272,11 +2273,11 @@ public class BasicTest {
 					date.minutes, 2, 0);
 		}
 
-		return failed;
+		Assert.assertEquals(0, failed);
 	}
 
 	@Test
-	public int parallax_test() {
+	public void parallax_test() {
 		LnEquPosn mars = new LnEquPosn(), parallax = new LnEquPosn();
 		LnLnlatPosn observer = new LnLnlatPosn();
 		LnDms dms = new LnDms();
@@ -2319,11 +2320,11 @@ public class BasicTest {
 		failed += test_result("Mars DEC parallax for Palomar observatory at"
 				+ "2003/08/28 3:17 UT  ", parallax.dec, -14.1 / 3600.0, 0.00002);
 
-		return failed;
+		Assert.assertEquals(0, failed);
 	}
 
 	@Test
-	public int angular_test() {
+	public void angular_test() {
 		int failed = 0;
 		double d;
 		LnEquPosn posn1 = new LnEquPosn(), posn2 = new LnEquPosn();
@@ -2345,11 +2346,11 @@ public class BasicTest {
 				"(Angular) Position Angle of Arcturus and Spica   ", d,
 				22.39042787, 0.00001);
 
-		return failed;
+		Assert.assertEquals(0, failed);
 	}
 
 	@Test
-	public int utility_test() {
+	public void utility_test() {
 		LnDms dms = new LnDms();
 		double deg = -1.23, deg2 = 1.23, deg3 = -0.5;
 
@@ -2368,11 +2369,10 @@ public class BasicTest {
 				.format("TEST deg %f ==> deg %c%d min %d sec %f\n", deg3,
 						dms.neg != 0 ? '-' : '+', dms.degrees, dms.minutes,
 						dms.seconds);
-		return 0;
 	}
 
 	@Test
-	public int airmass_test() {
+	public void airmass_test() {
 		int failed = 0;
 		double x;
 
@@ -2392,6 +2392,6 @@ public class BasicTest {
 					+ "10 degrees", X, x, 0.000000001);
 		}
 
-		return failed;
+		Assert.assertEquals(0, failed);
 	}
 }
