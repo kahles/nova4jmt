@@ -2,9 +2,9 @@ package org.n4j;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
-import static org.n4j.Solar.ln_get_solar_geom_coords;
 import static org.n4j.Utility.ln_deg_to_rad;
 import static org.n4j.Utility.ln_rad_to_deg;
+import static org.n4j.solarsystem.Solar.ln_get_solar_geom_coords;
 
 import org.n4j.api.LnEquPosn;
 import org.n4j.api.LnHelioPosn;

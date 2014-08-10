@@ -1,12 +1,12 @@
-package org.n4j;
+package org.n4j.solarsystem;
 
-import static org.n4j.Earth.ln_get_earth_helio_coords;
-import static org.n4j.Earth.ln_get_earth_solar_dist;
 import static org.n4j.Nutation.ln_get_nutation;
 import static org.n4j.RiseSet.ln_get_body_rst_horizon;
 import static org.n4j.Transform.ln_get_equ_from_ecl;
 import static org.n4j.Transform.ln_get_rect_from_helio;
 import static org.n4j.Utility.ln_range_degrees;
+import static org.n4j.solarsystem.Earth.ln_get_earth_helio_coords;
+import static org.n4j.solarsystem.Earth.ln_get_earth_solar_dist;
 import static org.n4j.util.Reflect.getMethod;
 
 import org.n4j.api.LnEquPosn;

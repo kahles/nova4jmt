@@ -24,26 +24,6 @@ import static org.n4j.EllipticMotion.ln_solve_kepler;
 import static org.n4j.HeliocentricTime.ln_get_heliocentric_time_diff;
 import static org.n4j.HyperbolicMotion.ln_get_hyp_body_equ_coords;
 import static org.n4j.HyperbolicMotion.ln_get_hyp_body_next_rst_horizon;
-
-import static org.n4j.Parallax.get_topocentric;
-import static org.n4j.Parallax.ln_get_parallax;
-import static org.n4j.Parallax.ln_get_parallax_ha;
-
-import static org.n4j.ParabolicMotion.ln_solve_barker;
-import static org.n4j.ParabolicMotion.ln_get_par_true_anomaly;
-import static org.n4j.ParabolicMotion.ln_get_par_radius_vector;
-import static org.n4j.ParabolicMotion.ln_get_par_helio_rect_posn;
-import static org.n4j.ParabolicMotion.ln_get_par_geo_rect_posn;
-import static org.n4j.ParabolicMotion.ln_get_par_body_equ_coords;
-import static org.n4j.ParabolicMotion.ln_get_par_body_earth_dist;
-import static org.n4j.ParabolicMotion.ln_get_par_body_solar_dist;
-import static org.n4j.ParabolicMotion.ln_get_par_body_phase_angle;
-import static org.n4j.ParabolicMotion.ln_get_par_body_elong;
-import static org.n4j.ParabolicMotion.ln_get_par_body_rst;
-import static org.n4j.ParabolicMotion.ln_get_par_body_rst_horizon;
-import static org.n4j.ParabolicMotion.ln_get_par_body_next_rst;
-import static org.n4j.ParabolicMotion.ln_get_par_body_next_rst_horizon;
-import static org.n4j.ParabolicMotion.ln_get_par_body_next_rst_horizon_future;
 import static org.n4j.HyperbolicMotion.ln_get_hyp_body_solar_dist;
 import static org.n4j.HyperbolicMotion.ln_get_hyp_radius_vector;
 import static org.n4j.HyperbolicMotion.ln_get_hyp_true_anomaly;
@@ -56,6 +36,14 @@ import static org.n4j.JulianDay.ln_get_julian_from_tms;
 import static org.n4j.JulianDay.ln_get_tms_from_julian;
 import static org.n4j.JulianDay.ln_zonedate_to_date;
 import static org.n4j.Nutation.ln_get_nutation;
+import static org.n4j.ParabolicMotion.ln_get_par_body_earth_dist;
+import static org.n4j.ParabolicMotion.ln_get_par_body_equ_coords;
+import static org.n4j.ParabolicMotion.ln_get_par_body_solar_dist;
+import static org.n4j.ParabolicMotion.ln_get_par_geo_rect_posn;
+import static org.n4j.ParabolicMotion.ln_get_par_helio_rect_posn;
+import static org.n4j.ParabolicMotion.ln_get_par_radius_vector;
+import static org.n4j.ParabolicMotion.ln_get_par_true_anomaly;
+import static org.n4j.Parallax.ln_get_parallax;
 import static org.n4j.Precession.ln_get_equ_prec;
 import static org.n4j.Precession.ln_get_equ_prec2;
 import static org.n4j.ProperMotion.ln_get_equ_pm;
@@ -66,10 +54,6 @@ import static org.n4j.RiseSet.ln_get_object_rst;
 import static org.n4j.RiseSet.ln_get_object_rst_horizon;
 import static org.n4j.SiderealTime.ln_get_apparent_sidereal_time;
 import static org.n4j.SiderealTime.ln_get_mean_sidereal_time;
-import static org.n4j.Solar.LN_SOLAR_STANDART_HORIZON;
-import static org.n4j.Solar.ln_get_solar_equ_coords;
-import static org.n4j.Solar.ln_get_solar_geom_coords;
-import static org.n4j.Solar.ln_get_solar_rst;
 import static org.n4j.Transform.ln_get_ecl_from_equ;
 import static org.n4j.Transform.ln_get_equ_from_ecl;
 import static org.n4j.Transform.ln_get_equ_from_gal;
@@ -87,41 +71,92 @@ import static org.n4j.Utility.ln_lnlat_to_hlnlat;
 import static org.n4j.api.Constants.B1900;
 import static org.n4j.api.Constants.JD2000;
 import static org.n4j.api.Constants.JD2050;
+import static org.n4j.solarsystem.Earth.ln_get_earth_helio_coords;
+import static org.n4j.solarsystem.Earth.ln_get_earth_solar_dist;
+import static org.n4j.solarsystem.Jupiter.ln_get_jupiter_disk;
+import static org.n4j.solarsystem.Jupiter.ln_get_jupiter_earth_dist;
+import static org.n4j.solarsystem.Jupiter.ln_get_jupiter_equ_coords;
+import static org.n4j.solarsystem.Jupiter.ln_get_jupiter_equ_sdiam;
+import static org.n4j.solarsystem.Jupiter.ln_get_jupiter_helio_coords;
+import static org.n4j.solarsystem.Jupiter.ln_get_jupiter_magnitude;
+import static org.n4j.solarsystem.Jupiter.ln_get_jupiter_phase;
+import static org.n4j.solarsystem.Jupiter.ln_get_jupiter_pol_sdiam;
+import static org.n4j.solarsystem.Jupiter.ln_get_jupiter_solar_dist;
+import static org.n4j.solarsystem.Lunar.ln_get_lunar_bright_limb;
+import static org.n4j.solarsystem.Lunar.ln_get_lunar_disk;
+import static org.n4j.solarsystem.Lunar.ln_get_lunar_earth_dist;
+import static org.n4j.solarsystem.Lunar.ln_get_lunar_ecl_coords;
+import static org.n4j.solarsystem.Lunar.ln_get_lunar_equ_coords_prec;
+import static org.n4j.solarsystem.Lunar.ln_get_lunar_geo_posn;
+import static org.n4j.solarsystem.Lunar.ln_get_lunar_phase;
+import static org.n4j.solarsystem.Mars.ln_get_mars_disk;
+import static org.n4j.solarsystem.Mars.ln_get_mars_earth_dist;
+import static org.n4j.solarsystem.Mars.ln_get_mars_equ_coords;
+import static org.n4j.solarsystem.Mars.ln_get_mars_helio_coords;
+import static org.n4j.solarsystem.Mars.ln_get_mars_magnitude;
+import static org.n4j.solarsystem.Mars.ln_get_mars_phase;
+import static org.n4j.solarsystem.Mars.ln_get_mars_sdiam;
+import static org.n4j.solarsystem.Mars.ln_get_mars_solar_dist;
+import static org.n4j.solarsystem.Mercury.ln_get_mercury_disk;
+import static org.n4j.solarsystem.Mercury.ln_get_mercury_earth_dist;
+import static org.n4j.solarsystem.Mercury.ln_get_mercury_equ_coords;
+import static org.n4j.solarsystem.Mercury.ln_get_mercury_helio_coords;
+import static org.n4j.solarsystem.Mercury.ln_get_mercury_magnitude;
+import static org.n4j.solarsystem.Mercury.ln_get_mercury_phase;
+import static org.n4j.solarsystem.Mercury.ln_get_mercury_sdiam;
+import static org.n4j.solarsystem.Mercury.ln_get_mercury_solar_dist;
+import static org.n4j.solarsystem.Neptune.ln_get_neptune_disk;
+import static org.n4j.solarsystem.Neptune.ln_get_neptune_earth_dist;
+import static org.n4j.solarsystem.Neptune.ln_get_neptune_equ_coords;
+import static org.n4j.solarsystem.Neptune.ln_get_neptune_helio_coords;
+import static org.n4j.solarsystem.Neptune.ln_get_neptune_magnitude;
+import static org.n4j.solarsystem.Neptune.ln_get_neptune_phase;
+import static org.n4j.solarsystem.Neptune.ln_get_neptune_sdiam;
+import static org.n4j.solarsystem.Neptune.ln_get_neptune_solar_dist;
+import static org.n4j.solarsystem.Pluto.ln_get_pluto_disk;
+import static org.n4j.solarsystem.Pluto.ln_get_pluto_earth_dist;
+import static org.n4j.solarsystem.Pluto.ln_get_pluto_equ_coords;
+import static org.n4j.solarsystem.Pluto.ln_get_pluto_helio_coords;
+import static org.n4j.solarsystem.Pluto.ln_get_pluto_magnitude;
+import static org.n4j.solarsystem.Pluto.ln_get_pluto_phase;
+import static org.n4j.solarsystem.Pluto.ln_get_pluto_sdiam;
+import static org.n4j.solarsystem.Pluto.ln_get_pluto_solar_dist;
+import static org.n4j.solarsystem.Saturn.ln_get_saturn_disk;
+import static org.n4j.solarsystem.Saturn.ln_get_saturn_earth_dist;
+import static org.n4j.solarsystem.Saturn.ln_get_saturn_equ_coords;
+import static org.n4j.solarsystem.Saturn.ln_get_saturn_equ_sdiam;
+import static org.n4j.solarsystem.Saturn.ln_get_saturn_helio_coords;
+import static org.n4j.solarsystem.Saturn.ln_get_saturn_magnitude;
+import static org.n4j.solarsystem.Saturn.ln_get_saturn_phase;
+import static org.n4j.solarsystem.Saturn.ln_get_saturn_pol_sdiam;
+import static org.n4j.solarsystem.Saturn.ln_get_saturn_solar_dist;
+import static org.n4j.solarsystem.Solar.LN_SOLAR_STANDART_HORIZON;
+import static org.n4j.solarsystem.Solar.ln_get_solar_equ_coords;
+import static org.n4j.solarsystem.Solar.ln_get_solar_geom_coords;
+import static org.n4j.solarsystem.Solar.ln_get_solar_rst;
+import static org.n4j.solarsystem.Uranus.ln_get_uranus_disk;
+import static org.n4j.solarsystem.Uranus.ln_get_uranus_earth_dist;
+import static org.n4j.solarsystem.Uranus.ln_get_uranus_equ_coords;
+import static org.n4j.solarsystem.Uranus.ln_get_uranus_helio_coords;
+import static org.n4j.solarsystem.Uranus.ln_get_uranus_magnitude;
+import static org.n4j.solarsystem.Uranus.ln_get_uranus_phase;
+import static org.n4j.solarsystem.Uranus.ln_get_uranus_sdiam;
+import static org.n4j.solarsystem.Uranus.ln_get_uranus_solar_dist;
+import static org.n4j.solarsystem.Venus.ln_get_venus_disk;
+import static org.n4j.solarsystem.Venus.ln_get_venus_earth_dist;
+import static org.n4j.solarsystem.Venus.ln_get_venus_equ_coords;
+import static org.n4j.solarsystem.Venus.ln_get_venus_helio_coords;
+import static org.n4j.solarsystem.Venus.ln_get_venus_magnitude;
+import static org.n4j.solarsystem.Venus.ln_get_venus_phase;
+import static org.n4j.solarsystem.Venus.ln_get_venus_rst;
+import static org.n4j.solarsystem.Venus.ln_get_venus_sdiam;
+import static org.n4j.solarsystem.Venus.ln_get_venus_solar_dist;
 import static org.n4j.util.Reflect.getMethod;
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
-import static org.n4j.Utility.ln_deg_to_rad;
-import static org.n4j.Utility.ln_rad_to_deg;
-import static org.n4j.Utility.ln_range_degrees;
-import static java.lang.Math.acos;
-import static java.lang.Math.asin;
-import static java.lang.Math.atan;
-import static java.lang.Math.atan2;
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
-import static java.lang.Math.sqrt;
-import static java.lang.Math.tan;
-import static org.n4j.Earth.ln_get_earth_helio_coords;
-import static org.n4j.Earth.ln_get_earth_solar_dist;
-import static org.n4j.RiseSet.LN_STAR_STANDART_HORIZON;
-import static org.n4j.RiseSet.ln_get_motion_body_next_rst_horizon;
-import static org.n4j.RiseSet.ln_get_motion_body_next_rst_horizon_future;
-import static org.n4j.RiseSet.ln_get_motion_body_rst_horizon;
-import static org.n4j.Solar.ln_get_solar_geo_coords;
-import static org.n4j.Transform.ln_get_rect_from_helio;
-import static org.n4j.Utility.ln_deg_to_rad;
-import static org.n4j.Utility.ln_get_light_time;
-import static org.n4j.Utility.ln_get_rect_distance;
-import static org.n4j.Utility.ln_rad_to_deg;
-import static org.n4j.Utility.ln_range_degrees;
-import static org.n4j.api.Constants.M_PI_2;
-import static org.n4j.api.Constants.M_PI_4;
-import static org.n4j.util.Reflect.getMethod;
+
 import java.math.BigDecimal;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.n4j.Solar;
 import org.n4j.api.LnDate;
 import org.n4j.api.LnDms;
 import org.n4j.api.LnEllOrbit;
@@ -140,6 +175,7 @@ import org.n4j.api.LnZoneDate;
 import org.n4j.api.LnhEquPosn;
 import org.n4j.api.LnhLnlatPosn;
 import org.n4j.api.TimeVal;
+import org.n4j.solarsystem.Solar;
 
 public class BasicTest {
 	void usleep(int miliseconds) {
@@ -207,7 +243,9 @@ public class BasicTest {
 	}
 
 	/* test julian day calculations */
-	int julian_test() {
+
+	@Test
+	public int julian_test() {
 		double JD, JD2;
 		int wday, failed = 0;
 		LnDate date = new LnDate(), pdate = new LnDate();
@@ -310,7 +348,8 @@ public class BasicTest {
 		return failed;
 	}
 
-	int dynamical_test() {
+	@Test
+	public int dynamical_test() {
 		LnDate date = new LnDate();
 		double TD, JD;
 		int failed = 0;
@@ -330,7 +369,8 @@ public class BasicTest {
 		return failed;
 	}
 
-	int heliocentric_test() {
+	@Test
+	public int heliocentric_test() {
 		LnEquPosn object = new LnEquPosn();
 		LnDate date = new LnDate();
 		double JD;
@@ -531,7 +571,8 @@ public class BasicTest {
 		return failed;
 	}
 
-	int sidereal_test() {
+	@Test
+	public int sidereal_test() {
 		LnDate date = new LnDate();
 		double sd;
 		double JD;
@@ -557,7 +598,8 @@ public class BasicTest {
 		return failed;
 	}
 
-	int solar_coord_test() {
+	@Test
+	public int solar_coord_test() {
 		LnHelioPosn pos = new LnHelioPosn();
 		int failed = 0;
 
@@ -574,7 +616,8 @@ public class BasicTest {
 		return failed;
 	}
 
-	int aberration_test() {
+	@Test
+	public int aberration_test() {
 		LnhEquPosn hobject = new LnhEquPosn();
 		LnEquPosn object = new LnEquPosn(), pos = new LnEquPosn();
 		LnDate date = new LnDate();
@@ -609,7 +652,8 @@ public class BasicTest {
 		return failed;
 	}
 
-	int precession_test() {
+	@Test
+	public int precession_test() {
 		double JD;
 		LnEquPosn object = new LnEquPosn(), pos = new LnEquPosn(), pos2 = new LnEquPosn(), pm = new LnEquPosn();
 		LnhEquPosn hobject = new LnhEquPosn();
@@ -722,7 +766,8 @@ public class BasicTest {
 		return failed;
 	}
 
-	int apparent_position_test() {
+	@Test
+	public int apparent_position_test() {
 		double JD;
 		LnhEquPosn hobject = new LnhEquPosn(), hpm = new LnhEquPosn();
 		LnEquPosn object = new LnEquPosn(), pm = new LnEquPosn(), pos = new LnEquPosn();
@@ -758,15 +803,17 @@ public class BasicTest {
 		return failed;
 	}
 
-	int vsop87_test() {
-		LnHelioPosn pos;
-		LnhEquPosn hequ;
-		LnEquPosn equ;
+	@Test
+	public int vsop87_test() {
+		LnHelioPosn pos = new LnHelioPosn();
+		LnhEquPosn hequ = new LnhEquPosn();
+		LnEquPosn equ = new LnEquPosn();
+		;
 		double JD = 2448976.5;
 		double au;
 		int failed = 0;
 
-		LnDate date;
+		LnDate date = new LnDate();
 		date.years = 2003;
 		date.months = 1;
 		date.days = 29;
@@ -955,12 +1002,13 @@ public class BasicTest {
 		return failed;
 	}
 
-	int lunar_test() {
+	@Test
+	public int lunar_test() {
 		double JD = 2448724.5;
 
-		LnRectPosn moon;
-		LnEquPosn equ;
-		LnLnlatPosn ecl;
+		LnRectPosn moon = new LnRectPosn();
+		LnEquPosn equ = new LnEquPosn();
+		LnLnlatPosn ecl = new LnLnlatPosn();
 		int failed = 0;
 
 		/* JD = get_julian_from_sys(); */
@@ -980,13 +1028,14 @@ public class BasicTest {
 		return failed;
 	}
 
-	int elliptic_motion_test() {
+	@Test
+	public int elliptic_motion_test() {
 		double r, v, l, V, dist;
 		double E, e_JD, o_JD;
-		LnEllOrbit orbit;
-		LnRectPosn posn;
-		LnDate epoch_date, obs_date;
-		LnEquPosn equ_posn;
+		LnEllOrbit orbit = new LnEllOrbit();
+		LnRectPosn posn = new LnRectPosn();
+		LnDate epoch_date = new LnDate(), obs_date = new LnDate();
+		LnEquPosn equ_posn = new LnEquPosn();
 		int failed = 0;
 
 		obs_date.years = 1990;
@@ -1122,7 +1171,9 @@ public class BasicTest {
 	}
 
 	/* need a proper parabolic orbit to properly test */
-	int parabolic_motion_test() {
+
+	@Test
+	public int parabolic_motion_test() {
 		double r, v, dist;
 		double e_JD, o_JD;
 		LnParOrbit orbit = new LnParOrbit();
@@ -1206,7 +1257,9 @@ public class BasicTest {
 	}
 
 	/* data from Meeus, chapter 35 */
-	int hyperbolic_motion_test() {
+
+	@Test
+	public int hyperbolic_motion_test() {
 		double r, v, dist;
 		double e_JD, o_JD;
 		LnHypOrbit orbit = new LnHypOrbit();
@@ -1286,13 +1339,14 @@ public class BasicTest {
 		return failed;
 	}
 
-	int rst_test() {
-		LnLnlatPosn observer;
-		LnRstTime rst;
-		LnHms hms;
-		LnDms dms;
-		LnDate date;
-		LnEquPosn object;
+	@Test
+	public int rst_test() {
+		LnLnlatPosn observer = new LnLnlatPosn();
+		LnRstTime rst = new LnRstTime();
+		LnHms hms = new LnHms();
+		LnDms dms = new LnDms();
+		LnDate date = new LnDate();
+		LnEquPosn object = new LnEquPosn();
 		double JD, JD_next;
 		int ret;
 		int failed = 0;
@@ -1883,7 +1937,8 @@ public class BasicTest {
 		return failed;
 	}
 
-	int ell_rst_test() {
+	@Test
+	public int ell_rst_test() {
 		LnLnlatPosn observer = new LnLnlatPosn();
 		LnEllOrbit orbit = new LnEllOrbit();
 		LnDate date = new LnDate();
@@ -2024,7 +2079,8 @@ public class BasicTest {
 		return failed;
 	}
 
-	int hyp_future_rst_test() {
+	@Test
+	public int hyp_future_rst_test() {
 		LnLnlatPosn observer = new LnLnlatPosn();
 		LnHypOrbit orbit = new LnHypOrbit();
 		LnDate date = new LnDate();
@@ -2092,7 +2148,8 @@ public class BasicTest {
 		return failed;
 	}
 
-	int body_future_rst_test() {
+	@Test
+	public int body_future_rst_test() {
 		LnLnlatPosn observer = new LnLnlatPosn();
 		LnDate date = new LnDate();
 		LnRstTime rst = new LnRstTime();
@@ -2218,11 +2275,12 @@ public class BasicTest {
 		return failed;
 	}
 
-	int parallax_test() {
-		LnEquPosn mars, parallax;
-		LnLnlatPosn observer;
-		LnDms dms;
-		LnDate date;
+	@Test
+	public int parallax_test() {
+		LnEquPosn mars = new LnEquPosn(), parallax = new LnEquPosn();
+		LnLnlatPosn observer = new LnLnlatPosn();
+		LnDms dms = new LnDms();
+		LnDate date = new LnDate();
 		double jd;
 		int failed = 0;
 
@@ -2264,7 +2322,8 @@ public class BasicTest {
 		return failed;
 	}
 
-	int angular_test() {
+	@Test
+	public int angular_test() {
 		int failed = 0;
 		double d;
 		LnEquPosn posn1 = new LnEquPosn(), posn2 = new LnEquPosn();
@@ -2289,7 +2348,8 @@ public class BasicTest {
 		return failed;
 	}
 
-	int utility_test() {
+	@Test
+	public int utility_test() {
 		LnDms dms = new LnDms();
 		double deg = -1.23, deg2 = 1.23, deg3 = -0.5;
 
@@ -2311,7 +2371,8 @@ public class BasicTest {
 		return 0;
 	}
 
-	int airmass_test() {
+	@Test
+	public int airmass_test() {
 		int failed = 0;
 		double x;
 

@@ -8,13 +8,10 @@ import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
 import static java.lang.Math.tan;
-import static org.n4j.Earth.ln_get_earth_helio_coords;
-import static org.n4j.Earth.ln_get_earth_solar_dist;
 import static org.n4j.RiseSet.LN_STAR_STANDART_HORIZON;
 import static org.n4j.RiseSet.ln_get_motion_body_next_rst_horizon;
 import static org.n4j.RiseSet.ln_get_motion_body_next_rst_horizon_future;
 import static org.n4j.RiseSet.ln_get_motion_body_rst_horizon;
-import static org.n4j.Solar.ln_get_solar_geo_coords;
 import static org.n4j.Transform.ln_get_rect_from_helio;
 import static org.n4j.Utility.ln_deg_to_rad;
 import static org.n4j.Utility.ln_get_light_time;
@@ -23,7 +20,12 @@ import static org.n4j.Utility.ln_rad_to_deg;
 import static org.n4j.Utility.ln_range_degrees;
 import static org.n4j.api.Constants.M_PI_2;
 import static org.n4j.api.Constants.M_PI_4;
+import static org.n4j.solarsystem.Earth.ln_get_earth_helio_coords;
+import static org.n4j.solarsystem.Earth.ln_get_earth_solar_dist;
+import static org.n4j.solarsystem.Solar.ln_get_solar_geo_coords;
 import static org.n4j.util.Reflect.getMethod;
+
+
 
 import org.n4j.api.LnEllOrbit;
 import org.n4j.api.LnEquPosn;

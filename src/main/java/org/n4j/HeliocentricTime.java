@@ -2,10 +2,10 @@ package org.n4j;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
-import static org.n4j.Earth.ln_get_earth_helio_coords;
 import static org.n4j.Nutation.ln_get_nutation;
 import static org.n4j.Utility.ln_deg_to_rad;
 import static org.n4j.Utility.ln_range_degrees;
+import static org.n4j.solarsystem.Earth.ln_get_earth_helio_coords;
 
 import org.n4j.api.LnEquPosn;
 import org.n4j.api.LnHelioPosn;
