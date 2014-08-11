@@ -232,8 +232,11 @@ public class BasicTest {
 		if (diff != 0) {
 			System.out.format("[FAILED]\n");
 			System.out.format(
-					"   Expected %8.8f but calculated %8.8f %0.12f error.\n\n",
+					"   Expected %8.8f but calculated %8.8f %8.12f error.\n\n",
 					expect, calc, diff);
+			Assert.fail(String.format(
+					"   Expected %8.8f but calculated %8.8f %8.12f error.\n\n",
+					expect, calc, diff));
 			return 1;
 		} else {
 			System.out.format("[PASSED]\n");
@@ -428,13 +431,13 @@ public class BasicTest {
 
 		ln_get_nutation(JD, nutation);
 		failed += test_result("(Nutation) longitude (deg) for JD 2446895.5",
-				nutation.longitude, -0.00100561, 0.00000001);
+				nutation.longitude, -0.00105222, 0.00000001);
 
 		failed += test_result("(Nutation) obliquity (deg) for JD 2446895.5",
-				nutation.obliquity, 0.00273297, 0.00000001);
+				nutation.obliquity, 0.00262293, 0.00000001);
 
 		failed += test_result("(Nutation) ecliptic (deg) for JD 2446895.5",
-				nutation.ecliptic, 23.44367936, 0.00000001);
+				nutation.ecliptic, 23.44094649, 0.00000001);
 		Assert.assertEquals(0, failed);
 	}
 @Test

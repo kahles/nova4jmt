@@ -1,8 +1,10 @@
 package org.n4j;
 
 import static org.n4j.Utility.ln_deg_to_rad;
+import static java.math.MathContext.DECIMAL128;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 
 import org.n4j.api.LnNutation;
 
@@ -206,24 +208,24 @@ public class Nutation {
 			JDE = d(DynamicalTime.ln_get_jde(JD.doubleValue()));
 
 			/* calc T */
-			T = (JDE.subtract(d(2451545.0))).divide(d(36525.0));
+			T = (JDE.subtract(d(2451545L))).divide(d(36525L),DECIMAL128);
 			T2 = T.multiply(T);
 			T3 = T2.multiply(T);
 
 			/* calculate D,M,M',F and Omega */
 			D = d(297.85036).add(d(445267.111480).multiply(T))
 					.subtract(d(0.0019142).multiply(T2))
-					.add(T3.divide(d(189474.0)));
+					.add(T3.divide(d(189474L),DECIMAL128));
 			M = d(357.52772).add(d(35999.050340).multiply(T))
 					.subtract(d(0.0001603).multiply(T2))
-					.subtract(T3.divide(d(300000.0)));
+					.subtract(T3.divide(d(300000L),DECIMAL128));
 			MM = d(134.96298).add(d(477198.867398).multiply(T))
-					.add(d(0.0086972).multiply(T2)).add(T3.divide(d(56250.0)));
+					.add(d(0.0086972).multiply(T2)).add(T3.divide(d(56250L),DECIMAL128));
 			F = d(93.2719100).add(d(483202.017538).multiply(T))
 					.subtract(d(0.0036825).multiply(T2))
-					.add(T3.divide(d(327270.0)));
+					.add(T3.divide(d(327270L),DECIMAL128));
 			O = d(125.04452).subtract(d(1934.136261).multiply(T))
-					.add(d(0.0020708).multiply(T2)).add(T3.divide(d(450000.0)));
+					.add(d(0.0020708).multiply(T2)).add(T3.divide(d(450000L),DECIMAL128));
 
 			/* convert to radians */
 			D = ln_deg_to_rad(D);
@@ -253,19 +255,19 @@ public class Nutation {
 			}
 
 			/* change to arcsecs */
-			c_longitude = c_longitude.divide(d(10000.0));
-			c_obliquity = c_obliquity.divide(d(10000.0));
+			c_longitude = c_longitude.divide(d(10000L),DECIMAL128);
+			c_obliquity = c_obliquity.divide(d(10000L),DECIMAL128);
 
 			/* change to degrees */
-			c_longitude = c_longitude.divide(d(60.0 * 60.0));
-			c_obliquity = c_obliquity.divide(d(60.0 * 60.0));
+			c_longitude = c_longitude.divide(d(60L * 60L),DECIMAL128);
+			c_obliquity = c_obliquity.divide(d(60L * 60L),DECIMAL128);
 
 			/* calculate mean ecliptic - Meeus 2nd edition, eq. 22.2 */
-			c_ecliptic = d(23.0).add(d(26.0).divide(d(60.0)))
-					.add(d(21.448).divide(d(3600.0))) //
-					.subtract(d(46.8150).divide(d(3600.0)).multiply(T)) //
-					.subtract(d(0.00059).divide(d(3600.0)).multiply(T2)) //
-					.add(d(0.001813).divide(d(3600.0)).multiply(T3));
+			c_ecliptic = d(23L).add(d(26L).divide(d(60L),DECIMAL128))
+					.add(d(21.448).divide(d(3600L),DECIMAL128)) //
+					.subtract(d(46.8150).divide(d(3600L),DECIMAL128).multiply(T)) //
+					.subtract(d(0.00059).divide(d(3600L),DECIMAL128).multiply(T2)) //
+					.add(d(0.001813).divide(d(3600L),DECIMAL128).multiply(T3));
 
 			/*
 			 * c_ecliptic += c_obliquity; * Uncomment this if function should

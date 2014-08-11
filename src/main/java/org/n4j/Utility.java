@@ -26,7 +26,7 @@ public class Utility {
 	/**
 	 * deg.radian
 	 */
-	private static final double D2R = (1.7453292519943295769e-2d);
+	private static final BigDecimal D2R = new BigDecimal("0.017453292519943295769");
 	/**
 	 * radian.deg
 	 */
@@ -59,7 +59,7 @@ public class Utility {
 
 	/* convert degrees to radians */
 	public static double ln_deg_to_rad(double degrees) {
-		return (degrees * D2R);
+		return (degrees * D2R.doubleValue());
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class Utility {
 	 * @return
 	 */
 	public static BigDecimal ln_deg_to_rad(BigDecimal degrees) {
-		return (degrees.multiply(BigDecimal.valueOf(D2R)));
+		return (degrees.multiply(D2R));
 	}
 
 	/* convert hours:mins:secs to degrees */
