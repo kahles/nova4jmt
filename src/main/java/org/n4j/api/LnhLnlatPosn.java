@@ -10,10 +10,10 @@ public class LnhLnlatPosn {
 	/**
 	 * longitude. Object longitude.
 	 */
-	public LnDms lng;
+	public LnDms lng = new LnDms();
 	/**
 	 * latitude. Object latitude
 	 */
-	public LnDms lat;
+	public LnDms lat = new LnDms();
 
 }

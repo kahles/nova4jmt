@@ -25,8 +25,14 @@ public class LnDate {
 	/** Seconds. Valid values 0 - 59.99999.... */
 	public double seconds;
 
-	@Override
-	public LnDate clone() throws CloneNotSupportedException {
-		return (LnDate) super.clone();
+	public LnDate copy() {
+		LnDate result = new LnDate();
+		result.years = years;
+		result.months = months;
+		result.days = days;
+		result.hours = hours;
+		result.minutes = minutes;
+		result.seconds = seconds;
+		return result;
 	}
 }

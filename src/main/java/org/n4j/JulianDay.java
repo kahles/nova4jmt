@@ -25,15 +25,11 @@ public class JulianDay {
 		double JD;
 		double days;
 		int a, b;
-		LnDate local_date = new LnDate();
-
 		/* create local copy */
-		try {
-			local_date = date.clone();
-		} catch (CloneNotSupportedException e) {
-			// ok
-		}
+		LnDate local_date = date.copy();
 
+		
+		
 		/* check for month = January or February */
 		if (local_date.months < 3) {
 			local_date.years--;
@@ -96,7 +92,7 @@ public class JulianDay {
 		Z = (int) JD;
 		F = JD - Z;
 
-		if (Z < 2299161)
+		if (Z < 2299161d)
 			A = (int) Z;
 		else {
 			a = (int) ((Z - 1867216.25) / 36524.25);
@@ -303,18 +299,4 @@ public class JulianDay {
 		ln_get_date(jd, date);
 	}
 
-	/**
-	 * tms = time in ms as in System.currentTimeMillis()
-	 * 
-	 * @param JD
-	 * @return
-	 */
-	public static long ln_get_tms_from_julian(double JD) {
-
-		return -1;
-	}
-
-	public static double ln_get_julian_from_tms(long tms) {
-		return -1;
-	}
 }
