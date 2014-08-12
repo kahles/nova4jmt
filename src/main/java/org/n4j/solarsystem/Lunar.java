@@ -17,6 +17,14 @@ import static org.n4j.solarsystem.Solar.ln_get_solar_ecl_coords;
 import static org.n4j.solarsystem.Solar.ln_get_solar_equ_coords;
 import static org.n4j.util.Reflect.getMethod;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.n4j.api.LnEquPosn;
 import org.n4j.api.LnLnlatPosn;
 import org.n4j.api.LnRectPosn;
@@ -74,7 +82,54 @@ public class Lunar {
 			A = a;
 			B = b;
 		}
+
+		public MainProblem(String line) {
+			int startOfIlu = line.indexOf('{', 1);
+			int ensOfIlu = line.indexOf('}', startOfIlu);
+			ilu = readIntArray(line.substring(startOfIlu + 1, ensOfIlu), 4);
+			int startOfA = line.indexOf(',', ensOfIlu) + 1;
+			int endOfA = line.indexOf(',', startOfA);
+			A = Double.valueOf(line.substring(startOfA + 1, endOfA));
+			int startOfB = line.indexOf('{', endOfA);
+			int ensOfB = line.indexOf('}', startOfB);
+			B = readDoubleArray(line.substring(startOfB + 1, ensOfB), 5);
+		}
+
+		@Override
+		public String toString() {
+			return "{" + Arrays.toString(ilu) + "," + A + ","
+					+ Arrays.toString(B) + "}";
+		}
+
 	};
+
+	private static double[] readDoubleArray(String string, int size) {
+		double[] result = new double[size];
+		int index = 0;
+		int pos = 0;
+		int endPos;
+		while ((endPos = string.indexOf(',', pos)) >= 0) {
+			result[index++] = Double.valueOf(string.substring(pos, endPos)
+					.trim());
+			pos = endPos + 1;
+		}
+		result[index++] = Double.valueOf(string.substring(pos).trim());
+		return result;
+	}
+
+	private static int[] readIntArray(String string, int size) {
+		int[] result = new int[size];
+		int index = 0;
+		int pos = 0;
+		int endPos;
+		while ((endPos = string.indexOf(',', pos)) >= 0) {
+			result[index++] = Integer.parseInt(string.substring(pos, endPos)
+					.trim());
+			pos = endPos + 1;
+		}
+		result[index++] = Integer.parseInt(string.substring(pos).trim());
+		return result;
+	}
 
 	/* used for elp 4 - 9 */
 	public static class EarthPert {
@@ -238,53 +293,69 @@ public class Lunar {
 	private static final PlanSolPert[] plan_sol_pert_elp36;
 
 	static {
-		// read lunar.data
-		main_elp1 = null;
-		main_elp2 = null;
-		main_elp3 = null;
-		earth_pert_elp4 = null;
-		earth_pert_elp5 = null;
-		earth_pert_elp6 = null;
-		earth_pert_elp7 = null;
-		earth_pert_elp8 = null;
-		earth_pert_elp9 = null;
-		plan_pert_elp10 = null;
-		plan_pert_elp11 = null;
-
-		plan_pert_elp12 = null;
-		plan_pert_elp13 = null;
-
-		plan_pert_elp14 = null;
-
-		plan_pert_elp15 = null;
-
-		plan_pert_elp16 = null;
-
-		plan_pert_elp17 = null;
-
-		plan_pert_elp18 = null;
-
-		plan_pert_elp19 = null;
-
-		plan_pert_elp20 = null;
-
-		plan_pert_elp21 = null;
-		tidal_effects_elp22 = null;
-		tidal_effects_elp23 = null;
-		tidal_effects_elp24 = null;
-		tidal_effects_elp25 = null;
-		tidal_effects_elp26 = null;
-		tidal_effects_elp27 = null;
-		moon_pert_elp28 = null;
-		moon_pert_elp29 = null;
-		moon_pert_elp30 = null;
-		rel_pert_elp31 = null;
-		rel_pert_elp32 = null;
-		rel_pert_elp33 = null;
-		plan_sol_pert_elp34 = null;
-		plan_sol_pert_elp35 = null;
-		plan_sol_pert_elp36 = null;
-
+		try {
+			InputStream in = Lunar.class.getResourceAsStream("lunar.data");
+			BufferedReader reader = new BufferedReader(
+					new InputStreamReader(in));
+			String line;
+			boolean readingMainProblem = false;
+			List<MainProblem> mainProblems = new ArrayList<MainProblem>();
+			while ((line = reader.readLine()) != null) {
+				line = line.trim();
+				if (line.length() > 0) {
+					if (line.charAt(0) == '{') {
+						if (readingMainProblem) {
+							mainProblems.add(new MainProblem(line));
+						}
+					} else {
+						readingMainProblem = false;
+						if (line.startsWith("main_problem")) {
+							readingMainProblem = true;
+							mainProblems.clear();
+						}
+					}
+				}
+			}
+			// read lunar.data
+			main_elp1 = null;
+			main_elp2 = null;
+			main_elp3 = null;
+			earth_pert_elp4 = null;
+			earth_pert_elp5 = null;
+			earth_pert_elp6 = null;
+			earth_pert_elp7 = null;
+			earth_pert_elp8 = null;
+			earth_pert_elp9 = null;
+			plan_pert_elp10 = null;
+			plan_pert_elp11 = null;
+			plan_pert_elp12 = null;
+			plan_pert_elp13 = null;
+			plan_pert_elp14 = null;
+			plan_pert_elp15 = null;
+			plan_pert_elp16 = null;
+			plan_pert_elp17 = null;
+			plan_pert_elp18 = null;
+			plan_pert_elp19 = null;
+			plan_pert_elp20 = null;
+			plan_pert_elp21 = null;
+			tidal_effects_elp22 = null;
+			tidal_effects_elp23 = null;
+			tidal_effects_elp24 = null;
+			tidal_effects_elp25 = null;
+			tidal_effects_elp26 = null;
+			tidal_effects_elp27 = null;
+			moon_pert_elp28 = null;
+			moon_pert_elp29 = null;
+			moon_pert_elp30 = null;
+			rel_pert_elp31 = null;
+			rel_pert_elp32 = null;
+			rel_pert_elp33 = null;
+			plan_sol_pert_elp34 = null;
+			plan_sol_pert_elp35 = null;
+			plan_sol_pert_elp36 = null;
+		} catch (IOException e) {
+			throw new IllegalArgumentException(e);
+		}
 	}
 
 	/* sum lunar elp1 series */
