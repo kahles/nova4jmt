@@ -1,5 +1,27 @@
 package org.n4j.test;
 
+/*
+ * #%L
+ * libnova for Java
+ * %%
+ * Copyright (C) 2014 novaforjava
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/lgpl-3.0.html>.
+ * #L%
+ */
+
 import static org.n4j.Aberration.ln_get_equ_aber;
 import static org.n4j.Airmass.ln_get_airmass;
 import static org.n4j.Airmass.ln_get_alt_from_airmass;
@@ -184,7 +206,7 @@ public class BasicTest {
 		}
 	}
 
-	/*
+	/**
 	 * Define DATE or SYS_DATE for testing VSOP87 theory with other JD
 	 */
 	// #define DATE
@@ -243,7 +265,7 @@ public class BasicTest {
 		}
 	}
 
-	/* test julian day calculations */
+	/**test julian day calculations */
 
 	@Test
 	public void julian_test() {
@@ -255,7 +277,7 @@ public class BasicTest {
 		long now;
 		long now_jd;
 
-		/* Get julian day for 04/10/1957 19:00:00 */
+		/**Get julian day for 04/10/1957 19:00:00 */
 		date.years = 1957;
 		date.months = 10;
 		date.days = 4;
@@ -266,7 +288,7 @@ public class BasicTest {
 		failed += test_result("(Julian Day) JD for 4/10/1957 19:00:00", JD,
 				2436116.29166667, 0.00001);
 
-		/* Get julian day for 27/01/333 12:00:00 */
+		/**Get julian day for 27/01/333 12:00:00 */
 		date.years = 333;
 		date.months = 1;
 		date.days = 27;
@@ -275,7 +297,7 @@ public class BasicTest {
 		failed += test_result("(Julian Day) JD for 27/01/333 12:00:00", JD,
 				1842713.0, 0.1);
 
-		/* Get julian day for 30/06/1954 00:00:00 */
+		/**Get julian day for 30/06/1954 00:00:00 */
 		date.years = 1954;
 		date.months = 6;
 		date.days = 30;
@@ -287,7 +309,7 @@ public class BasicTest {
 		wday = ln_get_day_of_week(date);
 		failed += test_result("(Julian Day) Weekday No", wday, 3, 0.1);
 
-		/* Test ln_date_to_zonedate and back */
+		/**Test ln_date_to_zonedate and back */
 
 		ln_date_to_zonedate(date, zonedate, 7200);
 		ln_zonedate_to_date(zonedate, date);
@@ -342,7 +364,7 @@ public class BasicTest {
 		double TD, JD;
 		int failed = 0;
 
-		/* Dynamical Time test for 01/01/2000 00:00:00 */
+		/**Dynamical Time test for 01/01/2000 00:00:00 */
 		date.years = 2000;
 		date.months = 1;
 		date.days = 1;
@@ -438,7 +460,7 @@ public class BasicTest {
 		LnDate date = new LnDate();
 		int failed = 0;
 
-		/* observers position */
+		/**observers position */
 		hobserver.lng.neg = 0;
 		hobserver.lng.degrees = 282;
 		hobserver.lng.minutes = 56;
@@ -448,7 +470,7 @@ public class BasicTest {
 		hobserver.lat.minutes = 55;
 		hobserver.lat.seconds = 17.0;
 
-		/* object position */
+		/**object position */
 		hobject.ra.hours = 23;
 		hobject.ra.minutes = 9;
 		hobject.ra.seconds = 16.641;
@@ -457,7 +479,7 @@ public class BasicTest {
 		hobject.dec.minutes = 43;
 		hobject.dec.seconds = 11.61;
 
-		/* date and time */
+		/**date and time */
 		date.years = 1987;
 		date.months = 4;
 		date.days = 10;
@@ -475,7 +497,7 @@ public class BasicTest {
 		failed += test_result("(Transforms) Equ to Horiz AZ ", hrz.az,
 				68.03429264, 0.00000001);
 
-		/* try something close to the pole */
+		/**try something close to the pole */
 		object.dec = 90.0;
 
 		ln_get_hrz_from_equ(object, observer, JD, hrz);
@@ -508,7 +530,7 @@ public class BasicTest {
 		failed += test_result("(Transforms) Equ to Horiz AZ ", hrz.az, 180.0,
 				0.00000001);
 
-		/* Equ position of Pollux */
+		/**Equ position of Pollux */
 		hpollux.ra.hours = 7;
 		hpollux.ra.minutes = 45;
 		hpollux.ra.seconds = 18.946;
@@ -532,7 +554,7 @@ public class BasicTest {
 		failed += test_result("(Transforms) Ecl to Equ DEC", equ.dec,
 				28.02618333, 0.00000001);
 
-		/* Gal pole */
+		/**Gal pole */
 		gal.l = 0.0;
 		gal.b = 90.0;
 
@@ -567,7 +589,7 @@ public class BasicTest {
 		double JD;
 		int failed = 0;
 
-		/* 10/04/1987 19:21:00 */
+		/**10/04/1987 19:21:00 */
 		date.years = 1987;
 		date.months = 4;
 		date.days = 10;
@@ -613,7 +635,7 @@ public class BasicTest {
 		double JD;
 		int failed = 0;
 
-		/* object position */
+		/**object position */
 		hobject.ra.hours = 2;
 		hobject.ra.minutes = 44;
 		hobject.ra.seconds = 12.9747;
@@ -622,7 +644,7 @@ public class BasicTest {
 		hobject.dec.minutes = 13;
 		hobject.dec.seconds = 39.896;
 
-		/* date */
+		/**date */
 		date.years = 2028;
 		date.months = 11;
 		date.days = 13;
@@ -649,7 +671,7 @@ public class BasicTest {
 		LnDate grb_date = new LnDate();
 		int failed = 0;
 
-		/* object position */
+		/**object position */
 		hobject.ra.hours = 2;
 		hobject.ra.minutes = 44;
 		hobject.ra.seconds = 11.986;
@@ -724,8 +746,8 @@ public class BasicTest {
 
 		// TODO long double
 		// proper motions
-		pm.ra = ((/* long */double) 0.19877) * (15.0 / 3600.0);
-		pm.dec = ((/* long */double) -0.0152) / 3600.0;
+		pm.ra = ((/**long */double) 0.19877) * (15.0 / 3600.0);
+		pm.dec = ((/**long */double) -0.0152) / 3600.0;
 
 		ln_get_equ_pm(object, pm, B1900, pos);
 
@@ -762,7 +784,7 @@ public class BasicTest {
 		LnEquPosn object = new LnEquPosn(), pm = new LnEquPosn(), pos = new LnEquPosn();
 		int failed = 0;
 
-		/* objects position */
+		/**objects position */
 		hobject.ra.hours = 2;
 		hobject.ra.minutes = 44;
 		hobject.ra.seconds = 12.9747;
@@ -771,7 +793,7 @@ public class BasicTest {
 		hobject.dec.minutes = 13;
 		hobject.dec.seconds = 39.896;
 
-		/* proper motion of object */
+		/**proper motion of object */
 		hpm.ra.hours = 0;
 		hpm.ra.minutes = 0;
 		hpm.ra.seconds = 0.03425;
@@ -989,8 +1011,8 @@ public class BasicTest {
 		LnLnlatPosn ecl = new LnLnlatPosn();
 		int failed = 0;
 
-		/* JD = get_julian_from_sys(); */
-		/* JD=2448724.5; */
+		/**JD = get_julian_from_sys(); */
+		/**JD=2448724.5; */
 		ln_get_lunar_geo_posn(JD, moon, 0);
 		System.out.format("lunar x %f  y %f  z %f\n", moon.X, moon.Y, moon.Z);
 		ln_get_lunar_ecl_coords(JD, ecl, 0);
@@ -1148,7 +1170,7 @@ public class BasicTest {
 		Assert.assertEquals(0, failed);
 	}
 
-	/* need a proper parabolic orbit to properly test */
+	/**need a proper parabolic orbit to properly test */
 
 	@Test
 	public void parabolic_motion_test() {
@@ -1234,7 +1256,7 @@ public class BasicTest {
 		Assert.assertEquals(0, failed);
 	}
 
-	/* data from Meeus, chapter 35 */
+	/**data from Meeus, chapter 35 */
 
 	@Test
 	public void hyperbolic_motion_test() {
@@ -1873,7 +1895,7 @@ public class BasicTest {
 		failed += test_result("Object at dec -52 rise at 37 S",
 				ln_get_object_rst(JD, observer, object, rst), 0, 0);
 
-		/* Venus on 1988 March 20 at Boston */
+		/**Venus on 1988 March 20 at Boston */
 		date.years = 1988;
 		date.months = 3;
 		date.days = 20;
@@ -1926,7 +1948,7 @@ public class BasicTest {
 		int ret;
 		int failed = 0;
 
-		/* Comment C/1996 B2 (Hyakutake) somewhere at Japan */
+		/**Comment C/1996 B2 (Hyakutake) somewhere at Japan */
 
 		observer.lng = 135.0;
 		observer.lat = 35.0;
@@ -2070,7 +2092,7 @@ public class BasicTest {
 		observer.lng = 15.0;
 		observer.lat = 50.0;
 
-		/* C/2006 P1 (McNaught) */
+		/**C/2006 P1 (McNaught) */
 
 		orbit.q = 0.170742005109787;
 		orbit.e = 1.00001895427704;
@@ -2291,7 +2313,7 @@ public class BasicTest {
 		ln_get_parallax(mars, ln_get_mars_earth_dist(jd), observer, 1706, jd,
 				parallax);
 
-		/* parallax is hard to calculate, so we allow relatively big error */
+		/**parallax is hard to calculate, so we allow relatively big error */
 		failed += test_result("Mars RA parallax for Palomar observatory at"
 				+ "2003/08/28 3:17 UT  ", parallax.ra, 0.0053917, 0.00001);
 		failed += test_result("Mars DEC parallax for Palomar observatory at"
@@ -2306,11 +2328,11 @@ public class BasicTest {
 		double d;
 		LnEquPosn posn1 = new LnEquPosn(), posn2 = new LnEquPosn();
 
-		/* alpha Bootes (Arcturus) */
+		/**alpha Bootes (Arcturus) */
 		posn1.ra = 213.9154;
 		posn1.dec = 19.1825;
 
-		/* alpha Virgo (Spica) */
+		/**alpha Virgo (Spica) */
 		posn2.ra = 201.2983;
 		posn2.dec = -11.1614;
 

@@ -1,5 +1,27 @@
 package org.n4j;
 
+/*
+ * #%L
+ * libnova for Java
+ * %%
+ * Copyright (C) 2014 novaforjave
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/lgpl-3.0.html>.
+ * #L%
+ */
+
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static org.n4j.Utility.ln_deg_to_rad;
@@ -27,11 +49,11 @@ public class Precession {
 			LnEquPosn position) {
 		double t, t2, t3, A, B, C, zeta, eta, theta, ra, dec, mean_ra, mean_dec;
 		// TODO BigDecimal
-		/* change original ra and dec to radians */
+		/** change original ra and dec to radians */
 		mean_ra = ln_deg_to_rad(mean_position.ra);
 		mean_dec = ln_deg_to_rad(mean_position.dec);
 
-		/* calc t, zeta, eta and theta for J2000.0 Equ 20.3 */
+		/** calc t, zeta, eta and theta for J2000.0 Equ 20.3 */
 		t = (JD - Constants.JD2000) / 36525.0;
 		t *= 1.0 / 3600.0;
 		t2 = t * t;
@@ -43,7 +65,7 @@ public class Precession {
 		eta = ln_deg_to_rad(eta);
 		theta = ln_deg_to_rad(theta);
 
-		/* calc A,B,C equ 20.4 */
+		/** calc A,B,C equ 20.4 */
 		A = cos(mean_dec) * sin(mean_ra + zeta);
 		B = cos(theta) * cos(mean_dec) * cos(mean_ra + zeta) - sin(theta)
 				* sin(mean_dec);
@@ -52,18 +74,19 @@ public class Precession {
 
 		ra = Math.atan2(A, B) + eta;
 
-		/* check for object near celestial pole */
+		/** check for object near celestial pole */
 		if (mean_dec > (0.4 * Math.PI) || mean_dec < (-0.4 * Math.PI)) {
-			/* close to pole */
+			/** close to pole */
 			dec = Math.acos(Math.sqrt(A * A + B * B));
 			if (mean_dec < 0.)
-				dec *= -1; /* 0 <= acos() <= PI */
+				dec *= -1;
+			/** 0 <= acos() <= PI */
 		} else {
-			/* not close to pole */
+			/** not close to pole */
 			dec = Math.asin(C);
 		}
 
-		/* change to degrees */
+		/** change to degrees */
 		position.ra = ln_range_degrees(ln_rad_to_deg(ra));
 		position.dec = ln_rad_to_deg(dec);
 	}
@@ -87,11 +110,11 @@ public class Precession {
 		// TODO BigDecimal
 		double t, t2, t3, A, B, C, zeta, eta, theta, ra, dec, mean_ra, mean_dec, T, T2;
 
-		/* change original ra and dec to radians */
+		/** change original ra and dec to radians */
 		mean_ra = ln_deg_to_rad(mean_position.ra);
 		mean_dec = ln_deg_to_rad(mean_position.dec);
 
-		/* calc t, T, zeta, eta and theta Equ 20.2 */
+		/** calc t, T, zeta, eta and theta Equ 20.2 */
 		T = ((double) (fromJD - Constants.JD2000)) / 36525.0;
 		T *= 1.0 / 3600.0;
 		t = ((double) (toJD - fromJD)) / 36525.0;
@@ -109,7 +132,7 @@ public class Precession {
 		eta = ln_deg_to_rad(eta);
 		theta = ln_deg_to_rad(theta);
 
-		/* calc A,B,C equ 20.4 */
+		/** calc A,B,C equ 20.4 */
 		A = cos(mean_dec) * sin(mean_ra + zeta);
 		B = cos(theta) * cos(mean_dec) * cos(mean_ra + zeta) - sin(theta)
 				* sin(mean_dec);
@@ -118,18 +141,19 @@ public class Precession {
 
 		ra = Math.atan2(A, B) + eta;
 
-		/* check for object near celestial pole */
+		/** check for object near celestial pole */
 		if (mean_dec > (0.4 * Math.PI) || mean_dec < (-0.4 * Math.PI)) {
-			/* close to pole */
+			/** close to pole */
 			dec = Math.acos(Math.sqrt(A * A + B * B));
 			if (mean_dec < 0.)
-				dec *= -1; /* 0 <= acos() <= PI */
+				dec *= -1;
+			/** 0 <= acos() <= PI */
 		} else {
-			/* not close to pole */
+			/** not close to pole */
 			dec = Math.asin(C);
 		}
 
-		/* change to degrees */
+		/** change to degrees */
 		position.ra = ln_range_degrees(ln_rad_to_deg(ra));
 		position.dec = ln_rad_to_deg(dec);
 	}

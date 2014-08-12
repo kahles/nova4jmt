@@ -1,5 +1,27 @@
 package org.n4j.solarsystem;
 
+/*
+ * #%L
+ * libnova for Java
+ * %%
+ * Copyright (C) 2014 novaforjava
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/lgpl-3.0.html>.
+ * #L%
+ */
+
 import static java.lang.Math.acos;
 import static java.lang.Math.atan2;
 import static java.lang.Math.cos;
@@ -33,10 +55,10 @@ import org.n4j.api.LnRstTime;
 public class Lunar {
 
 	public static double LN_LUNAR_STANDART_HORIZON = 0.125;
-	/* AU in KM */
+	/** AU in KM */
 	public static long AU = 149597870L;
 
-	/* Chapront theory lunar constants */
+	/** Chapront theory lunar constants */
 	static final double RAD = (648000.0 / Math.PI);
 	static final double DEG = (Math.PI / 180.0);
 	static final double M_PI_2 = (2.0 * Math.PI);
@@ -51,14 +73,14 @@ public class Lunar {
 	static final double C1 = 60.0;
 	static final double C2 = 3600.0;
 
-	/* Corrections of the constants for DE200/LE200 */
+	/** Corrections of the constants for DE200/LE200 */
 	static final double DELNU = ((0.55604 / RAD) / W12);
 	static final double DELE = (0.01789 / RAD);
 	static final double DELG = (-0.08066 / RAD);
 	static final double DELNP = ((-0.06424 / RAD) / W12);
 	static final double DELEP = (-0.12879 / RAD);
 
-	/* Precession matrix */
+	/** Precession matrix */
 	static final double P1 = 0.10180391e-4d;
 	static final double P2 = 0.47020439e-6d;
 	static final double P3 = -0.5417367e-9d;
@@ -70,7 +92,7 @@ public class Lunar {
 	static final double Q4 = -0.1371808e-11d;
 	static final double Q5 = -0.320334e-14d;
 
-	/* used for elp1 - 3 */
+	/** used for elp1 - 3 */
 	public static class MainProblem {
 		int ilu[];// 4
 		double A;
@@ -131,7 +153,7 @@ public class Lunar {
 		return result;
 	}
 
-	/* used for elp 4 - 9 */
+	/** used for elp 4 - 9 */
 	public static class EarthPert {
 		int iz;
 		int ilu[];// 4
@@ -149,7 +171,7 @@ public class Lunar {
 		}
 	};
 
-	/* used for elp 10 - 21 */
+	/** used for elp 10 - 21 */
 	public static class PlanetPert {
 		int ipla[];// 11
 		double theta;
@@ -194,14 +216,14 @@ public class Lunar {
 
 	}
 
-	/* cache values */
+	/** cache values */
 	static double c_JD = 0;
 	static double c_X = 0;
 	static double c_Y = 0;
 	static double c_Z = 0;
 	static double c_precision = 1.0;
 
-	/* constants with corrections for DE200 / LE200 */
+	/** constants with corrections for DE200 / LE200 */
 	static double W1[] = {
 			((218.0 + (18.0 / 60.0) + (59.95571 / 3600.0))) * DEG,
 			1732559343.73604 / RAD, -5.8883 / RAD, 0.006604 / RAD,
@@ -225,7 +247,7 @@ public class Lunar {
 			(102.0 + (56.0 / 60.0) + (14.42753 / 3600.0)) * DEG,
 			1161.2283 / RAD, 0.5327 / RAD, -0.000138 / RAD, 0 };
 
-	/* Delaunay's arguments. */
+	/** Delaunay's arguments. */
 	static double del[][] = {
 			{ 5.198466741027443, 7771.377146811758394, -0.000028449351621,
 					0.000000031973462, -0.000000000154365 },
@@ -240,7 +262,7 @@ public class Lunar {
 			(218.0 + (18.0 / 60.0) + (59.95571 / 3600.0)) * DEG,
 			((1732559343.73604 / RAD) + PRECES) };
 
-	/* Planetary arguments */
+	/** Planetary arguments */
 	static double p[][] = {
 			{ (252 + 15 / C1 + 3.25986 / C2) * DEG, 538101628.68898 / RAD },
 			{ (181 + 58 / C1 + 47.28305 / C2) * DEG, 210664136.43355 / RAD },
@@ -252,7 +274,7 @@ public class Lunar {
 			{ (314 + 3 / C1 + 18.01841 / C2) * DEG, 1542481.19393 / RAD },
 			{ (304 + 20 / C1 + 55.19575 / C2) * DEG, 786550.32074 / RAD } };
 
-	/* precision */
+	/** precision */
 	static double pre[] = new double[3];
 
 	private static final MainProblem[] main_elp1;
@@ -358,7 +380,7 @@ public class Lunar {
 		}
 	}
 
-	/* sum lunar elp1 series */
+	/** sum lunar elp1 series */
 	public static double sum_series_elp1(double[] t) {
 		double result = 0;
 		double x, y;
@@ -366,9 +388,9 @@ public class Lunar {
 		int i, j, k;
 
 		for (j = 0; j < main_elp1.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(main_elp1[j].A) > pre[0]) {
-				/* derivatives of A */
+				/** derivatives of A */
 				tgv = main_elp1[j].B[0] + DTASM * main_elp1[j].B[4];
 				x = main_elp1[j].A + tgv * (DELNP - AM * DELNU)
 						+ main_elp1[j].B[1] * DELG + main_elp1[j].B[2] * DELE
@@ -380,7 +402,7 @@ public class Lunar {
 						y += main_elp1[j].ilu[i] * del[i][k] * t[k];
 				}
 
-				/* y in correct quad */
+				/** y in correct quad */
 				y = ln_range_radians2(y);
 				result += x * sin(y);
 			}
@@ -388,7 +410,7 @@ public class Lunar {
 		return result;
 	}
 
-	/* sum lunar elp2 series */
+	/** sum lunar elp2 series */
 	public static double sum_series_elp2(double[] t) {
 		double result = 0;
 		double x, y;
@@ -396,9 +418,9 @@ public class Lunar {
 		int i, j, k;
 
 		for (j = 0; j < main_elp2.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(main_elp2[j].A) > pre[1]) {
-				/* derivatives of A */
+				/** derivatives of A */
 				tgv = main_elp2[j].B[0] + DTASM * main_elp2[j].B[4];
 				x = main_elp2[j].A + tgv * (DELNP - AM * DELNU)
 						+ main_elp2[j].B[1] * DELG + main_elp2[j].B[2] * DELE
@@ -409,7 +431,7 @@ public class Lunar {
 					for (i = 0; i < 4; i++)
 						y += main_elp2[j].ilu[i] * del[i][k] * t[k];
 				}
-				/* y in correct quad */
+				/** y in correct quad */
 				y = ln_range_radians2(y);
 				result += x * sin(y);
 			}
@@ -417,7 +439,7 @@ public class Lunar {
 		return result;
 	}
 
-	/* sum lunar elp3 series */
+	/** sum lunar elp3 series */
 	public static double sum_series_elp3(double[] t) {
 		double result = 0;
 		double x, y;
@@ -425,9 +447,9 @@ public class Lunar {
 		int i, j, k;
 
 		for (j = 0; j < main_elp3.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(main_elp3[j].A) > pre[2]) {
-				/* derivatives of A */
+				/** derivatives of A */
 				tgv = main_elp3[j].B[0] + DTASM * main_elp3[j].B[4];
 				x = main_elp3[j].A + tgv * (DELNP - AM * DELNU)
 						+ main_elp3[j].B[1] * DELG + main_elp3[j].B[2] * DELE
@@ -439,7 +461,7 @@ public class Lunar {
 						y += main_elp3[j].ilu[i] * del[i][k] * t[k];
 				}
 				y += (M_PI_2);
-				/* y in correct quad */
+				/** y in correct quad */
 				y = ln_range_radians2(y);
 				result += x * sin(y);
 			}
@@ -447,14 +469,14 @@ public class Lunar {
 		return result;
 	}
 
-	/* sum lunar elp4 series */
+	/** sum lunar elp4 series */
 	public static double sum_series_elp4(double[] t) {
 		double result = 0;
 		int i, j, k;
 		double y;
 
 		for (j = 0; j < earth_pert_elp4.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(earth_pert_elp4[j].A) > pre[0]) {
 				y = earth_pert_elp4[j].O * DEG;
 				for (k = 0; k < 2; k++) {
@@ -462,7 +484,7 @@ public class Lunar {
 					for (i = 0; i < 4; i++)
 						y += earth_pert_elp4[j].ilu[i] * del[i][k] * t[k];
 				}
-				/* put y in correct quad */
+				/** put y in correct quad */
 				y = ln_range_radians2(y);
 				result += earth_pert_elp4[j].A * sin(y);
 			}
@@ -470,14 +492,14 @@ public class Lunar {
 		return result;
 	}
 
-	/* sum lunar elp5 series */
+	/** sum lunar elp5 series */
 	public static double sum_series_elp5(double[] t) {
 		double result = 0;
 		int i, j, k;
 		double y;
 
 		for (j = 0; j < earth_pert_elp5.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(earth_pert_elp5[j].A) > pre[1]) {
 				y = earth_pert_elp5[j].O * DEG;
 				for (k = 0; k < 2; k++) {
@@ -485,7 +507,7 @@ public class Lunar {
 					for (i = 0; i < 4; i++)
 						y += earth_pert_elp5[j].ilu[i] * del[i][k] * t[k];
 				}
-				/* put y in correct quad */
+				/** put y in correct quad */
 				y = ln_range_radians2(y);
 				result += earth_pert_elp5[j].A * sin(y);
 			}
@@ -493,14 +515,14 @@ public class Lunar {
 		return result;
 	}
 
-	/* sum lunar elp6 series */
+	/** sum lunar elp6 series */
 	public static double sum_series_elp6(double[] t) {
 		double result = 0;
 		int i, j, k;
 		double y;
 
 		for (j = 0; j < earth_pert_elp6.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(earth_pert_elp6[j].A) > pre[2]) {
 				y = earth_pert_elp6[j].O * DEG;
 				for (k = 0; k < 2; k++) {
@@ -508,7 +530,7 @@ public class Lunar {
 					for (i = 0; i < 4; i++)
 						y += earth_pert_elp6[j].ilu[i] * del[i][k] * t[k];
 				}
-				/* put y in correct quad */
+				/** put y in correct quad */
 				y = ln_range_radians2(y);
 				result += earth_pert_elp6[j].A * sin(y);
 			}
@@ -516,14 +538,14 @@ public class Lunar {
 		return result;
 	}
 
-	/* sum lunar elp7 series */
+	/** sum lunar elp7 series */
 	public static double sum_series_elp7(double[] t) {
 		double result = 0;
 		int i, j, k;
 		double y, A;
 
 		for (j = 0; j < earth_pert_elp7.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(earth_pert_elp7[j].A) > pre[0]) {
 				A = earth_pert_elp7[j].A * t[1];
 				y = earth_pert_elp7[j].O * DEG;
@@ -532,7 +554,7 @@ public class Lunar {
 					for (i = 0; i < 4; i++)
 						y += earth_pert_elp7[j].ilu[i] * del[i][k] * t[k];
 				}
-				/* put y in correct quad */
+				/** put y in correct quad */
 				y = ln_range_radians2(y);
 				result += A * sin(y);
 			}
@@ -540,14 +562,14 @@ public class Lunar {
 		return result;
 	}
 
-	/* sum lunar elp8 series */
+	/** sum lunar elp8 series */
 	public static double sum_series_elp8(double[] t) {
 		double result = 0;
 		int i, j, k;
 		double y, A;
 
 		for (j = 0; j < earth_pert_elp8.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(earth_pert_elp8[j].A) > pre[1]) {
 				y = earth_pert_elp8[j].O * DEG;
 				A = earth_pert_elp8[j].A * t[1];
@@ -556,7 +578,7 @@ public class Lunar {
 					for (i = 0; i < 4; i++)
 						y += earth_pert_elp8[j].ilu[i] * del[i][k] * t[k];
 				}
-				/* put y in correct quad */
+				/** put y in correct quad */
 				y = ln_range_radians2(y);
 				result += A * sin(y);
 			}
@@ -564,14 +586,14 @@ public class Lunar {
 		return result;
 	}
 
-	/* sum lunar elp9 series */
+	/** sum lunar elp9 series */
 	public static double sum_series_elp9(double[] t) {
 		double result = 0;
 		int i, j, k;
 		double y, A;
 
 		for (j = 0; j < earth_pert_elp9.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(earth_pert_elp9[j].A) > pre[2]) {
 				A = earth_pert_elp9[j].A * t[1];
 				y = earth_pert_elp9[j].O * DEG;
@@ -580,7 +602,7 @@ public class Lunar {
 					for (i = 0; i < 4; i++)
 						y += earth_pert_elp9[j].ilu[i] * del[i][k] * t[k];
 				}
-				/* put y in correct quad */
+				/** put y in correct quad */
 				y = ln_range_radians2(y);
 				result += A * sin(y);
 			}
@@ -588,14 +610,14 @@ public class Lunar {
 		return result;
 	}
 
-	/* sum lunar elp10 series */
+	/** sum lunar elp10 series */
 	public static double sum_series_elp10(double[] t) {
 		double result = 0;
 		int i, j, k;
 		double y;
 
 		for (j = 0; j < plan_pert_elp10.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(plan_pert_elp10[j].O) > pre[0]) {
 				y = plan_pert_elp10[j].theta * DEG;
 				for (k = 0; k < 2; k++) {
@@ -606,7 +628,7 @@ public class Lunar {
 					for (i = 0; i < 8; i++)
 						y += plan_pert_elp10[j].ipla[i] * p[i][k] * t[k];
 				}
-				/* put y in correct quad */
+				/** put y in correct quad */
 				y = ln_range_radians2(y);
 				result += plan_pert_elp10[j].O * sin(y);
 			}
@@ -614,14 +636,14 @@ public class Lunar {
 		return result;
 	}
 
-	/* sum lunar elp11 series */
+	/** sum lunar elp11 series */
 	public static double sum_series_elp11(double[] t) {
 		double result = 0;
 		int i, j, k;
 		double y;
 
 		for (j = 0; j < plan_pert_elp11.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(plan_pert_elp11[j].O) > pre[1]) {
 				y = plan_pert_elp11[j].theta * DEG;
 				for (k = 0; k < 2; k++) {
@@ -632,7 +654,7 @@ public class Lunar {
 					for (i = 0; i < 8; i++)
 						y += plan_pert_elp11[j].ipla[i] * p[i][k] * t[k];
 				}
-				/* put y in correct quad */
+				/** put y in correct quad */
 				y = ln_range_radians2(y);
 				result += plan_pert_elp11[j].O * sin(y);
 			}
@@ -640,14 +662,14 @@ public class Lunar {
 		return result;
 	}
 
-	/* sum lunar elp12 series */
+	/** sum lunar elp12 series */
 	public static double sum_series_elp12(double[] t) {
 		double result = 0;
 		int i, j, k;
 		double y;
 
 		for (j = 0; j < plan_pert_elp12.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(plan_pert_elp12[j].O) > pre[2]) {
 				y = plan_pert_elp12[j].theta * DEG;
 				for (k = 0; k < 2; k++) {
@@ -658,7 +680,7 @@ public class Lunar {
 					for (i = 0; i < 8; i++)
 						y += plan_pert_elp12[j].ipla[i] * p[i][k] * t[k];
 				}
-				/* put y in correct quad */
+				/** put y in correct quad */
 				y = ln_range_radians2(y);
 				result += plan_pert_elp12[j].O * sin(y);
 			}
@@ -666,14 +688,14 @@ public class Lunar {
 		return result;
 	}
 
-	/* sum lunar elp13 series */
+	/** sum lunar elp13 series */
 	public static double sum_series_elp13(double[] t) {
 		double result = 0;
 		int i, j, k;
 		double y, x;
 
 		for (j = 0; j < plan_pert_elp13.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(plan_pert_elp13[j].O) > pre[0]) {
 				y = plan_pert_elp13[j].theta * DEG;
 				for (k = 0; k < 2; k++) {
@@ -684,7 +706,7 @@ public class Lunar {
 					for (i = 0; i < 8; i++)
 						y += plan_pert_elp13[j].ipla[i] * p[i][k] * t[k];
 				}
-				/* put y in correct quad */
+				/** put y in correct quad */
 				y = ln_range_radians2(y);
 				x = plan_pert_elp13[j].O * t[1];
 				result += x * sin(y);
@@ -693,14 +715,14 @@ public class Lunar {
 		return result;
 	}
 
-	/* sum lunar elp14 series */
+	/** sum lunar elp14 series */
 	public static double sum_series_elp14(double[] t) {
 		double result = 0;
 		int i, j, k;
 		double y, x;
 
 		for (j = 0; j < plan_pert_elp14.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(plan_pert_elp14[j].O) > pre[1]) {
 				y = plan_pert_elp14[j].theta * DEG;
 				for (k = 0; k < 2; k++) {
@@ -711,7 +733,7 @@ public class Lunar {
 					for (i = 0; i < 8; i++)
 						y += plan_pert_elp14[j].ipla[i] * p[i][k] * t[k];
 				}
-				/* put y in correct quad */
+				/** put y in correct quad */
 				y = ln_range_radians2(y);
 				x = plan_pert_elp14[j].O * t[1];
 				result += x * sin(y);
@@ -720,14 +742,14 @@ public class Lunar {
 		return result;
 	}
 
-	/* sum lunar elp15 series */
+	/** sum lunar elp15 series */
 	public static double sum_series_elp15(double[] t) {
 		double result = 0;
 		int i, j, k;
 		double y, x;
 
 		for (j = 0; j < plan_pert_elp15.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(plan_pert_elp15[j].O) > pre[2]) {
 				y = plan_pert_elp15[j].theta * DEG;
 				for (k = 0; k < 2; k++) {
@@ -738,7 +760,7 @@ public class Lunar {
 					for (i = 0; i < 8; i++)
 						y += plan_pert_elp15[j].ipla[i] * p[i][k] * t[k];
 				}
-				/* put y in correct quad */
+				/** put y in correct quad */
 				y = ln_range_radians2(y);
 				x = plan_pert_elp15[j].O * t[1];
 				result += x * sin(y);
@@ -747,14 +769,14 @@ public class Lunar {
 		return result;
 	}
 
-	/* sum lunar elp16 series */
+	/** sum lunar elp16 series */
 	public static double sum_series_elp16(double[] t) {
 		double result = 0;
 		int i, j, k;
 		double y;
 
 		for (j = 0; j < plan_pert_elp16.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(plan_pert_elp16[j].O) > pre[0]) {
 				y = plan_pert_elp16[j].theta * DEG;
 				for (k = 0; k < 2; k++) {
@@ -763,7 +785,7 @@ public class Lunar {
 					for (i = 0; i < 7; i++)
 						y += plan_pert_elp16[j].ipla[i] * p[i][k] * t[k];
 				}
-				/* put y in correct quad */
+				/** put y in correct quad */
 				y = ln_range_radians2(y);
 				result += plan_pert_elp16[j].O * sin(y);
 			}
@@ -777,7 +799,7 @@ public class Lunar {
 		double y;
 
 		for (j = 0; j < plan_pert_elp17.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(plan_pert_elp17[j].O) > pre[1]) {
 				y = plan_pert_elp17[j].theta * DEG;
 				for (k = 0; k < 2; k++) {
@@ -786,7 +808,7 @@ public class Lunar {
 					for (i = 0; i < 7; i++)
 						y += plan_pert_elp17[j].ipla[i] * p[i][k] * t[k];
 				}
-				/* put y in correct quad */
+				/** put y in correct quad */
 				y = ln_range_radians2(y);
 				result += plan_pert_elp17[j].O * sin(y);
 			}
@@ -800,7 +822,7 @@ public class Lunar {
 		double y;
 
 		for (j = 0; j < plan_pert_elp18.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(plan_pert_elp18[j].O) > pre[2]) {
 				y = plan_pert_elp18[j].theta * DEG;
 				for (k = 0; k < 2; k++) {
@@ -809,7 +831,7 @@ public class Lunar {
 					for (i = 0; i < 7; i++)
 						y += plan_pert_elp18[j].ipla[i] * p[i][k] * t[k];
 				}
-				/* put y in correct quad */
+				/** put y in correct quad */
 				y = ln_range_radians2(y);
 				result += plan_pert_elp18[j].O * sin(y);
 			}
@@ -823,7 +845,7 @@ public class Lunar {
 		double y, x;
 
 		for (j = 0; j < plan_pert_elp19.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(plan_pert_elp19[j].O) > pre[0]) {
 				y = plan_pert_elp19[j].theta * DEG;
 				for (k = 0; k < 2; k++) {
@@ -832,7 +854,7 @@ public class Lunar {
 					for (i = 0; i < 7; i++)
 						y += plan_pert_elp19[j].ipla[i] * p[i][k] * t[k];
 				}
-				/* put y in correct quad */
+				/** put y in correct quad */
 				y = ln_range_radians2(y);
 				x = plan_pert_elp19[j].O * t[1];
 				result += x * sin(y);
@@ -847,7 +869,7 @@ public class Lunar {
 		double y, x;
 
 		for (j = 0; j < plan_pert_elp20.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(plan_pert_elp20[j].O) > pre[1]) {
 				y = plan_pert_elp20[j].theta * DEG;
 				for (k = 0; k < 2; k++) {
@@ -856,7 +878,7 @@ public class Lunar {
 					for (i = 0; i < 7; i++)
 						y += plan_pert_elp20[j].ipla[i] * p[i][k] * t[k];
 				}
-				/* put y in correct quad */
+				/** put y in correct quad */
 				y = ln_range_radians2(y);
 				x = plan_pert_elp20[j].O * t[1];
 				result += x * sin(y);
@@ -871,7 +893,7 @@ public class Lunar {
 		double y, x;
 
 		for (j = 0; j < plan_pert_elp21.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(plan_pert_elp21[j].O) > pre[2]) {
 				y = plan_pert_elp21[j].theta * DEG;
 				for (k = 0; k < 2; k++) {
@@ -880,7 +902,7 @@ public class Lunar {
 					for (i = 0; i < 7; i++)
 						y += plan_pert_elp21[j].ipla[i] * p[i][k] * t[k];
 				}
-				/* put y in correct quad */
+				/** put y in correct quad */
 				y = ln_range_radians2(y);
 				x = plan_pert_elp21[j].O * t[1];
 				result += x * sin(y);
@@ -889,14 +911,14 @@ public class Lunar {
 		return result;
 	}
 
-	/* sum lunar elp22 series */
+	/** sum lunar elp22 series */
 	public static double sum_series_elp22(double[] t) {
 		double result = 0;
 		int i, j, k;
 		double y;
 
 		for (j = 0; j < tidal_effects_elp22.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(tidal_effects_elp22[j].A) > pre[0]) {
 				y = tidal_effects_elp22[j].O * DEG;
 				for (k = 0; k < 2; k++) {
@@ -904,7 +926,7 @@ public class Lunar {
 					for (i = 0; i < 4; i++)
 						y += tidal_effects_elp22[j].ilu[i] * del[i][k] * t[k];
 				}
-				/* put y in correct quad */
+				/** put y in correct quad */
 				y = ln_range_radians2(y);
 				result += tidal_effects_elp22[j].A * sin(y);
 			}
@@ -912,14 +934,14 @@ public class Lunar {
 		return result;
 	}
 
-	/* sum lunar elp23 series */
+	/** sum lunar elp23 series */
 	public static double sum_series_elp23(double[] t) {
 		double result = 0;
 		int i, j, k;
 		double y;
 
 		for (j = 0; j < tidal_effects_elp23.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(tidal_effects_elp23[j].A) > pre[1]) {
 				y = tidal_effects_elp23[j].O * DEG;
 				for (k = 0; k < 2; k++) {
@@ -927,7 +949,7 @@ public class Lunar {
 					for (i = 0; i < 4; i++)
 						y += tidal_effects_elp23[j].ilu[i] * del[i][k] * t[k];
 				}
-				/* put y in correct quad */
+				/** put y in correct quad */
 				y = ln_range_radians2(y);
 				result += tidal_effects_elp23[j].A * sin(y);
 			}
@@ -935,14 +957,14 @@ public class Lunar {
 		return result;
 	}
 
-	/* sum lunar elp24 series */
+	/** sum lunar elp24 series */
 	public static double sum_series_elp24(double[] t) {
 		double result = 0;
 		int i, j, k;
 		double y;
 
 		for (j = 0; j < tidal_effects_elp24.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(tidal_effects_elp24[j].A) > pre[2]) {
 				y = tidal_effects_elp24[j].O * DEG;
 				for (k = 0; k < 2; k++) {
@@ -950,7 +972,7 @@ public class Lunar {
 					for (i = 0; i < 4; i++)
 						y += tidal_effects_elp24[j].ilu[i] * del[i][k] * t[k];
 				}
-				/* put y in correct quad */
+				/** put y in correct quad */
 				y = ln_range_radians2(y);
 				result += tidal_effects_elp24[j].A * sin(y);
 			}
@@ -958,14 +980,14 @@ public class Lunar {
 		return result;
 	}
 
-	/* sum lunar elp25 series */
+	/** sum lunar elp25 series */
 	public static double sum_series_elp25(double[] t) {
 		double result = 0;
 		int i, j, k;
 		double y, A;
 
 		for (j = 0; j < tidal_effects_elp25.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(tidal_effects_elp25[j].A) > pre[0]) {
 				A = tidal_effects_elp25[j].A * t[1];
 				y = tidal_effects_elp25[j].O * DEG;
@@ -974,7 +996,7 @@ public class Lunar {
 					for (i = 0; i < 4; i++)
 						y += tidal_effects_elp25[j].ilu[i] * del[i][k] * t[k];
 				}
-				/* put y in correct quad */
+				/** put y in correct quad */
 				y = ln_range_radians2(y);
 				result += A * sin(y);
 			}
@@ -982,14 +1004,14 @@ public class Lunar {
 		return result;
 	}
 
-	/* sum lunar elp26 series */
+	/** sum lunar elp26 series */
 	public static double sum_series_elp26(double[] t) {
 		double result = 0;
 		int i, j, k;
 		double y, A;
 
 		for (j = 0; j < tidal_effects_elp26.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(tidal_effects_elp26[j].A) > pre[1]) {
 				A = tidal_effects_elp26[j].A * t[1];
 				y = tidal_effects_elp26[j].O * DEG;
@@ -998,7 +1020,7 @@ public class Lunar {
 					for (i = 0; i < 4; i++)
 						y += tidal_effects_elp26[j].ilu[i] * del[i][k] * t[k];
 				}
-				/* put y in correct quad */
+				/** put y in correct quad */
 				y = ln_range_radians2(y);
 				result += A * sin(y);
 			}
@@ -1006,14 +1028,14 @@ public class Lunar {
 		return result;
 	}
 
-	/* sum lunar elp27 series */
+	/** sum lunar elp27 series */
 	public static double sum_series_elp27(double[] t) {
 		double result = 0;
 		int i, j, k;
 		double y, A;
 
 		for (j = 0; j < tidal_effects_elp27.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(tidal_effects_elp27[j].A) > pre[2]) {
 				A = tidal_effects_elp27[j].A * t[1];
 				y = tidal_effects_elp27[j].O * DEG;
@@ -1022,7 +1044,7 @@ public class Lunar {
 					for (i = 0; i < 4; i++)
 						y += tidal_effects_elp27[j].ilu[i] * del[i][k] * t[k];
 				}
-				/* put y in correct quad */
+				/** put y in correct quad */
 				y = ln_range_radians2(y);
 				result += A * sin(y);
 			}
@@ -1030,14 +1052,14 @@ public class Lunar {
 		return result;
 	}
 
-	/* sum lunar elp28 series */
+	/** sum lunar elp28 series */
 	public static double sum_series_elp28(double[] t) {
 		double result = 0;
 		int i, j, k;
 		double y;
 
 		for (j = 0; j < moon_pert_elp28.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(moon_pert_elp28[j].A) > pre[0]) {
 				y = moon_pert_elp28[j].O * DEG;
 				for (k = 0; k < 2; k++) {
@@ -1045,7 +1067,7 @@ public class Lunar {
 					for (i = 0; i < 4; i++)
 						y += moon_pert_elp28[j].ilu[i] * del[i][k] * t[k];
 				}
-				/* put y in correct quad */
+				/** put y in correct quad */
 				y = ln_range_radians2(y);
 				result += moon_pert_elp28[j].A * sin(y);
 			}
@@ -1053,14 +1075,14 @@ public class Lunar {
 		return result;
 	}
 
-	/* sum lunar elp29 series */
+	/** sum lunar elp29 series */
 	public static double sum_series_elp29(double[] t) {
 		double result = 0;
 		int i, j, k;
 		double y;
 
 		for (j = 0; j < moon_pert_elp29.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(moon_pert_elp29[j].A) > pre[1]) {
 				y = moon_pert_elp29[j].O * DEG;
 				for (k = 0; k < 2; k++) {
@@ -1068,7 +1090,7 @@ public class Lunar {
 					for (i = 0; i < 4; i++)
 						y += moon_pert_elp29[j].ilu[i] * del[i][k] * t[k];
 				}
-				/* put y in correct quad */
+				/** put y in correct quad */
 				y = ln_range_radians2(y);
 				result += moon_pert_elp29[j].A * sin(y);
 			}
@@ -1076,14 +1098,14 @@ public class Lunar {
 		return result;
 	}
 
-	/* sum lunar elp30 series */
+	/** sum lunar elp30 series */
 	public static double sum_series_elp30(double[] t) {
 		double result = 0;
 		int i, j, k;
 		double y;
 
 		for (j = 0; j < moon_pert_elp30.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(moon_pert_elp30[j].A) > pre[2]) {
 				y = moon_pert_elp30[j].O * DEG;
 				for (k = 0; k < 2; k++) {
@@ -1091,7 +1113,7 @@ public class Lunar {
 					for (i = 0; i < 4; i++)
 						y += moon_pert_elp30[j].ilu[i] * del[i][k] * t[k];
 				}
-				/* put y in correct quad */
+				/** put y in correct quad */
 				y = ln_range_radians2(y);
 				result += moon_pert_elp30[j].A * sin(y);
 			}
@@ -1099,14 +1121,14 @@ public class Lunar {
 		return result;
 	}
 
-	/* sum lunar elp31 series */
+	/** sum lunar elp31 series */
 	public static double sum_series_elp31(double[] t) {
 		double result = 0;
 		int i, j, k;
 		double y;
 
 		for (j = 0; j < rel_pert_elp31.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(rel_pert_elp31[j].A) > pre[0]) {
 				y = rel_pert_elp31[j].O * DEG;
 				for (k = 0; k < 2; k++) {
@@ -1114,7 +1136,7 @@ public class Lunar {
 					for (i = 0; i < 4; i++)
 						y += rel_pert_elp31[j].ilu[i] * del[i][k] * t[k];
 				}
-				/* put y in correct quad */
+				/** put y in correct quad */
 				y = ln_range_radians2(y);
 				result += rel_pert_elp31[j].A * sin(y);
 			}
@@ -1122,14 +1144,14 @@ public class Lunar {
 		return result;
 	}
 
-	/* sum lunar elp32 series */
+	/** sum lunar elp32 series */
 	public static double sum_series_elp32(double[] t) {
 		double result = 0;
 		int i, j, k;
 		double y;
 
 		for (j = 0; j < rel_pert_elp32.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(rel_pert_elp32[j].A) > pre[1]) {
 				y = rel_pert_elp32[j].O * DEG;
 				for (k = 0; k < 2; k++) {
@@ -1137,7 +1159,7 @@ public class Lunar {
 					for (i = 0; i < 4; i++)
 						y += rel_pert_elp32[j].ilu[i] * del[i][k] * t[k];
 				}
-				/* put y in correct quad */
+				/** put y in correct quad */
 				y = ln_range_radians2(y);
 				result += rel_pert_elp32[j].A * sin(y);
 			}
@@ -1145,14 +1167,14 @@ public class Lunar {
 		return result;
 	}
 
-	/* sum lunar elp33 series */
+	/** sum lunar elp33 series */
 	public static double sum_series_elp33(double[] t) {
 		double result = 0;
 		int i, j, k;
 		double y;
 
 		for (j = 0; j < rel_pert_elp33.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(rel_pert_elp33[j].A) > pre[2]) {
 				y = rel_pert_elp33[j].O * DEG;
 				for (k = 0; k < 2; k++) {
@@ -1160,7 +1182,7 @@ public class Lunar {
 					for (i = 0; i < 4; i++)
 						y += rel_pert_elp33[j].ilu[i] * del[i][k] * t[k];
 				}
-				/* put y in correct quad */
+				/** put y in correct quad */
 				y = ln_range_radians2(y);
 				result += rel_pert_elp33[j].A * sin(y);
 			}
@@ -1168,14 +1190,14 @@ public class Lunar {
 		return result;
 	}
 
-	/* sum lunar elp34 series */
+	/** sum lunar elp34 series */
 	public static double sum_series_elp34(double[] t) {
 		double result = 0;
 		int i, j, k;
 		double y, A;
 
 		for (j = 0; j < plan_sol_pert_elp34.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(plan_sol_pert_elp34[j].A) > pre[0]) {
 				A = plan_sol_pert_elp34[j].A * t[2];
 				y = plan_sol_pert_elp34[j].O * DEG;
@@ -1184,7 +1206,7 @@ public class Lunar {
 					for (i = 0; i < 4; i++)
 						y += plan_sol_pert_elp34[j].ilu[i] * del[i][k] * t[k];
 				}
-				/* put y in correct quad */
+				/** put y in correct quad */
 				y = ln_range_radians2(y);
 				result += A * sin(y);
 			}
@@ -1192,14 +1214,14 @@ public class Lunar {
 		return result;
 	}
 
-	/* sum lunar elp35 series */
+	/** sum lunar elp35 series */
 	public static double sum_series_elp35(double[] t) {
 		double result = 0;
 		int i, j, k;
 		double y, A;
 
 		for (j = 0; j < plan_sol_pert_elp35.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(plan_sol_pert_elp35[j].A) > pre[1]) {
 				A = plan_sol_pert_elp35[j].A * t[2];
 				y = plan_sol_pert_elp35[j].O * DEG;
@@ -1208,7 +1230,7 @@ public class Lunar {
 					for (i = 0; i < 4; i++)
 						y += plan_sol_pert_elp35[j].ilu[i] * del[i][k] * t[k];
 				}
-				/* put y in correct quad */
+				/** put y in correct quad */
 				y = ln_range_radians2(y);
 				result += A * sin(y);
 			}
@@ -1216,14 +1238,14 @@ public class Lunar {
 		return result;
 	}
 
-	/* sum lunar elp36 series */
+	/** sum lunar elp36 series */
 	public static double sum_series_elp36(double[] t) {
 		double result = 0;
 		int i, j, k;
 		double y, A;
 
 		for (j = 0; j < plan_sol_pert_elp36.length; j++) {
-			/* do we need to calc this value */
+			/** do we need to calc this value */
 			if (Math.abs(plan_sol_pert_elp36[j].A) > pre[2]) {
 				A = plan_sol_pert_elp36[j].A * t[2];
 				y = plan_sol_pert_elp36[j].O * DEG;
@@ -1232,7 +1254,7 @@ public class Lunar {
 					for (i = 0; i < 4; i++)
 						y += plan_sol_pert_elp36[j].ilu[i] * del[i][k] * t[k];
 				}
-				/* put y in correct quad */
+				/** put y in correct quad */
 				y = ln_range_radians2(y);
 				result += A * sin(y);
 			}
@@ -1240,12 +1262,12 @@ public class Lunar {
 		return result;
 	}
 
-	/*
-	 * ! \fn void ln_get_lunar_geo_posn(double JD, LnRectPosn pos, double
-	 * precision); \param JD Julian day. \param pos Pointer to a geocentric
-	 * position structure to held result. \param precision The truncation level
-	 * of the series in radians for longitude and latitude and in km for
-	 * distance. (Valid range 0 - 0.01, 0 being highest accuracy) \ingroup lunar
+	/**
+	 * void ln_get_lunar_geo_posn(double JD, LnRectPosn pos, double precision);
+	 * \param JD Julian day. \param pos Pointer to a geocentric position
+	 * structure to held result. \param precision The truncation level of the
+	 * series in radians for longitude and latitude and in km for distance.
+	 * (Valid range 0 - 0.01, 0 being highest accuracy) \ingroup lunar
 	 * 
 	 * Calculate the rectangular geocentric lunar coordinates to the inertial
 	 * mean ecliptic and equinox of J2000. The geocentric coordinates returned
@@ -1254,7 +1276,7 @@ public class Lunar {
 	 * This function is based upon the Lunar Solution ELP2000-82B by Michelle
 	 * Chapront-Touze and Jean Chapront of the Bureau des Longitudes, Paris.
 	 */
-	/* ELP 2000-82B theory */
+	/** ELP 2000-82B theory */
 	public static void ln_get_lunar_geo_posn(double JD, LnRectPosn moon,
 			double precision) {
 		double t[] = new double[5];
@@ -1263,11 +1285,11 @@ public class Lunar {
 		double x, y, z;
 		double pw, qw, pwqw, pw2, qw2, ra;
 
-		/* is precision too low ? */
+		/** is precision too low ? */
 		if (precision > 0.01)
 			precision = 0.01;
 
-		/* is value in cache ? */
+		/** is value in cache ? */
 		if (JD == c_JD && precision >= c_precision) {
 			moon.X = c_X;
 			moon.Y = c_Y;
@@ -1275,19 +1297,19 @@ public class Lunar {
 			return;
 		}
 
-		/* calc julian centuries */
+		/** calc julian centuries */
 		t[0] = 1.0;
 		t[1] = (JD - 2451545.0) / 36525.0;
 		t[2] = t[1] * t[1];
 		t[3] = t[2] * t[1];
 		t[4] = t[3] * t[1];
 
-		/* calc precision */
+		/** calc precision */
 		pre[0] = precision * RAD;
 		pre[1] = precision * RAD;
 		pre[2] = precision * ATH;
 
-		/* sum elp series */
+		/** sum elp series */
 		elp[0] = sum_series_elp1(t);
 		elp[1] = sum_series_elp2(t);
 		elp[2] = sum_series_elp3(t);
@@ -1332,7 +1354,7 @@ public class Lunar {
 		c = elp[2] + elp[5] + elp[8] + elp[11] + elp[14] + elp[17] + elp[20]
 				+ elp[23] + elp[26] + elp[29] + elp[32] + elp[35];
 
-		/* calculate geocentric coords */
+		/** calculate geocentric coords */
 		a = a / RAD + W1[0] + W1[1] * t[1] + W1[2] * t[2] + W1[3] * t[3]
 				+ W1[4] * t[4];
 		b = b / RAD;
@@ -1343,7 +1365,7 @@ public class Lunar {
 		x = x * cos(a);
 		z = c * sin(b);
 
-		/* Laskars series */
+		/** Laskars series */
 		pw = (P1 + P2 * t[1] + P3 * t[2] + P4 * t[3] + P5 * t[4]) * t[1];
 		qw = (Q1 + Q2 * t[1] + Q3 * t[2] + Q4 * t[3] + Q5 * t[4]) * t[1];
 		ra = 2.0 * sqrt(1 - pw * pw - qw * qw);
@@ -1356,19 +1378,19 @@ public class Lunar {
 		b = pwqw * x + qw2 * y - qw * z;
 		c = -pw * x + qw * y + (pw2 + qw2 - 1) * z;
 
-		/* save cache and result */
+		/** save cache and result */
 		c_JD = JD;
 		c_X = moon.X = a;
 		c_Y = moon.Y = b;
 		c_Z = moon.Z = c;
 	}
 
-	/*
-	 * ! \fn void ln_get_lunar_equ_coords_prec(double JD, LnEquPosn position,
-	 * double precision); \param JD Julian Day \param position Pointer to a
-	 * LnLnlatPosn to store result. \param precision The truncation level of the
-	 * series in radians for longitude and latitude and in km for distance.
-	 * (Valid range 0 - 0.01, 0 being highest accuracy) \ingroup lunar
+	/**
+	 * void ln_get_lunar_equ_coords_prec(double JD, LnEquPosn position, double
+	 * precision); \param JD Julian Day \param position Pointer to a LnLnlatPosn
+	 * to store result. \param precision The truncation level of the series in
+	 * radians for longitude and latitude and in km for distance. (Valid range 0
+	 * - 0.01, 0 being highest accuracy) \ingroup lunar
 	 * 
 	 * Calculate the lunar RA and DEC for Julian day JD. Accuracy is better than
 	 * 10 arcsecs in right ascension and 4 arcsecs in declination.
@@ -1381,9 +1403,9 @@ public class Lunar {
 		ln_get_equ_from_ecl(ecl, JD, position);
 	}
 
-	/*
-	 * ! \fn void ln_get_lunar_equ_coords(double JD, LnEquPosn position); \param
-	 * JD Julian Day \param position Pointer to a LnLnlatPosn to store result.
+	/**
+	 * void ln_get_lunar_equ_coords(double JD, LnEquPosn position); \param JD
+	 * Julian Day \param position Pointer to a LnLnlatPosn to store result.
 	 * \ingroup lunar
 	 * 
 	 * Calculate the lunar RA and DEC for Julian day JD. Accuracy is better than
@@ -1393,12 +1415,12 @@ public class Lunar {
 		ln_get_lunar_equ_coords_prec(JD, position, 0);
 	}
 
-	/*
-	 * ! \fn void ln_get_lunar_ecl_coords(double JD, LnLnlatPosn position,
-	 * double precision); \param JD Julian Day \param position Pointer to a
-	 * LnLnlatPosn to store result. \param precision The truncation level of the
-	 * series in radians for longitude and latitude and in km for distance.
-	 * (Valid range 0 - 0.01, 0 being highest accuracy) \ingroup lunar
+	/**
+	 * void ln_get_lunar_ecl_coords(double JD, LnLnlatPosn position, double
+	 * precision); \param JD Julian Day \param position Pointer to a LnLnlatPosn
+	 * to store result. \param precision The truncation level of the series in
+	 * radians for longitude and latitude and in km for distance. (Valid range 0
+	 * - 0.01, 0 being highest accuracy) \ingroup lunar
 	 * 
 	 * Calculate the lunar longitude and latitude for Julian day JD. Accuracy is
 	 * better than 10 arcsecs in longitude and 4 arcsecs in latitude.
@@ -1407,10 +1429,10 @@ public class Lunar {
 			double precision) {
 		LnRectPosn moon = new LnRectPosn();
 
-		/* get lunar geocentric position */
+		/** get lunar geocentric position */
 		ln_get_lunar_geo_posn(JD, moon, precision);
 
-		/* convert to long and lat */
+		/** convert to long and lat */
 		position.lng = atan2(moon.Y, moon.X);
 		position.lat = atan2(moon.Z, (sqrt((moon.X * moon.X)
 				+ (moon.Y * moon.Y))));
@@ -1418,9 +1440,9 @@ public class Lunar {
 		position.lat = ln_rad_to_deg(position.lat);
 	}
 
-	/*
-	 * ! \fn double ln_get_lunar_earth_dist(double JD); \param JD Julian Day
-	 * \return The distance between the Earth and Moon in km. \ingroup lunar
+	/**
+	 * double ln_get_lunar_earth_dist(double JD); \param JD Julian Day \return
+	 * The distance between the Earth and Moon in km. \ingroup lunar
 	 * 
 	 * Calculates the distance between the centre of the Earth and the centre of
 	 * the Moon in km.
@@ -1432,9 +1454,9 @@ public class Lunar {
 		return sqrt((moon.X * moon.X) + (moon.Y * moon.Y) + (moon.Z * moon.Z));
 	}
 
-	/*
-	 * ! \fn double ln_get_lunar_phase(double JD); \param JD Julian Day \return
-	 * Phase angle. (Value between 0 and 180) \ingroup lunar
+	/**
+	 * double ln_get_lunar_phase(double JD); \param JD Julian Day \return Phase
+	 * angle. (Value between 0 and 180) \ingroup lunar
 	 * 
 	 * Calculates the angle Sun - Moon - Earth.
 	 */
@@ -1444,24 +1466,25 @@ public class Lunar {
 		double lunar_elong;
 		double R, delta;
 
-		/* get lunar and solar long + lat */
+		/** get lunar and solar long + lat */
 		ln_get_lunar_ecl_coords(JD, moon, 0.0001);
 		ln_get_solar_ecl_coords(JD, sunlp);
 
-		/* calc lunar geocentric elongation equ 48.2 */
+		/** calc lunar geocentric elongation equ 48.2 */
 		lunar_elong = acos(cos(ln_deg_to_rad(moon.lat))
 				* cos(ln_deg_to_rad(sunlp.lng - moon.lng)));
 
-		/* now calc phase Equ 48.2 */
+		/** now calc phase Equ 48.2 */
 		R = ln_get_earth_solar_dist(JD);
 		delta = ln_get_lunar_earth_dist(JD);
-		R = R * AU; /* convert R to km */
+		R = R * AU;
+		/** convert R to km */
 		phase = atan2((R * sin(lunar_elong)), (delta - R * cos(lunar_elong)));
 		return ln_rad_to_deg(phase);
 	}
 
-	/*
-	 * ! \fn double ln_get_lunar_disk(double JD); \param JD Julian Day \return
+	/**
+	 * double ln_get_lunar_disk(double JD); \param JD Julian Day \return
 	 * Illuminated fraction. (Value between 0 and 1) \brief Calculate the
 	 * illuminated fraction of the moons disk \ingroup lunar
 	 * 
@@ -1470,15 +1493,15 @@ public class Lunar {
 	public static double ln_get_lunar_disk(double JD) {
 		double i;
 
-		/* Equ 48.1 */
+		/** Equ 48.1 */
 		i = ln_deg_to_rad(ln_get_lunar_phase(JD));
 		return (1.0 + cos(i)) / 2.0;
 	}
 
-	/*
-	 * ! \fn double ln_get_lunar_bright_limb(double JD); \param JD Julian Day
-	 * \return The position angle in degrees. \brief Calculate the position
-	 * angle of the Moon's bright limb. \ingroup lunar
+	/**
+	 * double ln_get_lunar_bright_limb(double JD); \param JD Julian Day \return
+	 * The position angle in degrees. \brief Calculate the position angle of the
+	 * Moon's bright limb. \ingroup lunar
 	 * 
 	 * Calculates the position angle of the midpoint of the illuminated limb of
 	 * the moon, reckoned eastward from the north point of the disk.
@@ -1492,11 +1515,11 @@ public class Lunar {
 
 		LnEquPosn moon = new LnEquPosn(), sunlp = new LnEquPosn();
 
-		/* get lunar and solar long + lat */
+		/** get lunar and solar long + lat */
 		ln_get_lunar_equ_coords(JD, moon);
 		ln_get_solar_equ_coords(JD, sunlp);
 
-		/* Equ 48.5 */
+		/** Equ 48.5 */
 		x = cos(ln_deg_to_rad(sunlp.dec))
 				* sin(ln_deg_to_rad(sunlp.ra - moon.ra));
 		y = sin((ln_deg_to_rad(sunlp.dec)) * cos(ln_deg_to_rad(moon.dec)))
@@ -1508,9 +1531,9 @@ public class Lunar {
 		return ln_rad_to_deg(angle);
 	}
 
-	/*
-	 * ! \fn double ln_get_lunar_rst(double JD, LnLnlatPosn observer, LnRstTime
-	 * rst); \param JD Julian day \param observer Observers position \param rst
+	/**
+	 * double ln_get_lunar_rst(double JD, LnLnlatPosn observer, LnRstTime rst);
+	 * \param JD Julian day \param observer Observers position \param rst
 	 * Pointer to store Rise, Set and Transit time in JD \return 0 for success,
 	 * else 1 for circumpolar. \todo Improve lunar standard altitude for rst
 	 * 
@@ -1527,8 +1550,8 @@ public class Lunar {
 				LN_LUNAR_STANDART_HORIZON, rst);
 	}
 
-	/*
-	 * ! \fn double ln_get_lunar_sdiam(double JD) \param JD Julian day \return
+	/**
+	 * double ln_get_lunar_sdiam(double JD) \param JD Julian day \return
 	 * Semidiameter in arc seconds \todo Use Topocentric distance.
 	 * 
 	 * Calculate the semidiameter of the Moon in arc seconds for the given
@@ -1542,42 +1565,42 @@ public class Lunar {
 		return So / dist;
 	}
 
-	/*
-	 * ! \fn double ln_get_lunar_long_asc_node(double JD); \param JD Julian Day.
+	/**
+	 * double ln_get_lunar_long_asc_node(double JD); \param JD Julian Day.
 	 * \return Longitude of ascending node in degrees.
 	 * 
 	 * Calculate the mean longitude of the Moons ascening node for the given
 	 * Julian day.
 	 */
 	public static double ln_get_lunar_long_asc_node(double JD) {
-		/* calc julian centuries */
+		/** calc julian centuries */
 		double T = (JD - 2451545.0) / 36525.0;
 		double omega = 125.0445479;
 		double T2 = T * T;
 		double T3 = T2 * T;
 		double T4 = T3 * T;
 
-		/* equ 47.7 */
+		/** equ 47.7 */
 		omega -= 1934.1362891 * T + 0.0020754 * T2 + T3 / 467441.0 - T4
 				/ 60616000.0;
 		return omega;
 	}
 
-	/*
-	 * ! \fn double ln_get_lunar_long_perigee(double JD); \param JD Julian Day
-	 * \return Longitude of Moons mean perigee in degrees.
+	/**
+	 * double ln_get_lunar_long_perigee(double JD); \param JD Julian Day \return
+	 * Longitude of Moons mean perigee in degrees.
 	 * 
 	 * Calculate the longitude of the Moon's mean perigee.
 	 */
 	public static double ln_get_lunar_long_perigee(double JD) {
-		/* calc julian centuries */
+		/** calc julian centuries */
 		double T = (JD - 2451545.0) / 36525.0;
 		double per = 83.3532465;
 		double T2 = T * T;
 		double T3 = T2 * T;
 		double T4 = T3 * T;
 
-		/* equ 47.7 */
+		/** equ 47.7 */
 		per += 4069.0137287 * T - 0.0103200 * T2 - T3 / 80053.0 + T4
 				/ 18999000.0;
 		return per;

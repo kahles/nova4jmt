@@ -1,5 +1,27 @@
 package org.n4j;
 
+/*
+ * #%L
+ * libnova for Java
+ * %%
+ * Copyright (C) 2014 novaforjava
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/lgpl-3.0.html>.
+ * #L%
+ */
+
 public class DynamicalTime {
 
 	public static class year_TD {
@@ -7,7 +29,7 @@ public class DynamicalTime {
 		double TD;
 	};
 
-	/* dynamical time in seconds for every second year from 1620 to 1992 */
+	/** dynamical time in seconds for every second year from 1620 to 1992 */
 	private static final double[] delta_t = { 124.0, 115.0, 106.0, 98.0, 91.0,
 			85.0, 79.0, 74.0, 70.0, 65.0, 62.0, 58.0, 55.0, 53.0, 50.0, 48.0,
 			46.0, 44.0, 42.0, 40.0, 37.0, 35.0, 33.0, 31.0, 28.0, 26.0, 24.0,
@@ -27,43 +49,43 @@ public class DynamicalTime {
 			40.2, 42.2, 44.5, 46.5, 48.5, 50.5, 52.2, 53.8, 54.9, 55.8, 56.9,
 			58.3 };
 
-	/* Stephenson and Houlden for years prior to 948 A.D. */
+	/** Stephenson and Houlden for years prior to 948 A.D. */
 	public static double get_dynamical_diff_sh1(double JD) {
 		double TD, E;
 
-		/* number of centuries from 948 */
+		/** number of centuries from 948 */
 		E = (JD - 2067314.5) / 36525.0;
 
 		TD = 1830.0 - 405.0 * E + 46.5 * E * E;
 		return TD;
 	}
 
-	/* Stephenson and Houlden for years between 948 A.D. and 1600 A.D. */
+	/** Stephenson and Houlden for years between 948 A.D. and 1600 A.D. */
 	public static double get_dynamical_diff_sh2(double JD) {
 		double TD, t;
 
-		/* number of centuries from 1850 */
+		/** number of centuries from 1850 */
 		t = (JD - 2396758.5) / 36525.0;
 
 		TD = 22.5 * t * t;
 		return TD;
 	}
 
-	/* Table 9.a pg 72 for years 1600..1992. */
-	/* uses interpolation formula 3.3 on pg 25 */
+	/** Table 9.a pg 72 for years 1600..1992. */
+	/** uses interpolation formula 3.3 on pg 25 */
 	public static double get_dynamical_diff_table(double JD) {
 		double TD = 0;
 		double a, b, c, n;
 		int i;
 
-		/* get no days since 1620 and divide by 2 years */
+		/** get no days since 1620 and divide by 2 years */
 		i = (int) ((JD - 2312752.5) / 730.5);
 
-		/* get the base interpolation factor in the table */
+		/** get the base interpolation factor in the table */
 		if (i > (delta_t.length - 2))
 			i = delta_t.length - 2;
 
-		/* calc a,b,c,n */
+		/** calc a,b,c,n */
 		a = delta_t[i + 1] - delta_t[i];
 		b = delta_t[i + 2] - delta_t[i + 1];
 		c = a - b;
@@ -74,27 +96,27 @@ public class DynamicalTime {
 		return TD;
 	}
 
-	/* get the dynamical time diff in the near past / future 1992 .. 2010 */
-	/* uses interpolation formula 3.3 on pg 25 */
+	/** get the dynamical time diff in the near past / future 1992 .. 2010 */
+	/** uses interpolation formula 3.3 on pg 25 */
 	public static double get_dynamical_diff_near(double JD) {
 		double TD = 0;
-		/* TD for 1990, 2000, 2010 */
+		/** TD for 1990, 2000, 2010 */
 		double delta_T[] = { 56.86, 63.83, 70.0 };
 		double a, b, c, n;
 
-		/* calculate TD by interpolating value */
+		/** calculate TD by interpolating value */
 		a = delta_T[1] - delta_T[0];
 		b = delta_T[2] - delta_T[1];
 		c = b - a;
 
-		/* get number of days since 2000 and divide by 10 years */
+		/** get number of days since 2000 and divide by 10 years */
 		n = (JD - 2451544.5) / 3652.5;
 		TD = delta_T[1] + (n / 2) * (a + b + n * c);
 
 		return TD;
 	}
 
-	/* uses equation 9.1 pg 73 to calc JDE for other JD values */
+	/** uses equation 9.1 pg 73 to calc JDE for other JD values */
 	public static double get_dynamical_diff_other(double JD) {
 		double TD, a;
 
@@ -106,42 +128,42 @@ public class DynamicalTime {
 		return TD;
 	}
 
-	/*
-	 * ! \fn double ln_get_dynamical_time_diff(double JD) \param JD Julian Day
-	 * \return TD
+	/**
+	 * double ln_get_dynamical_time_diff(double JD) \param JD Julian Day \return
+	 * TD
 	 * 
 	 * Calculates the dynamical time (TD) difference in seconds (delta T) from
 	 * universal time.
 	 */
-	/*
+	/**
 	 * Equation 9.1 on pg 73.
 	 */
 	public static double ln_get_dynamical_time_diff(double JD) {
 		double TD;
 
-		/* check when JD is, and use corresponding formula */
-		/* check for date < 948 A.D. */
+		/** check when JD is, and use corresponding formula */
+		/** check for date < 948 A.D. */
 		if (JD < 2067314.5)
-			/* Stephenson and Houlden */
+			/** Stephenson and Houlden */
 			TD = get_dynamical_diff_sh1(JD);
 		else if (JD >= 2067314.5 && JD < 2305447.5)
-			/* check for date 948..1600 A.D. Stephenson and Houlden */
+			/** check for date 948..1600 A.D. Stephenson and Houlden */
 			TD = get_dynamical_diff_sh2(JD);
 		else if (JD >= 2312752.5 && JD < 2448622.5)
-			/* check for value in table 1620..1992 interpolation of table */
+			/** check for value in table 1620..1992 interpolation of table */
 			TD = get_dynamical_diff_table(JD);
 		else if (JD >= 2448622.5 && JD <= 2455197.5)
-			/* check for near future 1992..2010 interpolation */
+			/** check for near future 1992..2010 interpolation */
 			TD = get_dynamical_diff_near(JD);
 		else
-			/* other time period outside */
+			/** other time period outside */
 			TD = get_dynamical_diff_other(JD);
 
 		return TD;
 	}
 
-	/*
-	 * ! \fn double ln_get_jde(double JD) \param JD Julian Day \return Julian
+	/**
+	 * double ln_get_jde(double JD) \param JD Julian Day \return Julian
 	 * Ephemeris day
 	 * 
 	 * Calculates the Julian Ephemeris Day(JDE) from the given julian day

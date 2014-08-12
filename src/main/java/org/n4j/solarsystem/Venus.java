@@ -1,5 +1,27 @@
 package org.n4j.solarsystem;
 
+/*
+ * #%L
+ * libnova for Java
+ * %%
+ * Copyright (C) 2014 novaforjava
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/lgpl-3.0.html>.
+ * #L%
+ */
+
 import static java.lang.Math.acos;
 import static java.lang.Math.asin;
 import static java.lang.Math.atan2;
@@ -26,7 +48,7 @@ import org.n4j.api.LnRstTime;
 
 public class Venus {
 
-	/* cache variables */
+	/** cache variables */
 	static double cJD = 0.0, cL = 0.0, cB = 0.0, cR = 0.0;
 
 	static class Longitude {
@@ -1783,9 +1805,9 @@ public class Venus {
 				new LnVsop(0.00000000002, 5.33215705373, 20426.57109242200), };
 	}
 
-	/*
-	 * ! \fn void ln_get_venus_equ_coords(double JD, LnEquPosn *position);
-	 * \param JD Julian Day \param position Pointer to store position
+	/**
+	 * void ln_get_venus_equ_coords(double JD, LnEquPosn *position); \param JD
+	 * Julian Day \param position Pointer to store position
 	 * 
 	 * Calculates Venus's equatorial position for given julian day. This
 	 * function includes calculations for planetary aberration and refers to the
@@ -1802,7 +1824,7 @@ public class Venus {
 		double a, b, c;
 		double ra, dec, delta, diff, last, t = 0;
 
-		/* need typdef for solar heliocentric coords */
+		/** need typdef for solar heliocentric coords */
 		ln_get_solar_geom_coords(JD, h_sol);
 		ln_get_rect_from_helio(h_sol, g_sol);
 
@@ -1811,7 +1833,7 @@ public class Venus {
 			ln_get_venus_helio_coords(JD - t, h_venus);
 			ln_get_rect_from_helio(h_venus, g_venus);
 
-			/* equ 33.10 pg 229 */
+			/** equ 33.10 pg 229 */
 			a = g_sol.X + g_venus.X;
 			b = g_sol.Y + g_venus.Y;
 			c = g_sol.Z + g_venus.Z;
@@ -1826,21 +1848,20 @@ public class Venus {
 		dec = c / delta;
 		dec = asin(dec);
 
-		/* back to hours, degrees */
+		/** back to hours, degrees */
 		position.ra = ln_range_degrees(ln_rad_to_deg(ra));
 		position.dec = ln_rad_to_deg(dec);
 	}
 
-	/*
-	 * ! \fn void ln_get_venus_helio_coords(double JD, LnHelioPosn *position)
-	 * \param JD Julian Day \param position Pointer to store new heliocentric
-	 * position
+	/**
+	 * void ln_get_venus_helio_coords(double JD, LnHelioPosn *position) \param
+	 * JD Julian Day \param position Pointer to store new heliocentric position
 	 * 
 	 * Calculate Venus heliocentric (referred to the centre of the Sun)
 	 * coordinates in the FK5 reference frame for the given julian day.
 	 * Longitude and Latitude are in degrees, whilst radius vector is in AU.
 	 */
-	/*
+	/**
 	 * Chapter 31 Pg 206-207 Equ 31.1 31.2 , 31.3 using VSOP 87
 	 */
 	public static void ln_get_venus_helio_coords(double JD, LnHelioPosn position) {
@@ -1849,23 +1870,23 @@ public class Venus {
 		double B0, B1, B2, B3, B4, B5;
 		double R0, R1, R2, R3, R4, R5;
 
-		/* check cache first */
+		/** check cache first */
 		if (JD == cJD) {
-			/* cache hit */
+			/** cache hit */
 			position.L = cL;
 			position.B = cB;
 			position.R = cR;
 			return;
 		}
 
-		/* get julian ephemeris day */
+		/** get julian ephemeris day */
 		t = (JD - 2451545.0) / 365250.0;
 		t2 = t * t;
 		t3 = t2 * t;
 		t4 = t3 * t;
 		t5 = t4 * t;
 
-		/* calc L series */
+		/** calc L series */
 		L0 = ln_calc_series(Longitude.venus_longitude_l0, t);
 		L1 = ln_calc_series(Longitude.venus_longitude_l1, t);
 		L2 = ln_calc_series(Longitude.venus_longitude_l2, t);
@@ -1874,7 +1895,7 @@ public class Venus {
 		L5 = ln_calc_series(Longitude.venus_longitude_l5, t);
 		position.L = (L0 + L1 * t + L2 * t2 + L3 * t3 + L4 * t4 + L5 * t5);
 
-		/* calc B series */
+		/** calc B series */
 		B0 = ln_calc_series(Latitude.venus_latitude_b0, t);
 		B1 = ln_calc_series(Latitude.venus_latitude_b1, t);
 		B2 = ln_calc_series(Latitude.venus_latitude_b2, t);
@@ -1883,7 +1904,7 @@ public class Venus {
 		B5 = ln_calc_series(Latitude.venus_latitude_b5, t);
 		position.B = (B0 + B1 * t + B2 * t2 + B3 * t3 + B4 * t4 + B5 * t5);
 
-		/* calc R series */
+		/** calc R series */
 		R0 = ln_calc_series(Radius.venus_radius_r0, t);
 		R1 = ln_calc_series(Radius.venus_radius_r1, t);
 		R2 = ln_calc_series(Radius.venus_radius_r2, t);
@@ -1892,25 +1913,25 @@ public class Venus {
 		R5 = ln_calc_series(Radius.venus_radius_r5, t);
 		position.R = (R0 + R1 * t + R2 * t2 + R3 * t3 + R4 * t4 + R5 * t5);
 
-		/* change to degrees in correct quadrant */
+		/** change to degrees in correct quadrant */
 		position.L = ln_rad_to_deg(position.L);
 		position.B = ln_rad_to_deg(position.B);
 		position.L = ln_range_degrees(position.L);
 
-		/* change to fk5 reference frame */
+		/** change to fk5 reference frame */
 		ln_vsop87_to_fk5(position, JD);
 
-		/* save cache */
+		/** save cache */
 		cJD = JD;
 		cL = position.L;
 		cB = position.B;
 		cR = position.R;
 	}
 
-	/*
-	 * ! \fn double ln_get_venus_earth_dist(double JD); \param JD Julian day
-	 * \brief Calculate the distance between Venus and the Earth in AU \return
-	 * Distance in AU
+	/**
+	 * double ln_get_venus_earth_dist(double JD); \param JD Julian day \brief
+	 * Calculate the distance between Venus and the Earth in AU \return Distance
+	 * in AU
 	 * 
 	 * Calculates the distance in AU between the Earth and Venus for the given
 	 * julian day.
@@ -1920,15 +1941,15 @@ public class Venus {
 		LnRectPosn g_venus = new LnRectPosn(), g_earth = new LnRectPosn();
 		double x, y, z;
 
-		/* get heliocentric positions */
+		/** get heliocentric positions */
 		ln_get_venus_helio_coords(JD, h_venus);
 		ln_get_earth_helio_coords(JD, h_earth);
 
-		/* get geocentric coords */
+		/** get geocentric coords */
 		ln_get_rect_from_helio(h_venus, g_venus);
 		ln_get_rect_from_helio(h_earth, g_earth);
 
-		/* use pythag */
+		/** use pythag */
 		x = g_venus.X - g_earth.X;
 		y = g_venus.Y - g_earth.Y;
 		z = g_venus.Z - g_earth.Z;
@@ -1939,10 +1960,10 @@ public class Venus {
 		return sqrt(x + y + z);
 	}
 
-	/*
-	 * ! \fn double ln_get_venus_solar_dist(double JD); \param JD Julian day
-	 * \brief Calculate the distance between Venus and the Sun in AU \return
-	 * Distance in AU
+	/**
+	 * double ln_get_venus_solar_dist(double JD); \param JD Julian day \brief
+	 * Calculate the distance between Venus and the Sun in AU \return Distance
+	 * in AU
 	 * 
 	 * Calculates the distance in AU between the Sun and Venus for the given
 	 * julian day.
@@ -1950,27 +1971,27 @@ public class Venus {
 	public static double ln_get_venus_solar_dist(double JD) {
 		LnHelioPosn h_venus = new LnHelioPosn();
 
-		/* get heliocentric position */
+		/** get heliocentric position */
 		ln_get_venus_helio_coords(JD, h_venus);
 
 		return h_venus.R;
 	}
 
-	/*
-	 * ! \fn double ln_get_venus_magnitude(double JD); \param JD Julian day
-	 * \brief Calculate the visible magnitude of Venus \return Visible magnitude
-	 * of venus
+	/**
+	 * double ln_get_venus_magnitude(double JD); \param JD Julian day \brief
+	 * Calculate the visible magnitude of Venus \return Visible magnitude of
+	 * venus
 	 * 
 	 * Calculate the visible magnitude of Venus for the given julian day.
 	 */
 	public static double ln_get_venus_magnitude(double JD) {
 		double delta, r, i, i2, i3;
 
-		/* get distances */
+		/** get distances */
 		r = ln_get_venus_solar_dist(JD);
 		delta = ln_get_venus_earth_dist(JD);
 
-		/* get phase */
+		/** get phase */
 		i = ln_get_venus_phase(JD);
 		i2 = i * i;
 		i3 = i2 * i;
@@ -1979,53 +2000,53 @@ public class Venus {
 				- 0.00000065 * i3;
 	}
 
-	/*
-	 * ! \fn double ln_get_venus_disk(double JD); \param JD Julian day \brief
+	/**
+	 * double ln_get_venus_disk(double JD); \param JD Julian day \brief
 	 * Calculate the illuminated fraction of Venus disk \return Illuminated
 	 * fraction of venus disk
 	 * 
 	 * Calculate the illuminated fraction of Venus's disk for the given Julian
 	 * day
 	 */
-	/* Chapter 41 */
+	/** Chapter 41 */
 	public static double ln_get_venus_disk(double JD) {
 		double r, delta, R;
 
-		/* get distances */
+		/** get distances */
 		R = ln_get_earth_solar_dist(JD);
 		r = ln_get_venus_solar_dist(JD);
 		delta = ln_get_venus_earth_dist(JD);
 
-		/* calc fraction angle */
+		/** calc fraction angle */
 		return (((r + delta) * (r + delta)) - R * R) / (4.0 * r * delta);
 	}
 
-	/*
-	 * ! \fn double ln_get_venus_phase(double JD); \param JD Julian day \brief
+	/**
+	 * double ln_get_venus_phase(double JD); \param JD Julian day \brief
 	 * Calculate the phase angle of Venus (Sun - Venus - Earth) \return Phase
 	 * angle of Venus (degrees)
 	 * 
 	 * Calculates the phase angle of Venus, that is, the angle Sun - Venus -
 	 * Earth for the given Julian day.
 	 */
-	/* Chapter 41 */
+	/** Chapter 41 */
 	public static double ln_get_venus_phase(double JD) {
 		double i, r, delta, R;
 
-		/* get distances */
+		/** get distances */
 		R = ln_get_earth_solar_dist(JD);
 		r = ln_get_venus_solar_dist(JD);
 		delta = ln_get_venus_earth_dist(JD);
 
-		/* calc phase */
+		/** calc phase */
 		i = (r * r + delta * delta - R * R) / (2.0 * r * delta);
 		i = acos(i);
 
 		return ln_rad_to_deg(i);
 	}
 
-	/*
-	 * ! \fn double ln_get_venus_rst(double JD, LnLnlatPosn *observer, LnRstTime
+	/**
+	 * double ln_get_venus_rst(double JD, LnLnlatPosn *observer, LnRstTime
 	 * *rst); \param JD Julian day \param observer Observers position \param rst
 	 * Pointer to store Rise, Set and Transit time in JD \return 0 for success,
 	 * else 1 for circumpolar.
@@ -2043,24 +2064,25 @@ public class Venus {
 				LN_STAR_STANDART_HORIZON.doubleValue(), rst);
 	}
 
-	/*
-	 * ! \fn double ln_get_venus_sdiam(double JD) \param JD Julian day \return
+	/**
+	 * double ln_get_venus_sdiam(double JD) \param JD Julian day \return
 	 * Semidiameter in arc seconds
 	 * 
 	 * Calculate the semidiameter of Venus in arc seconds for the given julian
 	 * day.
 	 */
 	public static double ln_get_venus_sdiam(double JD) {
-		double So = 8.41; /* at 1 AU, using atmosphere value, not crust (8.34) */
+		double So = 8.41;
+		/** at 1 AU, using atmosphere value, not crust (8.34) */
 		double dist;
 
 		dist = ln_get_venus_earth_dist(JD);
 		return So / dist;
 	}
 
-	/*
-	 * ! \fn void ln_get_venus_rect_helio(double JD, LnRectPosn *position)
-	 * \param JD Julian day. \param position pointer to return position
+	/**
+	 * void ln_get_venus_rect_helio(double JD, LnRectPosn *position) \param JD
+	 * Julian day. \param position pointer to return position
 	 * 
 	 * Calculate Venus rectangular heliocentric coordinates for the given Julian
 	 * day. Coordinates are in AU.

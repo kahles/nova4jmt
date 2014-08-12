@@ -1,5 +1,27 @@
 package org.n4j.solarsystem;
 
+/*
+ * #%L
+ * libnova for Java
+ * %%
+ * Copyright (C) 2014 novaforjava
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/lgpl-3.0.html>.
+ * #L%
+ */
+
 import static java.lang.Math.acos;
 import static java.lang.Math.asin;
 import static java.lang.Math.atan2;
@@ -26,7 +48,7 @@ import org.n4j.api.LnRstTime;
 
 public class Uranus {
 
-	/* cache variables */
+	/** cache variables */
 	static double cJD = 0.0, cL = 0.0, cB = 0.0, cR = 0.0;
 
 	static class Longitude {
@@ -5334,9 +5356,9 @@ public class Uranus {
 				new LnVsop(0.00000002837, 3.14159265359, 0.00000000000), };
 	}
 
-	/*
-	 * ! \fn void ln_get_uranus_equ_coords(double JD, LnEquPosn position);
-	 * \param JD julian Day \param position pointer to store position
+	/**
+	 * void ln_get_uranus_equ_coords(double JD, LnEquPosn position); \param JD
+	 * julian Day \param position pointer to store position
 	 * 
 	 * Calculates uranus's equatorial position for given julian day. This
 	 * function includes calculations for planetary aberration and refers to the
@@ -5353,7 +5375,7 @@ public class Uranus {
 		double a, b, c;
 		double ra, dec, delta, diff, last, t = 0;
 
-		/* need typdef for solar heliocentric coords */
+		/** need typdef for solar heliocentric coords */
 		ln_get_solar_geom_coords(JD, h_sol);
 		ln_get_rect_from_helio(h_sol, g_sol);
 
@@ -5362,7 +5384,7 @@ public class Uranus {
 			ln_get_uranus_helio_coords(JD - t, h_uranus);
 			ln_get_rect_from_helio(h_uranus, g_uranus);
 
-			/* equ 33.10 pg 229 */
+			/** equ 33.10 pg 229 */
 			a = g_sol.X + g_uranus.X;
 			b = g_sol.Y + g_uranus.Y;
 			c = g_sol.Z + g_uranus.Z;
@@ -5377,21 +5399,20 @@ public class Uranus {
 		dec = c / delta;
 		dec = asin(dec);
 
-		/* back to hours, degrees */
+		/** back to hours, degrees */
 		position.ra = ln_range_degrees(ln_rad_to_deg(ra));
 		position.dec = ln_rad_to_deg(dec);
 	}
 
-	/*
-	 * ! \fn void ln_get_uranus_helio_coords(double JD, LnHelioPosn *position)
-	 * \param JD Julian Day \param position Pointer to store heliocentric
-	 * position
+	/**
+	 * void ln_get_uranus_helio_coords(double JD, LnHelioPosn *position) \param
+	 * JD Julian Day \param position Pointer to store heliocentric position
 	 * 
 	 * Calculate Uranus heliocentric (refered to the centre of the Sun)
 	 * coordinates in the FK5 reference frame for the given julian day.
 	 * Longitude and Latitude are in degrees, whilst radius vector is in AU.
 	 */
-	/*
+	/**
 	 * Chapter 31 Pg 206-207 Equ 31.1 31.2 , 31.3 using VSOP 87
 	 */
 	public static void ln_get_uranus_helio_coords(double JD,
@@ -5402,22 +5423,22 @@ public class Uranus {
 		double B0, B1, B2, B3;
 		double R0, R1, R2, R3, R4;
 
-		/* check cache first */
+		/** check cache first */
 		if (JD == cJD) {
-			/* cache hit */
+			/** cache hit */
 			position.L = cL;
 			position.B = cB;
 			position.R = cR;
 			return;
 		}
 
-		/* get julian ephemeris day */
+		/** get julian ephemeris day */
 		t = (JD - 2451545.0) / 365250;
 		t2 = t * t;
 		t3 = t2 * t;
 		t4 = t3 * t;
 
-		/* calc L series */
+		/** calc L series */
 		L0 = ln_calc_series(Longitude.uranus_longitude_l0, t);
 		L1 = ln_calc_series(Longitude.uranus_longitude_l1, t);
 		L2 = ln_calc_series(Longitude.uranus_longitude_l2, t);
@@ -5425,14 +5446,14 @@ public class Uranus {
 		L4 = ln_calc_series(Longitude.uranus_longitude_l4, t);
 		position.L = (L0 + L1 * t + L2 * t2 + L3 * t3 + L4 * t4);
 
-		/* calc B series */
+		/** calc B series */
 		B0 = ln_calc_series(Latitude.uranus_latitude_b0, t);
 		B1 = ln_calc_series(Latitude.uranus_latitude_b1, t);
 		B2 = ln_calc_series(Latitude.uranus_latitude_b2, t);
 		B3 = ln_calc_series(Latitude.uranus_latitude_b3, t);
 		position.B = (B0 + B1 * t + B2 * t2 + B3 * t3);
 
-		/* calc R series */
+		/** calc R series */
 		R0 = ln_calc_series(Radius.uranus_radius_r0, t);
 		R1 = ln_calc_series(Radius.uranus_radius_r1, t);
 		R2 = ln_calc_series(Radius.uranus_radius_r2, t);
@@ -5440,24 +5461,24 @@ public class Uranus {
 		R4 = ln_calc_series(Radius.uranus_radius_r4, t);
 		position.R = (R0 + R1 * t + R2 * t2 + R3 * t3 + R4 * t4);
 
-		/* change to degrees in correct quadrant */
+		/** change to degrees in correct quadrant */
 		position.L = ln_rad_to_deg(position.L);
 		position.B = ln_rad_to_deg(position.B);
 		position.L = ln_range_degrees(position.L);
 
-		/* change to fk5 reference frame */
+		/** change to fk5 reference frame */
 		ln_vsop87_to_fk5(position, JD);
 
-		/* save cache */
+		/** save cache */
 		cJD = JD;
 		cL = position.L;
 		cB = position.B;
 		cR = position.R;
 	}
 
-	/*
-	 * ! \fn double ln_get_uranus_earth_dist(double JD); \param JD Julian day
-	 * \brief Calculate the distance between Uranus and the Earth in AU \return
+	/**
+	 * double ln_get_uranus_earth_dist(double JD); \param JD Julian day \brief
+	 * Calculate the distance between Uranus and the Earth in AU \return
 	 * Distance in AU
 	 * 
 	 * Calculates the distance in AU between the Earth and Uranus for the given
@@ -5468,15 +5489,15 @@ public class Uranus {
 		LnRectPosn g_uranus = new LnRectPosn(), g_earth = new LnRectPosn();
 		double x, y, z;
 
-		/* get heliocentric positions */
+		/** get heliocentric positions */
 		ln_get_uranus_helio_coords(JD, h_uranus);
 		ln_get_earth_helio_coords(JD, h_earth);
 
-		/* get geocentric coords */
+		/** get geocentric coords */
 		ln_get_rect_from_helio(h_uranus, g_uranus);
 		ln_get_rect_from_helio(h_earth, g_earth);
 
-		/* use pythag */
+		/** use pythag */
 		x = g_uranus.X - g_earth.X;
 		y = g_uranus.Y - g_earth.Y;
 		z = g_uranus.Z - g_earth.Z;
@@ -5488,10 +5509,10 @@ public class Uranus {
 		return sqrt(x + y + z);
 	}
 
-	/*
-	 * ! \fn double ln_get_uranus_solar_dist(double JD); \param JD Julian day
-	 * \brief Calculate the distance between Uranus and the Sun in AU \return
-	 * Distance in AU
+	/**
+	 * double ln_get_uranus_solar_dist(double JD); \param JD Julian day \brief
+	 * Calculate the distance between Uranus and the Sun in AU \return Distance
+	 * in AU
 	 * 
 	 * Calculates the distance in AU between the Sun and Uranus for the given
 	 * julian day.
@@ -5499,75 +5520,75 @@ public class Uranus {
 	public static double ln_get_uranus_solar_dist(double JD) {
 		LnHelioPosn h_uranus = new LnHelioPosn();
 
-		/* get heliocentric position */
+		/** get heliocentric position */
 		ln_get_uranus_helio_coords(JD, h_uranus);
 		return h_uranus.R;
 	}
 
-	/*
-	 * ! \fn double ln_get_uranus_magnitude(double JD); \param JD Julian day
-	 * \brief Calculate the visible magnitude of Uranus \return Visible
-	 * magnitude of Uranus
+	/**
+	 * double ln_get_uranus_magnitude(double JD); \param JD Julian day \brief
+	 * Calculate the visible magnitude of Uranus \return Visible magnitude of
+	 * Uranus
 	 * 
 	 * Calculate the visible magnitude of Uranus for the given julian day.
 	 */
 	public static double ln_get_uranus_magnitude(double JD) {
 		double delta, r;
 
-		/* get distances */
+		/** get distances */
 		r = ln_get_uranus_solar_dist(JD);
 		delta = ln_get_uranus_earth_dist(JD);
 
 		return -7.19 + 5.0 * log10(r * delta);
 	}
 
-	/*
-	 * ! \fn double ln_get_uranus_disk(double JD); \param JD Julian day \brief
+	/**
+	 * double ln_get_uranus_disk(double JD); \param JD Julian day \brief
 	 * Calculate the illuminated fraction of Uranus disk \return Illuminated
 	 * fraction of Uranus disk
 	 * 
 	 * Calculate the illuminated fraction of Uranus's disk for the given Julian
 	 * day.
 	 */
-	/* Chapter 41 */
+	/** Chapter 41 */
 	public static double ln_get_uranus_disk(double JD) {
 		double r, delta, R;
 
-		/* get distances */
+		/** get distances */
 		R = ln_get_earth_solar_dist(JD);
 		r = ln_get_uranus_solar_dist(JD);
 		delta = ln_get_uranus_earth_dist(JD);
 
-		/* calc fraction angle */
+		/** calc fraction angle */
 		return (((r + delta) * (r + delta)) - R * R) / (4.0 * r * delta);
 	}
 
-	/*
-	 * ! \fn double ln_get_uranus_phase(double JD); \param JD Julian day \brief
+	/**
+	 * double ln_get_uranus_phase(double JD); \param JD Julian day \brief
 	 * Calculate the phase angle of Uranus (Sun - Uranus - Earth) \return Phase
 	 * angle of Uranus (degrees)
 	 * 
 	 * Calculates the phase angle of Uranus, that is, the angle Sun - Uranus -
 	 * Earth for the given Julian day.
 	 */
-	/* Chapter 41 */
+	/** Chapter 41 */
 	public static double ln_get_uranus_phase(double JD) {
 		double i, r, delta, R;
 
-		/* get distances */
+		/** get distances */
 		R = ln_get_earth_solar_dist(JD);
 		r = ln_get_uranus_solar_dist(JD);
 		delta = ln_get_uranus_earth_dist(JD);
 
-		/* calc phase */
+		/** calc phase */
 		i = (r * r + delta * delta - R * R) / (2.0 * r * delta);
 		i = acos(i);
 		return ln_rad_to_deg(i);
 	}
 
-	/*
-	 * ! \fn double ln_get_uranus_rst(double JD, LnLnlatPosn observer, LnRstTime
-	 * rst); \param JD Julian day \param observer Observers position \param rst
+	/**
+	 * double ln_get_uranus_rst(double JD, LnLnlatPosn observer, LnRstTime rst);
+	 * \param JD Julian day \param observer Observers position \param rst
 	 * Pointer to store Rise, Set and Transit time in JD \return 0 for success,
 	 * else 1 for circumpolar.
 	 * 
@@ -5584,24 +5605,25 @@ public class Uranus {
 				LN_STAR_STANDART_HORIZON.doubleValue(), rst);
 	}
 
-	/*
-	 * ! \fn double ln_get_uranus_sdiam(double JD) \param JD Julian day \return
+	/**
+	 * double ln_get_uranus_sdiam(double JD) \param JD Julian day \return
 	 * Semidiameter in arc seconds
 	 * 
 	 * Calculate the semidiameter of Uranus in arc seconds for the given julian
 	 * day.
 	 */
 	public static double ln_get_uranus_sdiam(double JD) {
-		double So = 35.02; /* at 1 AU */
+		double So = 35.02;
+		/** at 1 AU */
 		double dist;
 
 		dist = ln_get_uranus_earth_dist(JD);
 		return So / dist;
 	}
 
-	/*
-	 * ! \fn void ln_get_uranus_rect_helio(double JD, LnRectPosn position)
-	 * \param JD Julian day. \param position pointer to return position
+	/**
+	 * void ln_get_uranus_rect_helio(double JD, LnRectPosn position) \param JD
+	 * Julian day. \param position pointer to return position
 	 * 
 	 * Calculate Uranus rectangular heliocentric coordinates for the given
 	 * Julian day. Coordinates are in AU.

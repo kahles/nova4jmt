@@ -1,5 +1,27 @@
 package org.n4j.solarsystem;
 
+/*
+ * #%L
+ * libnova for Java
+ * %%
+ * Copyright (C) 2014 novaforjava
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/lgpl-3.0.html>.
+ * #L%
+ */
+
 import static java.lang.Math.acos;
 import static java.lang.Math.asin;
 import static java.lang.Math.atan2;
@@ -67,7 +89,7 @@ public class Pluto {
 		double A, B;
 	};
 
-	/* cache variables */
+	/** cache variables */
 	static double cJD = 0.0, cL = 0.0, cB = 0.0, cR = 0.0;
 
 	static pluto_argument[] argument = { new pluto_argument(0, 0, 1),
@@ -172,9 +194,9 @@ public class Pluto {
 			new pluto_radius(-8, 7), new pluto_radius(2, -10),
 			new pluto_radius(19, 35), new pluto_radius(10, 2) };
 
-	/*
-	 * ! \fn void ln_get_pluto_equ_coords(double JD, LnEquPosn position); \param
-	 * JD julian Day \param position Pointer to store position
+	/**
+	 * void ln_get_pluto_equ_coords(double JD, LnEquPosn position); \param JD
+	 * julian Day \param position Pointer to store position
 	 * 
 	 * Calculates Pluto's equatorial position for the given julian day.
 	 */
@@ -184,7 +206,7 @@ public class Pluto {
 		double a, b, c;
 		double ra, dec, delta, diff, last, t = 0;
 
-		/* need typdef for solar heliocentric coords */
+		/** need typdef for solar heliocentric coords */
 		ln_get_solar_geom_coords(JD, h_sol);
 		ln_get_rect_from_helio(h_sol, g_sol);
 
@@ -193,7 +215,7 @@ public class Pluto {
 			ln_get_pluto_helio_coords(JD - t, h_pluto);
 			ln_get_rect_from_helio(h_pluto, g_pluto);
 
-			/* equ 33.10 pg 229 */
+			/** equ 33.10 pg 229 */
 			a = g_sol.X + g_pluto.X;
 			b = g_sol.Y + g_pluto.Y;
 			c = g_sol.Z + g_pluto.Z;
@@ -208,15 +230,14 @@ public class Pluto {
 		dec = c / delta;
 		dec = asin(dec);
 
-		/* back to hours, degrees */
+		/** back to hours, degrees */
 		position.ra = ln_range_degrees(ln_rad_to_deg(ra));
 		position.dec = ln_rad_to_deg(dec);
 	}
 
-	/*
-	 * ! \fn void ln_get_pluto_helio_coords(double JD, LnHelioPosn position)
-	 * \param JD Julian Day \param position Pointer to store new heliocentric
-	 * position
+	/**
+	 * void ln_get_pluto_helio_coords(double JD, LnHelioPosn position) \param JD
+	 * Julian Day \param position Pointer to store new heliocentric position
 	 * 
 	 * Calculate Pluto's heliocentric coordinates for the given julian day. This
 	 * function is accurate to within 0.07" in longitude, 0.02" in latitude and
@@ -224,7 +245,7 @@ public class Pluto {
 	 * 
 	 * Note: This function is not valid outside the period of 1885-2099.
 	 */
-	/*
+	/**
 	 * Chap 37. Equ 37.1
 	 */
 
@@ -234,54 +255,54 @@ public class Pluto {
 		double t, a, sin_a, cos_a;
 		int i;
 
-		/* check cache first */
+		/** check cache first */
 		if (JD == cJD) {
-			/* cache hit */
+			/** cache hit */
 			position.L = cL;
 			position.B = cB;
 			position.R = cR;
 			return;
 		}
 
-		/* get julian centuries since J2000 */
+		/** get julian centuries since J2000 */
 		t = (JD - 2451545.0) / 36525.0;
 
-		/* calculate mean longitudes for jupiter, saturn and pluto */
+		/** calculate mean longitudes for jupiter, saturn and pluto */
 		J = 34.35 + 3034.9057 * t;
 		S = 50.08 + 1222.1138 * t;
 		P = 238.96 + 144.9600 * t;
 
-		/* calc periodic terms in table 37.A */
+		/** calc periodic terms in table 37.A */
 		for (i = 0; i < argument.length; i++) {
 			a = argument[i].J * J + argument[i].S * S + argument[i].P * P;
 			sin_a = sin(ln_deg_to_rad(a));
 			cos_a = cos(ln_deg_to_rad(a));
 
-			/* longitude */
+			/** longitude */
 			sum_longitude += longitude[i].A * sin_a + longitude[i].B * cos_a;
 
-			/* latitude */
+			/** latitude */
 			sum_latitude += latitude[i].A * sin_a + latitude[i].B * cos_a;
 
-			/* radius */
+			/** radius */
 			sum_radius += radius[i].A * sin_a + radius[i].B * cos_a;
 		}
 
-		/* calc L, B, R */
+		/** calc L, B, R */
 		position.L = 238.958116 + 144.96 * t + sum_longitude * 0.000001;
 		position.B = -3.908239 + sum_latitude * 0.000001;
 		position.R = 40.7241346 + sum_radius * 0.0000001;
 
-		/* save cache */
+		/** save cache */
 		cJD = JD;
 		cL = position.L;
 		cB = position.B;
 		cR = position.R;
 	}
 
-	/*
-	 * ! \fn double ln_get_pluto_earth_dist(double JD); \param JD Julian day
-	 * \return Distance in AU
+	/**
+	 * double ln_get_pluto_earth_dist(double JD); \param JD Julian day \return
+	 * Distance in AU
 	 * 
 	 * Calculates the distance in AU between the Earth and Pluto for the given
 	 * julian day.
@@ -291,15 +312,15 @@ public class Pluto {
 		LnRectPosn g_pluto = new LnRectPosn(), g_earth = new LnRectPosn();
 		double x, y, z;
 
-		/* get heliocentric positions */
+		/** get heliocentric positions */
 		ln_get_pluto_helio_coords(JD, h_pluto);
 		ln_get_earth_helio_coords(JD, h_earth);
 
-		/* get geocentric coords */
+		/** get geocentric coords */
 		ln_get_rect_from_helio(h_pluto, g_pluto);
 		ln_get_rect_from_helio(h_earth, g_earth);
 
-		/* use pythag */
+		/** use pythag */
 		x = g_pluto.X - g_earth.X;
 		y = g_pluto.Y - g_earth.Y;
 		z = g_pluto.Z - g_earth.Z;
@@ -311,9 +332,9 @@ public class Pluto {
 		return sqrt(x + y + z);
 	}
 
-	/*
-	 * ! \fn double ln_get_pluto_solar_dist(double JD); \param JD Julian day
-	 * \return Distance in AU
+	/**
+	 * double ln_get_pluto_solar_dist(double JD); \param JD Julian day \return
+	 * Distance in AU
 	 * 
 	 * Calculates the distance in AU between the Sun and Pluto for the given
 	 * julian day.
@@ -321,72 +342,72 @@ public class Pluto {
 	public static double ln_get_pluto_solar_dist(double JD) {
 		LnHelioPosn h_pluto = new LnHelioPosn();
 
-		/* get heliocentric position */
+		/** get heliocentric position */
 		ln_get_pluto_helio_coords(JD, h_pluto);
 		return h_pluto.R;
 	}
 
-	/*
-	 * ! \fn double ln_get_pluto_magnitude(double JD); \param JD Julian day
-	 * \return Visible magnitude of Pluto
+	/**
+	 * double ln_get_pluto_magnitude(double JD); \param JD Julian day \return
+	 * Visible magnitude of Pluto
 	 * 
 	 * Calculate the visible magnitude of Pluto for the given julian day.
 	 */
 	public static double ln_get_pluto_magnitude(double JD) {
 		double delta, r;
 
-		/* get distances */
+		/** get distances */
 		r = ln_get_pluto_solar_dist(JD);
 		delta = ln_get_pluto_earth_dist(JD);
 
 		return -1.0 + 5.0 * log10(r * delta);
 	}
 
-	/*
-	 * ! \fn double ln_get_pluto_disk(double JD); \param JD Julian day \return
+	/**
+	 * double ln_get_pluto_disk(double JD); \param JD Julian day \return
 	 * Illuminated fraction of Plutos disk
 	 * 
 	 * Calculate the illuminated fraction of Pluto's disk for the given julian
 	 * day.
 	 */
-	/* Chapter 41 */
+	/** Chapter 41 */
 	public static double ln_get_pluto_disk(double JD) {
 		double r, delta, R;
 
-		/* get distances */
+		/** get distances */
 		R = ln_get_earth_solar_dist(JD);
 		r = ln_get_pluto_solar_dist(JD);
 		delta = ln_get_pluto_earth_dist(JD);
 
-		/* calc fraction angle */
+		/** calc fraction angle */
 		return (((r + delta) * (r + delta)) - R * R) / (4.0 * r * delta);
 	}
 
-	/*
-	 * ! \fn double ln_get_pluto_phase(double JD); \param JD Julian day \return
-	 * Phase angle of Pluto (degrees)
+	/**
+	 * double ln_get_pluto_phase(double JD); \param JD Julian day \return Phase
+	 * angle of Pluto (degrees)
 	 * 
 	 * Calculate the phase angle of Pluto (Sun - Pluto - Earth) for the given
 	 * julian day.
 	 */
-	/* Chapter 41 */
+	/** Chapter 41 */
 	public static double ln_get_pluto_phase(double JD) {
 		double i, r, delta, R;
 
-		/* get distances */
+		/** get distances */
 		R = ln_get_earth_solar_dist(JD);
 		r = ln_get_pluto_solar_dist(JD);
 		delta = ln_get_pluto_earth_dist(JD);
 
-		/* calc phase */
+		/** calc phase */
 		i = (r * r + delta * delta - R * R) / (2.0 * r * delta);
 		i = acos(i);
 		return ln_rad_to_deg(i);
 	}
 
-	/*
-	 * ! \fn double ln_get_pluto_rst(double JD, LnLnlatPosn observer, LnRstTime
-	 * rst); \param JD Julian day \param observer Observers position \param rst
+	/**
+	 * double ln_get_pluto_rst(double JD, LnLnlatPosn observer, LnRstTime rst);
+	 * \param JD Julian day \param observer Observers position \param rst
 	 * Pointer to store Rise, Set and Transit time in JD \return 0 for success,
 	 * else 1 for circumpolar.
 	 * 
@@ -403,24 +424,25 @@ public class Pluto {
 				LN_STAR_STANDART_HORIZON.doubleValue(), rst);
 	}
 
-	/*
-	 * ! \fn double ln_get_pluto_sdiam(double JD) \param JD Julian day \return
+	/**
+	 * double ln_get_pluto_sdiam(double JD) \param JD Julian day \return
 	 * Semidiameter in arc seconds
 	 * 
 	 * Calculate the semidiameter of Pluto in arc seconds for the given julian
 	 * day.
 	 */
 	public static double ln_get_pluto_sdiam(double JD) {
-		double So = 2.07; /* at 1 AU */
+		double So = 2.07;
+		/** at 1 AU */
 		double dist;
 
 		dist = ln_get_pluto_earth_dist(JD);
 		return So / dist;
 	}
 
-	/*
-	 * ! \fn void ln_get_pluto_rect_helio(double JD, LnRectPosn position) \param
-	 * JD Julian day. \param position pointer to return position
+	/**
+	 * void ln_get_pluto_rect_helio(double JD, LnRectPosn position) \param JD
+	 * Julian day. \param position pointer to return position
 	 * 
 	 * Calculate Plutos rectangular heliocentric coordinates for the given
 	 * Julian day. Coordinates are in AU.

@@ -1,5 +1,27 @@
 package org.n4j;
 
+/*
+ * #%L
+ * libnova for Java
+ * %%
+ * Copyright (C) 2014 novaforjava
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/lgpl-3.0.html>.
+ * #L%
+ */
+
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static java.lang.Math.tan;
@@ -34,19 +56,19 @@ public class Vsop87 {
 		return value;
 	}
 
-	/*
-	 * ! \fn void ln_vsop87_to_fk5(struct ln_helio_posn *position, double JD)
-	 * \param position Position to transform. \param JD Julian day
+	/**
+	 * void ln_vsop87_to_fk5(struct ln_helio_posn *position, double JD) \param
+	 * position Position to transform. \param JD Julian day
 	 * 
 	 * Transform from VSOP87 to FK5 reference frame.
 	 */
-	/*
+	/**
 	 * Equation 31.3 Pg 207.
 	 */
 	public static void ln_vsop87_to_fk5(LnHelioPosn position, double JD) {
 		double LL, cos_LL, sin_LL, T, delta_L, delta_B, B;
 
-		/* get julian centuries from 2000 */
+		/** get julian centuries from 2000 */
 		T = (JD - 2451545.0) / 36525.0;
 
 		LL = position.L + (-1.397 - 0.00031 * T) * T;

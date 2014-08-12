@@ -1,5 +1,27 @@
 package org.n4j;
 
+/*
+ * #%L
+ * libnova for Java
+ * %%
+ * Copyright (C) 2014 novaforjava
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/lgpl-3.0.html>.
+ * #L%
+ */
+
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static org.n4j.Nutation.ln_get_nutation;
@@ -13,8 +35,8 @@ import org.n4j.api.LnNutation;
 
 public class HeliocentricTime {
 
-	/*
-	 * ! \fn double ln_get_heliocentric_time_diff(double JD, struct ln_equ_posn
+	/**
+	 * double ln_get_heliocentric_time_diff(double JD, struct ln_equ_posn
 	 * *object) \param JD Julian day \param object Pointer to object (RA, DEC)
 	 * for which heliocentric correction will be caculated
 	 * 
@@ -38,7 +60,7 @@ public class HeliocentricTime {
 		c_dec = cos(dec);
 		obliq = ln_deg_to_rad(nutation.ecliptic);
 
-		/*
+		/**
 		 * L.Binnendijk Properties of Double Stars, Philadelphia, University of
 		 * Pennselvania Press, pp. 228-232, 1960
 		 */

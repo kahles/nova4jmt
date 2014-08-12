@@ -1,5 +1,27 @@
 package org.n4j;
 
+/*
+ * #%L
+ * libnova for Java
+ * %%
+ * Copyright (C) 2014 novaforjava
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/lgpl-3.0.html>.
+ * #L%
+ */
+
 import static java.lang.Math.atan;
 import static java.lang.Math.atan2;
 import static java.lang.Math.cos;
@@ -14,7 +36,7 @@ import org.n4j.api.LnEquPosn;
 import org.n4j.api.LnLnlatPosn;
 
 public class Parallax {
-	/*
+	/**
 	 * Equ on page 77 - chapter 10, The Earth's globe
 	 */
 	public static void get_topocentric(LnLnlatPosn observer, double height,
@@ -36,18 +58,18 @@ public class Parallax {
 		ro_cos.value = Math.abs(ro_cos.value);
 	}
 
-	/*
-	 * ! \fn void ln_get_parallax(LnEquPosn object, double au_distance,
-	 * LnLnlatPosn observer, double height, double JD, LnEquPosn parallax);
-	 * \param object Object geocentric coordinates \param au_distance Distance
-	 * of object from Earth in AU \param observer Geographics observer positions
-	 * \param height Observer height in m \param JD Julian day of observation
-	 * \param parallax RA and DEC parallax
+	/**
+	 * void ln_get_parallax(LnEquPosn object, double au_distance, LnLnlatPosn
+	 * observer, double height, double JD, LnEquPosn parallax); \param object
+	 * Object geocentric coordinates \param au_distance Distance of object from
+	 * Earth in AU \param observer Geographics observer positions \param height
+	 * Observer height in m \param JD Julian day of observation \param parallax
+	 * RA and DEC parallax
 	 * 
 	 * Calculate body parallax, which is need to calculate topocentric position
 	 * of the body.
 	 */
-	/*
+	/**
 	 * Equ 39.1, 39.2, 39.3 Pg 263 and 264
 	 */
 	public static void ln_get_parallax(LnEquPosn object, double au_distance,
@@ -59,19 +81,19 @@ public class Parallax {
 		ln_get_parallax_ha(object, au_distance, observer, height, H, parallax);
 	}
 
-	/*
-	 * ! \fn void ln_get_parallax_ha(LnEquPosn object, double au_distance,
-	 * LnLnlatPosn observer, double height, double H, LnEquPosn parallax);
-	 * \param object Object geocentric coordinates \param au_distance Distance
-	 * of object from Earth in AU \param observer Geographics observer positions
-	 * \param height Observer height in m \param H Hour angle of object in hours
-	 * \param parallax RA and DEC parallax
+	/**
+	 * void ln_get_parallax_ha(LnEquPosn object, double au_distance, LnLnlatPosn
+	 * observer, double height, double H, LnEquPosn parallax); \param object
+	 * Object geocentric coordinates \param au_distance Distance of object from
+	 * Earth in AU \param observer Geographics observer positions \param height
+	 * Observer height in m \param H Hour angle of object in hours \param
+	 * parallax RA and DEC parallax
 	 * 
 	 * Calculate body parallax, which is need to calculate topocentric position
 	 * of the body. Uses hour angle as time reference (handy in case we already
 	 * compute it).
 	 */
-	/*
+	/**
 	 * Equ 39.1, 39.2, 39.3 Pg 263 and 264
 	 */
 	public static void ln_get_parallax_ha(LnEquPosn object, double au_distance,
@@ -82,7 +104,7 @@ public class Parallax {
 		get_topocentric(observer, height, ro_sin, ro_cos);
 		sin_pi = sin(ln_deg_to_rad((8.794 / au_distance) / 3600.0)); // (39.1)
 
-		/* change hour angle from hours to radians */
+		/** change hour angle from hours to radians */
 		H *= Math.PI / 12.0;
 
 		sin_H = sin(H);

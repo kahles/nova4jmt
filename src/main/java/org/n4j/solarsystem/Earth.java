@@ -1,5 +1,27 @@
 package org.n4j.solarsystem;
 
+/*
+ * #%L
+ * libnova for Java
+ * %%
+ * Copyright (C) 2014 novaforjava
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/lgpl-3.0.html>.
+ * #L%
+ */
+
 import static java.lang.Math.atan2;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
@@ -18,7 +40,7 @@ import org.n4j.api.LnRectPosn;
 
 public class Earth {
 
-	/* cache variables */
+	/** cache variables */
 	static double cJD = 0.0, cL = 0.0, cB = 0.0, cR = 0.0;
 
 	static Vsop87.LnVsop earth_longitude_l0[] = {
@@ -2621,16 +2643,16 @@ public class Earth {
 			new Vsop87.LnVsop(0.00000000086, 1.21805304895, 6283.07584999140),
 			new Vsop87.LnVsop(0.00000000012, 0.65572878044, 12566.15169998280), };
 
-	/*
-	 * ! \fn void ln_get_earth_helio_coords(double JD, struct ln_helio_posn
-	 * *position) \param JD Julian day \param position Pointer to store
-	 * heliocentric position
+	/**
+	 * void ln_get_earth_helio_coords(double JD, struct ln_helio_posn *position)
+	 * \param JD Julian day \param position Pointer to store heliocentric
+	 * position
 	 * 
 	 * Calculate Earths heliocentric (referred to the centre of the Sun)
 	 * coordinates for given julian day. Longitude and Latitude are in degrees,
 	 * whilst radius vector is in AU.
 	 */
-	/*
+	/**
 	 * Chapter 31 Pg 206-207 Equ 31.1 31.2 , 31.3 using VSOP 87
 	 */
 	public static void ln_get_earth_helio_coords(double JD, LnHelioPosn position) {
@@ -2639,23 +2661,23 @@ public class Earth {
 		double B0, B1, B2, B3, B4, B5;
 		double R0, R1, R2, R3, R4, R5;
 
-		/* check cache first */
+		/** check cache first */
 		if (JD == cJD) {
-			/* cache hit */
+			/** cache hit */
 			position.L = cL;
 			position.B = cB;
 			position.R = cR;
 			return;
 		}
 
-		/* get julian ephemeris day */
+		/** get julian ephemeris day */
 		t = (JD - 2451545.0) / 365250.0;
 		t2 = t * t;
 		t3 = t2 * t;
 		t4 = t3 * t;
 		t5 = t4 * t;
 
-		/* calc L series */
+		/** calc L series */
 		L0 = ln_calc_series(earth_longitude_l0, t);
 		L1 = ln_calc_series(earth_longitude_l1, t);
 		L2 = ln_calc_series(earth_longitude_l2, t);
@@ -2664,7 +2686,7 @@ public class Earth {
 		L5 = ln_calc_series(earth_longitude_l5, t);
 		position.L = (L0 + L1 * t + L2 * t2 + L3 * t3 + L4 * t4 + L5 * t5);
 
-		/* calc B series */
+		/** calc B series */
 		B0 = ln_calc_series(earth_latitude_b0, t);
 		B1 = ln_calc_series(earth_latitude_b1, t);
 		B2 = ln_calc_series(earth_latitude_b2, t);
@@ -2673,7 +2695,7 @@ public class Earth {
 		B5 = ln_calc_series(earth_latitude_b5, t);
 		position.B = (B0 + B1 * t + B2 * t2 + B3 * t3 + B4 * t4 + B5 * t5);
 
-		/* calc R series */
+		/** calc R series */
 		R0 = ln_calc_series(earth_radius_r0, t);
 		R1 = ln_calc_series(earth_radius_r1, t);
 		R2 = ln_calc_series(earth_radius_r2, t);
@@ -2682,24 +2704,24 @@ public class Earth {
 		R5 = ln_calc_series(earth_radius_r5, t);
 		position.R = (R0 + R1 * t + R2 * t2 + R3 * t3 + R4 * t4 + R5 * t5);
 
-		/* change to degrees in correct quadrant */
+		/** change to degrees in correct quadrant */
 		position.L = ln_rad_to_deg(position.L);
 		position.B = ln_rad_to_deg(position.B) * -1.0;
 		position.L = ln_range_degrees(position.L);
 
-		/* change to fk5 reference frame */
+		/** change to fk5 reference frame */
 		ln_vsop87_to_fk5(position, JD);
 
-		/* save cache */
+		/** save cache */
 		cJD = JD;
 		cL = position.L;
 		cB = position.B;
 		cR = position.R;
 	}
 
-	/*
-	 * ! \fn double ln_get_earth_solar_dist(double JD); \param JD Julian day.
-	 * \return Distance in AU
+	/**
+	 * double ln_get_earth_solar_dist(double JD); \param JD Julian day. \return
+	 * Distance in AU
 	 * 
 	 * Calculates the distance in AU between the Sun and Earth for the given
 	 * julian day.
@@ -2707,16 +2729,16 @@ public class Earth {
 	public static double ln_get_earth_solar_dist(double JD) {
 		LnHelioPosn h_earth = new LnHelioPosn();
 
-		/* get heliocentric position */
+		/** get heliocentric position */
 		ln_get_earth_helio_coords(JD, h_earth);
 
 		return h_earth.R;
 	}
 
-	/*
-	 * ! \fn void ln_get_earth_centre_dist (float height, double latitude,
-	 * double *p_sin_o, double *p_cos_o); \param height Height above sea level
-	 * in metres. \param latitude latitude in degrees. \param p_sin_o Pointer to
+	/**
+	 * void ln_get_earth_centre_dist (float height, double latitude, double
+	 * *p_sin_o, double *p_cos_o); \param height Height above sea level in
+	 * metres. \param latitude latitude in degrees. \param p_sin_o Pointer to
 	 * hold p_sin_o \param p_cos_o Pointer to hold p_cos_o
 	 * 
 	 * Calculate the quantities "p sin o" and "p cos o" needed in calculations
@@ -2737,10 +2759,9 @@ public class Earth {
 		p_cos_o.value = cos(u) + (height / 6378140.0) * cos(latitude);
 	}
 
-	/*
-	 * ! \fn void ln_get_earth_rect_helio(double JD, struct ln_rect_posn
-	 * *position) \param JD Julian day. \param position pointer to return
-	 * position
+	/**
+	 * void ln_get_earth_rect_helio(double JD, struct ln_rect_posn *position)
+	 * \param JD Julian day. \param position pointer to return position
 	 * 
 	 * Calculate the Earths rectangular heliocentric coordinates for the given
 	 * Julian day. Coordinates are in AU.

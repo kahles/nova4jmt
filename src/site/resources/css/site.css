@@ -1,0 +1,8 @@
+#banner {
+background-image: linear-gradient(left, rgb(0,0,0) 0%, rgb(255,255,
+    255) 100%);
+background-image: -moz-linear-gradient(center left, rgb(0,0,0) 0%,rgb(255,255,
+    255) 100%);
+background-image: -webkit-gradient(linear, left center, right center,
+     color-stop(0.000, rgb(0,0,0)),color-stop(1.000, rgb(255,255,255)));
+}

@@ -1,5 +1,27 @@
 package org.n4j;
 
+/*
+ * #%L
+ * libnova for Java
+ * %%
+ * Copyright (C) 2014 novaforjave
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/lgpl-3.0.html>.
+ * #L%
+ */
+
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static org.n4j.Utility.ln_deg_to_rad;
@@ -12,7 +34,7 @@ import org.n4j.api.LnLnlatPosn;
 
 public class Aberration {
 
-	/* data structures to hold arguments and coefficients of Ron-Vondrak theory */
+	/** data structures to hold arguments and coefficients of Ron-Vondrak theory */
 	private static class Arg {
 		double a_L2;
 		double a_L3;
@@ -60,7 +82,7 @@ public class Aberration {
 	};
 
 	static final Arg[] arguments = {
-	/* L2 3 4 5 6 7 8 LL D MM F */
+	/** L2 3 4 5 6 7 8 LL D MM F */
 	new Arg(0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 			new Arg(0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 			new Arg(0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0),
@@ -144,33 +166,36 @@ public class Aberration {
 			new XYZ(1, 0, -4, 0), new XYZ(-2, 0, -2, 0), new XYZ(-3, 0, 0, 0),
 			new XYZ(-2, 0, -2, 0), new XYZ(0, 0, -2, 0) };
 
-	/*
-	 * ! \fn void ln_get_equ_aber(struct ln_equ_posn *mean_position, double JD,
-	 * struct ln_equ_posn *position) \param mean_position Mean position of
-	 * object \param JD Julian Day \param position Pointer to store new object
+	/**
+	 * void ln_get_equ_aber(struct ln_equ_posn *mean_position, double JD, struct
+	 * ln_equ_posn *position) \param mean_position Mean position of object
+	 * \param JD Julian Day \param position Pointer to store new object
 	 * position.
 	 * 
 	 * Calculate a stars equatorial coordinates from it's mean equatorial
 	 * coordinates with the effects of aberration and nutation for a given
 	 * Julian Day.
 	 */
-	/*
+	/**
 	 * Equ 22.1, 22.1, 22.3, 22.4
 	 */
 	public static void ln_get_equ_aber(LnEquPosn mean_position, double JD,
 			LnEquPosn position) {
-		/* long */double mean_ra, mean_dec, delta_ra, delta_dec;
-		/* long */double L2, L3, L4, L5, L6, L7, L8, LL, D, MM, F, T, X, Y, Z, A;
-		/* long */double c;
+		/** long */
+		double mean_ra, mean_dec, delta_ra, delta_dec;
+		/** long */
+		double L2, L3, L4, L5, L6, L7, L8, LL, D, MM, F, T, X, Y, Z, A;
+		/** long */
+		double c;
 		int i;
 
-		/* speed of light in 10-8 au per day */
+		/** speed of light in 10-8 au per day */
 		c = 17314463350.0;
 
-		/* calc T */
+		/** calc T */
 		T = (JD - 2451545.0) / 36525.0;
 
-		/* calc planetary perturbutions */
+		/** calc planetary perturbutions */
 		L2 = 3.1761467 + 1021.3285546 * T;
 		L3 = 1.7534703 + 628.3075849 * T;
 		L4 = 6.2034809 + 334.0612431 * T;
@@ -187,7 +212,7 @@ public class Aberration {
 		Y = 0;
 		Z = 0;
 
-		/* sum the terms */
+		/** sum the terms */
 		for (i = 0; i < arguments.length; i++) {
 			A = arguments[i].a_L2 * L2 + arguments[i].a_L3 * L3
 					+ arguments[i].a_L4 * L4 + arguments[i].a_L5 * L5
@@ -207,7 +232,7 @@ public class Aberration {
 					* cos(A);
 		}
 
-		/* Equ 22.4 */
+		/** Equ 22.4 */
 		mean_ra = ln_deg_to_rad(mean_position.ra);
 		mean_dec = ln_deg_to_rad(mean_position.dec);
 
@@ -220,9 +245,9 @@ public class Aberration {
 		position.dec = ln_rad_to_deg(mean_dec + delta_dec);
 	}
 
-	/*
-	 * ! \fn void ln_get_ecl_aber(struct ln_lnlat_posn *mean_position, double
-	 * JD, struct ln_lnlat_posn *position) \param mean_position Mean position of
+	/**
+	 * void ln_get_ecl_aber(struct ln_lnlat_posn *mean_position, double JD,
+	 * struct ln_lnlat_posn *position) \param mean_position Mean position of
 	 * object \param JD Julian Day \param position Pointer to store new object
 	 * position.
 	 * 
@@ -230,7 +255,7 @@ public class Aberration {
 	 * coordinates with the effects of aberration and nutation for a given
 	 * Julian Day.
 	 */
-	/*
+	/**
 	 * Equ 22.2 pg 139
 	 */
 	public static void ln_get_ecl_aber(LnLnlatPosn mean_position, double JD,
@@ -241,30 +266,30 @@ public class Aberration {
 		double true_longitude, T, T2;
 		LnHelioPosn sol_position = new LnHelioPosn();
 
-		/* constant of aberration */
+		/** constant of aberration */
 		k = ln_deg_to_rad(20.49552 * (1.0 / 3600.0));
 
-		/* Equ 21.1 */
+		/** Equ 21.1 */
 		T = (JD - 2451545) / 36525;
 		T2 = T * T;
 
-		/* suns longitude in radians */
+		/** suns longitude in radians */
 		ln_get_solar_geom_coords(JD, sol_position);
 		true_longitude = ln_deg_to_rad(sol_position.B);
 
-		/* Earth orbit ecentricity */
+		/** Earth orbit ecentricity */
 		e = 0.016708617 - 0.000042037 * T - 0.0000001236 * T2;
 		e = ln_deg_to_rad(e);
 
-		/* longitude of perihelion Earths orbit */
+		/** longitude of perihelion Earths orbit */
 		t = 102.93735 + 1.71953 * T + 0.000046 * T2;
 		t = ln_deg_to_rad(t);
 
-		/* change object long/lat to radians */
+		/** change object long/lat to radians */
 		mean_lng = ln_deg_to_rad(mean_position.lng);
 		mean_lat = ln_deg_to_rad(mean_position.lat);
 
-		/* equ 22.2 */
+		/** equ 22.2 */
 		delta_lng = (-k * cos(true_longitude - mean_lng) + e * k
 				* cos(t - mean_lng))
 				/ cos(mean_lat);

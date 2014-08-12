@@ -1,5 +1,27 @@
 package org.n4j;
 
+/*
+ * #%L
+ * libnova for Java
+ * %%
+ * Copyright (C) 2014 novaforjava
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Lesser Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/lgpl-3.0.html>.
+ * #L%
+ */
+
 import static org.n4j.Utility.gettimeofday;
 
 import java.util.Calendar;
@@ -11,26 +33,24 @@ import org.n4j.api.Timezone;
 
 public class JulianDay {
 
-	/*
-	 * ! \fn double ln_get_julian_day(LnDate *date) \param date Date required.
-	 * \return Julian day
+	/**
+	 * double ln_get_julian_day(LnDate *date) \param date Date required. \return
+	 * Julian day
 	 * 
 	 * Calculate the julian day from a calendar day. Valid for positive and
 	 * negative years but not for negative JD.
 	 */
-	/*
+	/**
 	 * Formula 7.1 on pg 61
 	 */
 	public static double ln_get_julian_day(LnDate date) {
 		double JD;
 		double days;
 		int a, b;
-		/* create local copy */
+		/** create local copy */
 		LnDate local_date = date.copy();
 
-		
-		
-		/* check for month = January or February */
+		/** check for month = January or February */
 		if (local_date.months < 3) {
 			local_date.years--;
 			local_date.months += 12;
@@ -38,31 +58,31 @@ public class JulianDay {
 
 		a = local_date.years / 100;
 
-		/* check for Julian or Gregorian calendar (starts Oct 4th 1582) */
+		/** check for Julian or Gregorian calendar (starts Oct 4th 1582) */
 		if (local_date.years > 1582
 				|| (local_date.years == 1582 && (local_date.months > 10 || (local_date.months == 10 && local_date.days >= 4)))) {
-			/* Gregorian calendar */
+			/** Gregorian calendar */
 			b = 2 - a + (a / 4);
 		} else {
-			/* Julian calendar */
+			/** Julian calendar */
 			b = 0;
 		}
 
-		/* add a fraction of hours, minutes and secs to days */
+		/** add a fraction of hours, minutes and secs to days */
 		days = local_date.days + (double) (local_date.hours / 24.0)
 				+ (double) (local_date.minutes / 1440.0)
 				+ (double) (local_date.seconds / 86400.0);
 
-		/* now get the JD */
+		/** now get the JD */
 		JD = (int) (365.25 * (local_date.years + 4716))
 				+ (int) (30.6001 * (local_date.months + 1)) + days + b - 1524.5;
 
 		return JD;
 	}
 
-	/*
-	 * ! \fn unsigned int ln_get_day_of_week(LnDate *date) \param date Date
-	 * required \return Day of the week
+	/**
+	 * unsigned int ln_get_day_of_week(LnDate *date) \param date Date required
+	 * \return Day of the week
 	 * 
 	 * Calculate the day of the week. Returns 0 = Sunday .. 6 = Saturday
 	 */
@@ -70,7 +90,7 @@ public class JulianDay {
 		int day;
 		double JD;
 
-		/* get julian day */
+		/** get julian day */
 		JD = ln_get_julian_day(date);
 		JD += 1.5;
 		day = (int) JD % 7;
@@ -78,9 +98,9 @@ public class JulianDay {
 		return day;
 	}
 
-	/*
-	 * ! \fn void ln_get_date(double JD, LnDate *date) \param JD Julian day
-	 * \param date Pointer to new calendar date.
+	/**
+	 * void ln_get_date(double JD, LnDate *date) \param JD Julian day \param
+	 * date Pointer to new calendar date.
 	 * 
 	 * Calculate the date from the Julian day
 	 */
@@ -104,32 +124,32 @@ public class JulianDay {
 		D = (int) (365.25 * C);
 		E = (int) ((B - D) / 30.6001);
 
-		/* get the hms */
+		/** get the hms */
 		date.hours = (int) (F * 24);
 		F -= (double) date.hours / 24;
 		date.minutes = (int) (F * 1440);
 		F -= (double) date.minutes / 1440;
 		date.seconds = F * 86400;
 
-		/* get the day */
+		/** get the day */
 		date.days = B - D - (int) (30.6001 * E);
 
-		/* get the month */
+		/** get the month */
 		if (E < 14)
 			date.months = E - 1;
 		else
 			date.months = E - 13;
 
-		/* get the year */
+		/** get the year */
 		if (date.months > 2)
 			date.years = C - 4716;
 		else
 			date.years = C - 4715;
 	}
 
-	/*
-	 * ! \fn void ln_get_date_from_sys(LnDate *date) \param date Pointer to
-	 * store date.
+	/**
+	 * void ln_get_date_from_sys(LnDate *date) \param date Pointer to store
+	 * date.
 	 * 
 	 * Calculate local date from system date.
 	 */
@@ -137,7 +157,7 @@ public class JulianDay {
 		TimeVal tv = new TimeVal();
 		Timezone tz = new Timezone();
 
-		/* get current time with microseconds precission */
+		/** get current time with microseconds precission */
 		gettimeofday(tv, tz);
 
 		Calendar c = Calendar.getInstance();
@@ -149,7 +169,7 @@ public class JulianDay {
 		c.add(Calendar.HOUR_OF_DAY, (-offsetHrs));
 		c.add(Calendar.MINUTE, (-offsetMins));
 
-		/* fill in date struct */
+		/** fill in date struct */
 		date.seconds = c.get(Calendar.SECOND);
 		date.minutes = c.get(Calendar.MINUTE);
 		date.hours = c.get(Calendar.HOUR_OF_DAY);
@@ -158,8 +178,8 @@ public class JulianDay {
 		date.years = c.get(Calendar.YEAR);
 	}
 
-	/*
-	 * ! \fn double ln_get_julian_from_sys() \return Julian day (UT)
+	/**
+	 * double ln_get_julian_from_sys() \return Julian day (UT)
 	 * 
 	 * Calculate the julian day (UT) from the local system time
 	 */
@@ -167,16 +187,16 @@ public class JulianDay {
 		double JD;
 		LnDate date = new LnDate();
 
-		/* get sys date */
+		/** get sys date */
 		ln_get_date_from_sys(date);
 		JD = ln_get_julian_day(date);
 
 		return JD;
 	}
 
-	/*
-	 * ! \fn double ln_get_julian_local_date(LnZonedate* zonedate) \param
-	 * zonedate Local date \return Julian day (UT)
+	/**
+	 * double ln_get_julian_local_date(LnZonedate* zonedate) \param zonedate
+	 * Local date \return Julian day (UT)
 	 * 
 	 * Calculate Julian day (UT) from zone date
 	 */
@@ -188,8 +208,8 @@ public class JulianDay {
 		return ln_get_julian_day(date);
 	}
 
-	/*
-	 * ! \fn int ln_get_date_from_mpc(LnDate *date, char *mpc_date) \param date
+	/**
+	 * int ln_get_date_from_mpc(LnDate *date, char *mpc_date) \param date
 	 * Pointer to new calendar date. \param mpc_date Pointer to string MPC date
 	 * \return 0 for valid date
 	 * 
@@ -197,11 +217,11 @@ public class JulianDay {
 	 * http://cfa-www.harvard.edu/iau/info/PackedDates.html for info.
 	 */
 	public static int ln_get_date_from_mpc(LnDate date, String mpc_date) {
-		/* is mpc_date correct length */
+		/** is mpc_date correct length */
 		if (mpc_date.length() != 5)
 			return -1;
 
-		/* get the century */
+		/** get the century */
 		switch (mpc_date.charAt(0)) {
 		case 'I':
 			date.years = 1800;
@@ -216,27 +236,27 @@ public class JulianDay {
 			return -1;
 		}
 
-		/* get the year */
+		/** get the year */
 		date.years += Integer.parseInt(mpc_date.substring(1, 3));
 
-		/* month */
+		/** month */
 		date.months = Integer.parseInt(mpc_date.substring(3, 4), 16);
 
-		/* day */
+		/** day */
 		date.days = date.months = Integer
 				.parseInt(mpc_date.substring(4, 5), 31);
 		;
 
-		/* reset hours,min,secs to 0 */
+		/** reset hours,min,secs to 0 */
 		date.hours = 0;
 		date.minutes = 0;
 		date.seconds = 0;
 		return 0;
 	}
 
-	/*
-	 * ! \fn double ln_get_julian_from_mpc (char *mpc_date) \param mpc_date
-	 * Pointer to string MPC date \return Julian day.
+	/**
+	 * double ln_get_julian_from_mpc (char *mpc_date) \param mpc_date Pointer to
+	 * string MPC date \return Julian day.
 	 * 
 	 * Calculate the julian day from the a MPC packed date. See
 	 * http://cfa-www.harvard.edu/iau/info/PackedDates.html for info.
@@ -251,10 +271,10 @@ public class JulianDay {
 		return JD;
 	}
 
-	/*
-	 * ! \fn void ln_date_to_zonedate(LnDate *date, LnZonedate *zonedate, long
-	 * gmtoff) \param zonedate Ptr to zonedate \param gmtoff Offset in seconds
-	 * from UT \param date Ptr to date
+	/**
+	 * void ln_date_to_zonedate(LnDate *date, LnZonedate *zonedate, long gmtoff)
+	 * \param zonedate Ptr to zonedate \param gmtoff Offset in seconds from UT
+	 * \param date Ptr to date
 	 * 
 	 * Converts a ln_date (UT) to a ln_zonedate (local time).
 	 */
@@ -277,8 +297,8 @@ public class JulianDay {
 		zonedate.gmtoff = gmtoff;
 	}
 
-	/*
-	 * ! \fn void ln_zonedate_to_date(LnZonedate *zonedate, LnDate *date) \param
+	/**
+	 * void ln_zonedate_to_date(LnZonedate *zonedate, LnDate *date) \param
 	 * zonedate Ptr to zonedate \param date Ptr to date
 	 * 
 	 * Converts a ln_zonedate (local time) to a ln_date (UT).
