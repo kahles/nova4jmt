@@ -40,17 +40,25 @@ import static net.sourceforge.novaforjava.solarsystem.Solar.ln_get_solar_equ_coo
 import static net.sourceforge.novaforjava.util.Reflect.getMethod;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.sourceforge.novaforjava.api.LnEquPosn;
 import net.sourceforge.novaforjava.api.LnLnlatPosn;
 import net.sourceforge.novaforjava.api.LnRectPosn;
 import net.sourceforge.novaforjava.api.LnRstTime;
+
+import static net.sourceforge.novaforjava.util.DataReader.format;
+import static net.sourceforge.novaforjava.util.DataReader.readDoubleArray;
+import static net.sourceforge.novaforjava.util.DataReader.skipBlanks;
+import static net.sourceforge.novaforjava.util.DataReader.readIntArray;
+import static net.sourceforge.novaforjava.util.DataReader.skipOverChar;
 
 public class Lunar {
 
@@ -92,6 +100,7 @@ public class Lunar {
 	static final double Q4 = -0.1371808e-11d;
 	static final double Q5 = -0.320334e-14d;
 
+
 	/** used for elp1 - 3 */
 	public static class MainProblem {
 		int ilu[];// 4
@@ -106,15 +115,13 @@ public class Lunar {
 		}
 
 		public MainProblem(String line) {
-			int startOfIlu = line.indexOf('{', 1);
-			int ensOfIlu = line.indexOf('}', startOfIlu);
-			ilu = readIntArray(line.substring(startOfIlu + 1, ensOfIlu), 4);
-			int startOfA = line.indexOf(',', ensOfIlu) + 1;
-			int endOfA = line.indexOf(',', startOfA);
-			A = Double.valueOf(line.substring(startOfA + 1, endOfA));
-			int startOfB = line.indexOf('{', endOfA);
-			int ensOfB = line.indexOf('}', startOfB);
-			B = readDoubleArray(line.substring(startOfB + 1, ensOfB), 5);
+			ParsePosition pos = new ParsePosition(1);
+			ilu = readIntArray(line, pos, 4);
+			skipOverChar(line, pos, ',');
+			skipBlanks(line, pos);
+			A = format.parse(line, pos).doubleValue();
+			skipOverChar(line, pos, ',');
+			B = readDoubleArray(line, pos, 5);
 		}
 
 		@Override
@@ -125,33 +132,6 @@ public class Lunar {
 
 	};
 
-	private static double[] readDoubleArray(String string, int size) {
-		double[] result = new double[size];
-		int index = 0;
-		int pos = 0;
-		int endPos;
-		while ((endPos = string.indexOf(',', pos)) >= 0) {
-			result[index++] = Double.valueOf(string.substring(pos, endPos)
-					.trim());
-			pos = endPos + 1;
-		}
-		result[index++] = Double.valueOf(string.substring(pos).trim());
-		return result;
-	}
-
-	private static int[] readIntArray(String string, int size) {
-		int[] result = new int[size];
-		int index = 0;
-		int pos = 0;
-		int endPos;
-		while ((endPos = string.indexOf(',', pos)) >= 0) {
-			result[index++] = Integer.parseInt(string.substring(pos, endPos)
-					.trim());
-			pos = endPos + 1;
-		}
-		result[index++] = Integer.parseInt(string.substring(pos).trim());
-		return result;
-	}
 
 	/** used for elp 4 - 9 */
 	public static class EarthPert {
@@ -169,6 +149,23 @@ public class Lunar {
 			A = a;
 			P = p;
 		}
+
+		public EarthPert(String line) {
+			ParsePosition pos = new ParsePosition(1);
+			skipBlanks(line, pos);
+			iz = format.parse(line, pos).intValue();
+			skipOverChar(line, pos, ',');
+			ilu = readIntArray(line, pos, 4);
+			skipOverChar(line, pos, ',');
+			skipBlanks(line, pos);
+			O = format.parse(line, pos).doubleValue();
+			skipOverChar(line, pos, ',');
+			skipBlanks(line, pos);
+			A = format.parse(line, pos).doubleValue();
+			skipOverChar(line, pos, ',');
+			skipBlanks(line, pos);
+			P = format.parse(line, pos).doubleValue();
+		}
 	};
 
 	/** used for elp 10 - 21 */
@@ -185,6 +182,21 @@ public class Lunar {
 			O = o;
 			P = p;
 		}
+
+		public PlanetPert(String line) {
+			ParsePosition pos = new ParsePosition(1);
+			ipla = readIntArray(line, pos, 11);
+			skipOverChar(line, pos, ',');
+			skipBlanks(line, pos);
+			theta = format.parse(line, pos).doubleValue();
+			skipOverChar(line, pos, ',');
+			skipBlanks(line, pos);
+			O = format.parse(line, pos).doubleValue();
+			skipOverChar(line, pos, ',');
+			skipBlanks(line, pos);
+			P = format.parse(line, pos).doubleValue();
+		}
+
 	};
 
 	public static class TidalEffects extends EarthPert {
@@ -193,11 +205,18 @@ public class Lunar {
 			super(iz, ilu, o, a, p);
 		}
 
+		public TidalEffects(String line) {
+			super(line);
+		}
 	}
 
 	public static class MoonPert extends EarthPert {
 		public MoonPert(int iz, int[] ilu, double o, double a, double p) {
 			super(iz, ilu, o, a, p);
+		}
+
+		public MoonPert(String line) {
+			super(line);
 		}
 
 	}
@@ -207,11 +226,19 @@ public class Lunar {
 			super(iz, ilu, o, a, p);
 		}
 
+		public RelPert(String line) {
+			super(line);
+		}
+
 	}
 
 	public static class PlanSolPert extends EarthPert {
 		public PlanSolPert(int iz, int[] ilu, double o, double a, double p) {
 			super(iz, ilu, o, a, p);
+		}
+
+		public PlanSolPert(String line) {
+			super(line);
 		}
 
 	}
@@ -320,62 +347,132 @@ public class Lunar {
 			BufferedReader reader = new BufferedReader(
 					new InputStreamReader(in));
 			String line;
+			String varName = null;
 			boolean readingMainProblem = false;
+			boolean readingEarthPert = false;
+			boolean readingPlanpert = false;
+			boolean readingTidalEffects = false;
+			boolean readingMoonPert = false;
+			boolean readingRelPert = false;
+			boolean readingPlanSolPert = false;
 			List<MainProblem> mainProblems = new ArrayList<MainProblem>();
+			List<EarthPert> earthPerts = new ArrayList<EarthPert>();
+			List<PlanetPert> planPerts = new ArrayList<PlanetPert>();
+			List<TidalEffects> tidalEffects = new ArrayList<TidalEffects>();
+			List<MoonPert> moonPerts = new ArrayList<MoonPert>();
+			List<RelPert> relPerts = new ArrayList<RelPert>();
+			List<PlanSolPert> planSolPerts = new ArrayList<PlanSolPert>();
+			Map<String,Object> objectLists= new HashMap<String, Object>(); 
 			while ((line = reader.readLine()) != null) {
 				line = line.trim();
 				if (line.length() > 0) {
 					if (line.charAt(0) == '{') {
 						if (readingMainProblem) {
 							mainProblems.add(new MainProblem(line));
+						} else if (readingEarthPert) {
+							earthPerts.add(new EarthPert(line));
+						} else if (readingPlanpert) {
+							planPerts.add(new PlanetPert(line));
+						} else if (readingTidalEffects) {
+							tidalEffects.add(new TidalEffects(line));
+						} else if (readingMoonPert) {
+							moonPerts.add(new MoonPert(line));
+						} else if (readingRelPert) {
+							relPerts.add(new RelPert(line));
+						} else if (readingPlanSolPert) {
+							planSolPerts.add(new PlanSolPert(line));
 						}
 					} else {
+						if (readingMainProblem) {
+							objectLists.put(varName, mainProblems.toArray(new MainProblem[mainProblems.size()])); 
+						} else if (readingEarthPert) {
+							objectLists.put(varName,earthPerts.toArray(new EarthPert[earthPerts.size()])); 
+						} else if (readingPlanpert) {
+							objectLists.put(varName,planPerts.toArray(new PlanetPert[planPerts.size()])); 
+						} else if (readingTidalEffects) {
+							objectLists.put(varName,tidalEffects.toArray(new TidalEffects[tidalEffects.size()])); 
+						} else if (readingMoonPert) {
+							objectLists.put(varName,moonPerts.toArray(new MoonPert[moonPerts.size()])); 
+						} else if (readingRelPert) {
+							objectLists.put(varName,relPerts.toArray(new RelPert[relPerts.size()])); 
+						} else if (readingPlanSolPert) {
+							objectLists.put(varName,planSolPerts.toArray(new PlanSolPert[planSolPerts.size()])); 
+						}
+						
 						readingMainProblem = false;
+						readingEarthPert = false;
+						readingPlanpert = false;
+						readingTidalEffects = false;
+						readingMoonPert = false;
+						readingRelPert = false;
+						readingPlanSolPert = false;
+						varName = line.substring(line.lastIndexOf(' ') + 1);
 						if (line.startsWith("main_problem")) {
 							readingMainProblem = true;
 							mainProblems.clear();
+						} else if (line.startsWith("earth_pert")) {
+							readingEarthPert = true;
+							earthPerts.clear();
+						} else if (line.startsWith("planet_pert")) {
+							readingPlanpert = true;
+							planPerts.clear();
+						} else if (line.startsWith("tidal_effects")) {
+							readingTidalEffects = true;
+							tidalEffects.clear();
+						} else if (line.startsWith("moon_pert")) {
+							readingMoonPert = true;
+							moonPerts.clear();
+						} else if (line.startsWith("rel_pert")) {
+							readingRelPert = true;
+							relPerts.clear();
+						} else if (line.startsWith("plan_sol_pert")) {
+							readingPlanSolPert = true;
+							planSolPerts.clear();
+						} else {
+							throw new RuntimeException("unknown data");
 						}
 					}
 				}
 			}
+			objectLists.put(varName,planSolPerts.toArray(new PlanSolPert[planSolPerts.size()])); 
 			// read lunar.data
-			main_elp1 = null;
-			main_elp2 = null;
-			main_elp3 = null;
-			earth_pert_elp4 = null;
-			earth_pert_elp5 = null;
-			earth_pert_elp6 = null;
-			earth_pert_elp7 = null;
-			earth_pert_elp8 = null;
-			earth_pert_elp9 = null;
-			plan_pert_elp10 = null;
-			plan_pert_elp11 = null;
-			plan_pert_elp12 = null;
-			plan_pert_elp13 = null;
-			plan_pert_elp14 = null;
-			plan_pert_elp15 = null;
-			plan_pert_elp16 = null;
-			plan_pert_elp17 = null;
-			plan_pert_elp18 = null;
-			plan_pert_elp19 = null;
-			plan_pert_elp20 = null;
-			plan_pert_elp21 = null;
-			tidal_effects_elp22 = null;
-			tidal_effects_elp23 = null;
-			tidal_effects_elp24 = null;
-			tidal_effects_elp25 = null;
-			tidal_effects_elp26 = null;
-			tidal_effects_elp27 = null;
-			moon_pert_elp28 = null;
-			moon_pert_elp29 = null;
-			moon_pert_elp30 = null;
-			rel_pert_elp31 = null;
-			rel_pert_elp32 = null;
-			rel_pert_elp33 = null;
-			plan_sol_pert_elp34 = null;
-			plan_sol_pert_elp35 = null;
-			plan_sol_pert_elp36 = null;
-		} catch (IOException e) {
+			main_elp1 = (MainProblem[]) objectLists.get("main_elp1");
+			main_elp2 = (MainProblem[])objectLists.get("main_elp2");
+			main_elp3 = (MainProblem[])objectLists.get("main_elp3");
+			earth_pert_elp4 = (EarthPert[]) objectLists.get("earth_pert_elp4");
+			earth_pert_elp5 = (EarthPert[])objectLists.get("earth_pert_elp5");
+			earth_pert_elp6 = (EarthPert[])objectLists.get("earth_pert_elp6");
+			earth_pert_elp7 = (EarthPert[])objectLists.get("earth_pert_elp7");
+			earth_pert_elp8 = (EarthPert[])objectLists.get("earth_pert_elp8");
+			earth_pert_elp9 = (EarthPert[])objectLists.get("earth_pert_elp9");
+			plan_pert_elp10 = (PlanetPert[]) objectLists.get("plan_pert_elp10");
+			plan_pert_elp11 = (PlanetPert[])objectLists.get("plan_pert_elp11");
+			plan_pert_elp12 = (PlanetPert[])objectLists.get("plan_pert_elp12");
+			plan_pert_elp13 = (PlanetPert[])objectLists.get("plan_pert_elp13");
+			plan_pert_elp14 = (PlanetPert[])objectLists.get("plan_pert_elp14");
+			plan_pert_elp15 = (PlanetPert[])objectLists.get("plan_pert_elp15");
+			plan_pert_elp16 = (PlanetPert[])objectLists.get("plan_pert_elp16");
+			plan_pert_elp17 = (PlanetPert[])objectLists.get("plan_pert_elp17");
+			plan_pert_elp18 = (PlanetPert[])objectLists.get("plan_pert_elp18");
+			plan_pert_elp19 = (PlanetPert[])objectLists.get("plan_pert_elp19");
+			plan_pert_elp20 = (PlanetPert[])objectLists.get("plan_pert_elp20");
+			plan_pert_elp21 = (PlanetPert[])objectLists.get("plan_pert_elp21");
+			tidal_effects_elp22 = (TidalEffects[]) objectLists.get("tidal_effects_elp22");
+			tidal_effects_elp23 = (TidalEffects[])objectLists.get("tidal_effects_elp23");
+			tidal_effects_elp24 = (TidalEffects[])objectLists.get("tidal_effects_elp24");
+			tidal_effects_elp25 = (TidalEffects[])objectLists.get("tidal_effects_elp25");
+			tidal_effects_elp26 = (TidalEffects[])objectLists.get("tidal_effects_elp26");
+			tidal_effects_elp27 = (TidalEffects[])objectLists.get("tidal_effects_elp27");
+			moon_pert_elp28 = (MoonPert[]) objectLists.get("moon_pert_elp28");
+			moon_pert_elp29 = (MoonPert[]) objectLists.get("moon_pert_elp29");
+			moon_pert_elp30 = (MoonPert[]) objectLists.get("moon_pert_elp30");
+			rel_pert_elp31 = (RelPert[]) objectLists.get("rel_pert_elp31");
+			rel_pert_elp32 = (RelPert[]) objectLists.get("rel_pert_elp32");
+			rel_pert_elp33 = (RelPert[]) objectLists.get("rel_pert_elp33");
+			plan_sol_pert_elp34 = (PlanSolPert[]) objectLists.get("plan_sol_pert_elp34");
+			plan_sol_pert_elp35 = (PlanSolPert[]) objectLists.get("plan_sol_pert_elp35");
+			plan_sol_pert_elp36 = (PlanSolPert[]) objectLists.get("plan_sol_pert_elp36");
+		} catch (Exception e) {
 			throw new IllegalArgumentException(e);
 		}
 	}
