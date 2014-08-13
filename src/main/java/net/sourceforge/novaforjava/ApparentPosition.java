@@ -1,4 +1,4 @@
-package org.n4j;
+package net.sourceforge.novaforjava;
 
 /*
  * #%L
@@ -22,11 +22,11 @@ package org.n4j;
  * #L%
  */
 
-import static org.n4j.Aberration.ln_get_equ_aber;
-import static org.n4j.Precession.ln_get_equ_prec;
-import static org.n4j.ProperMotion.ln_get_equ_pm;
+import static net.sourceforge.novaforjava.Aberration.ln_get_equ_aber;
+import static net.sourceforge.novaforjava.Precession.ln_get_equ_prec;
+import static net.sourceforge.novaforjava.ProperMotion.ln_get_equ_pm;
 
-import org.n4j.api.LnEquPosn;
+import net.sourceforge.novaforjava.api.LnEquPosn;
 
 public class ApparentPosition {
 	/**

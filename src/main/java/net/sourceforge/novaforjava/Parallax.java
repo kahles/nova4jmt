@@ -1,4 +1,4 @@
-package org.n4j;
+package net.sourceforge.novaforjava;
 
 /*
  * #%L
@@ -27,13 +27,13 @@ import static java.lang.Math.atan2;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static java.lang.Math.tan;
-import static org.n4j.SiderealTime.ln_get_apparent_sidereal_time;
-import static org.n4j.Utility.ln_deg_to_rad;
-import static org.n4j.Utility.ln_rad_to_deg;
+import static net.sourceforge.novaforjava.SiderealTime.ln_get_apparent_sidereal_time;
+import static net.sourceforge.novaforjava.Utility.ln_deg_to_rad;
+import static net.sourceforge.novaforjava.Utility.ln_rad_to_deg;
 
-import org.n4j.api.DoubleRef;
-import org.n4j.api.LnEquPosn;
-import org.n4j.api.LnLnlatPosn;
+import net.sourceforge.novaforjava.api.DoubleRef;
+import net.sourceforge.novaforjava.api.LnEquPosn;
+import net.sourceforge.novaforjava.api.LnLnlatPosn;
 
 public class Parallax {
 	/**

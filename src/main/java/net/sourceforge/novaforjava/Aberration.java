@@ -1,4 +1,4 @@
-package org.n4j;
+package net.sourceforge.novaforjava;
 
 /*
  * #%L
@@ -24,13 +24,13 @@ package org.n4j;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
-import static org.n4j.Utility.ln_deg_to_rad;
-import static org.n4j.Utility.ln_rad_to_deg;
-import static org.n4j.solarsystem.Solar.ln_get_solar_geom_coords;
+import static net.sourceforge.novaforjava.Utility.ln_deg_to_rad;
+import static net.sourceforge.novaforjava.Utility.ln_rad_to_deg;
+import static net.sourceforge.novaforjava.solarsystem.Solar.ln_get_solar_geom_coords;
 
-import org.n4j.api.LnEquPosn;
-import org.n4j.api.LnHelioPosn;
-import org.n4j.api.LnLnlatPosn;
+import net.sourceforge.novaforjava.api.LnEquPosn;
+import net.sourceforge.novaforjava.api.LnHelioPosn;
+import net.sourceforge.novaforjava.api.LnLnlatPosn;
 
 public class Aberration {
 

@@ -1,4 +1,4 @@
-package org.n4j;
+package net.sourceforge.novaforjava;
 
 /*
  * #%L
@@ -25,20 +25,20 @@ package org.n4j;
 import static java.lang.Math.acos;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
-import static org.n4j.DynamicalTime.ln_get_dynamical_time_diff;
-import static org.n4j.SiderealTime.ln_get_apparent_sidereal_time;
-import static org.n4j.Utility.ln_deg_to_rad;
-import static org.n4j.Utility.ln_interpolate3;
-import static org.n4j.Utility.ln_rad_to_deg;
-import static org.n4j.Utility.ln_range_degrees;
-import static org.n4j.Utility.nan;
+import static net.sourceforge.novaforjava.DynamicalTime.ln_get_dynamical_time_diff;
+import static net.sourceforge.novaforjava.SiderealTime.ln_get_apparent_sidereal_time;
+import static net.sourceforge.novaforjava.Utility.ln_deg_to_rad;
+import static net.sourceforge.novaforjava.Utility.ln_interpolate3;
+import static net.sourceforge.novaforjava.Utility.ln_rad_to_deg;
+import static net.sourceforge.novaforjava.Utility.ln_range_degrees;
+import static net.sourceforge.novaforjava.Utility.nan;
 
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 
-import org.n4j.api.LnEquPosn;
-import org.n4j.api.LnLnlatPosn;
-import org.n4j.api.LnRstTime;
+import net.sourceforge.novaforjava.api.LnEquPosn;
+import net.sourceforge.novaforjava.api.LnLnlatPosn;
+import net.sourceforge.novaforjava.api.LnRstTime;
 
 public class RiseSet {
 	public static final BigDecimal LN_STAR_STANDART_HORIZON = new BigDecimal(

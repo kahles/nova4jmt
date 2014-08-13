@@ -1,4 +1,4 @@
-package org.n4j.api;
+package net.sourceforge.novaforjava.api;
 
 /*
  * #%L

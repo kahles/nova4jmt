@@ -1,4 +1,4 @@
-package org.n4j.solarsystem;
+package net.sourceforge.novaforjava.solarsystem;
 
 /*
  * #%L
@@ -23,16 +23,16 @@ package org.n4j.solarsystem;
  */
 
 import static java.lang.Math.log10;
-import static org.n4j.EllipticMotion.ln_get_ell_body_solar_dist;
-import static org.n4j.EllipticMotion.ln_get_ell_mean_anomaly;
-import static org.n4j.EllipticMotion.ln_get_ell_mean_motion;
-import static org.n4j.EllipticMotion.ln_get_ell_radius_vector;
-import static org.n4j.EllipticMotion.ln_solve_kepler;
-import static org.n4j.ParabolicMotion.ln_get_par_body_solar_dist;
-import static org.n4j.ParabolicMotion.ln_get_par_radius_vector;
+import static net.sourceforge.novaforjava.EllipticMotion.ln_get_ell_body_solar_dist;
+import static net.sourceforge.novaforjava.EllipticMotion.ln_get_ell_mean_anomaly;
+import static net.sourceforge.novaforjava.EllipticMotion.ln_get_ell_mean_motion;
+import static net.sourceforge.novaforjava.EllipticMotion.ln_get_ell_radius_vector;
+import static net.sourceforge.novaforjava.EllipticMotion.ln_solve_kepler;
+import static net.sourceforge.novaforjava.ParabolicMotion.ln_get_par_body_solar_dist;
+import static net.sourceforge.novaforjava.ParabolicMotion.ln_get_par_radius_vector;
 
-import org.n4j.api.LnEllOrbit;
-import org.n4j.api.LnParOrbit;
+import net.sourceforge.novaforjava.api.LnEllOrbit;
+import net.sourceforge.novaforjava.api.LnParOrbit;
 
 public class Comet {
 

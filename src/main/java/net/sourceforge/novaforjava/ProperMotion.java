@@ -1,4 +1,4 @@
-package org.n4j;
+package net.sourceforge.novaforjava;
 
 /*
  * #%L
@@ -22,10 +22,10 @@ package org.n4j;
  * #L%
  */
 
-import static org.n4j.Utility.ln_range_degrees;
-import static org.n4j.api.Constants.JD2000;
+import static net.sourceforge.novaforjava.Utility.ln_range_degrees;
+import static net.sourceforge.novaforjava.api.Constants.JD2000;
 
-import org.n4j.api.LnEquPosn;
+import net.sourceforge.novaforjava.api.LnEquPosn;
 
 public class ProperMotion {
 

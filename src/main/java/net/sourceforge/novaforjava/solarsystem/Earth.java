@@ -1,4 +1,4 @@
-package org.n4j.solarsystem;
+package net.sourceforge.novaforjava.solarsystem;
 
 /*
  * #%L
@@ -26,17 +26,17 @@ import static java.lang.Math.atan2;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static java.lang.Math.tan;
-import static org.n4j.Transform.ln_get_rect_from_helio;
-import static org.n4j.Utility.ln_deg_to_rad;
-import static org.n4j.Utility.ln_rad_to_deg;
-import static org.n4j.Utility.ln_range_degrees;
-import static org.n4j.Vsop87.ln_calc_series;
-import static org.n4j.Vsop87.ln_vsop87_to_fk5;
+import static net.sourceforge.novaforjava.Transform.ln_get_rect_from_helio;
+import static net.sourceforge.novaforjava.Utility.ln_deg_to_rad;
+import static net.sourceforge.novaforjava.Utility.ln_rad_to_deg;
+import static net.sourceforge.novaforjava.Utility.ln_range_degrees;
+import static net.sourceforge.novaforjava.Vsop87.ln_calc_series;
+import static net.sourceforge.novaforjava.Vsop87.ln_vsop87_to_fk5;
 
-import org.n4j.Vsop87;
-import org.n4j.api.DoubleRef;
-import org.n4j.api.LnHelioPosn;
-import org.n4j.api.LnRectPosn;
+import net.sourceforge.novaforjava.Vsop87;
+import net.sourceforge.novaforjava.api.DoubleRef;
+import net.sourceforge.novaforjava.api.LnHelioPosn;
+import net.sourceforge.novaforjava.api.LnRectPosn;
 
 public class Earth {
 

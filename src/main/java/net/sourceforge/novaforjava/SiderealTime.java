@@ -1,4 +1,4 @@
-package org.n4j;
+package net.sourceforge.novaforjava;
 
 /*
  * #%L
@@ -22,11 +22,11 @@ package org.n4j;
  * #L%
  */
 
-import static org.n4j.Nutation.ln_get_nutation;
-import static org.n4j.Utility.ln_deg_to_rad;
-import static org.n4j.Utility.ln_range_degrees;
+import static net.sourceforge.novaforjava.Nutation.ln_get_nutation;
+import static net.sourceforge.novaforjava.Utility.ln_deg_to_rad;
+import static net.sourceforge.novaforjava.Utility.ln_range_degrees;
 
-import org.n4j.api.LnNutation;
+import net.sourceforge.novaforjava.api.LnNutation;
 
 public class SiderealTime {
 

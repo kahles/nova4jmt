@@ -1,4 +1,4 @@
-package org.n4j;
+package net.sourceforge.novaforjava;
 
 /*
  * #%L
@@ -26,18 +26,18 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.TimeZone;
 
-import org.n4j.api.LnDms;
-import org.n4j.api.LnEquPosn;
-import org.n4j.api.LnHms;
-import org.n4j.api.LnHrzPosn;
-import org.n4j.api.LnLnlatPosn;
-import org.n4j.api.LnRectPosn;
-import org.n4j.api.LnhEquPosn;
-import org.n4j.api.LnhHrzPosn;
-import org.n4j.api.LnhLnlatPosn;
-import org.n4j.api.TimeVal;
-import org.n4j.api.Timezone;
-import org.n4j.util.Tokens;
+import net.sourceforge.novaforjava.api.LnDms;
+import net.sourceforge.novaforjava.api.LnEquPosn;
+import net.sourceforge.novaforjava.api.LnHms;
+import net.sourceforge.novaforjava.api.LnHrzPosn;
+import net.sourceforge.novaforjava.api.LnLnlatPosn;
+import net.sourceforge.novaforjava.api.LnRectPosn;
+import net.sourceforge.novaforjava.api.LnhEquPosn;
+import net.sourceforge.novaforjava.api.LnhHrzPosn;
+import net.sourceforge.novaforjava.api.LnhLnlatPosn;
+import net.sourceforge.novaforjava.api.TimeVal;
+import net.sourceforge.novaforjava.api.Timezone;
+import net.sourceforge.novaforjava.util.Tokens;
 
 public class Utility {
 

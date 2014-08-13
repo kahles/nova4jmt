@@ -1,4 +1,4 @@
-package org.n4j;
+package net.sourceforge.novaforjava;
 
 /*
  * #%L
@@ -22,14 +22,14 @@ package org.n4j;
  * #L%
  */
 
-import static org.n4j.Utility.gettimeofday;
+import static net.sourceforge.novaforjava.Utility.gettimeofday;
 
 import java.util.Calendar;
 
-import org.n4j.api.LnDate;
-import org.n4j.api.LnZoneDate;
-import org.n4j.api.TimeVal;
-import org.n4j.api.Timezone;
+import net.sourceforge.novaforjava.api.LnDate;
+import net.sourceforge.novaforjava.api.LnZoneDate;
+import net.sourceforge.novaforjava.api.TimeVal;
+import net.sourceforge.novaforjava.api.Timezone;
 
 public class JulianDay {
 

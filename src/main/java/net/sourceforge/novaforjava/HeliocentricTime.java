@@ -1,4 +1,4 @@
-package org.n4j;
+package net.sourceforge.novaforjava;
 
 /*
  * #%L
@@ -24,14 +24,14 @@ package org.n4j;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
-import static org.n4j.Nutation.ln_get_nutation;
-import static org.n4j.Utility.ln_deg_to_rad;
-import static org.n4j.Utility.ln_range_degrees;
-import static org.n4j.solarsystem.Earth.ln_get_earth_helio_coords;
+import static net.sourceforge.novaforjava.Nutation.ln_get_nutation;
+import static net.sourceforge.novaforjava.Utility.ln_deg_to_rad;
+import static net.sourceforge.novaforjava.Utility.ln_range_degrees;
+import static net.sourceforge.novaforjava.solarsystem.Earth.ln_get_earth_helio_coords;
 
-import org.n4j.api.LnEquPosn;
-import org.n4j.api.LnHelioPosn;
-import org.n4j.api.LnNutation;
+import net.sourceforge.novaforjava.api.LnEquPosn;
+import net.sourceforge.novaforjava.api.LnHelioPosn;
+import net.sourceforge.novaforjava.api.LnNutation;
 
 public class HeliocentricTime {
 

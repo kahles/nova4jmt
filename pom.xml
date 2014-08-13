@@ -135,6 +135,7 @@ The intended audience of libnova is java programmers, astronomers and anyone els
 						<id>first</id>
 						<goals>
 							<goal>update-file-header</goal>
+							<goal>update-project-license</goal>
 						</goals>
 						<phase>process-sources</phase>
 						<configuration>

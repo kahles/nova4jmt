@@ -1,4 +1,4 @@
-package org.n4j;
+package net.sourceforge.novaforjava;
 
 /*
  * #%L
@@ -25,9 +25,9 @@ package org.n4j;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static java.lang.Math.tan;
-import static org.n4j.Utility.ln_deg_to_rad;
+import static net.sourceforge.novaforjava.Utility.ln_deg_to_rad;
 
-import org.n4j.api.LnHelioPosn;
+import net.sourceforge.novaforjava.api.LnHelioPosn;
 
 public class Vsop87 {
 

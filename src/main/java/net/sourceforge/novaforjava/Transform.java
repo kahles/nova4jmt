@@ -1,4 +1,4 @@
-package org.n4j;
+package net.sourceforge.novaforjava;
 
 /*
  * #%L
@@ -22,22 +22,22 @@ package org.n4j;
  * #L%
  */
 
-import static org.n4j.Nutation.ln_get_nutation;
-import static org.n4j.Precession.ln_get_equ_prec2;
-import static org.n4j.SiderealTime.ln_get_apparent_sidereal_time;
-import static org.n4j.SiderealTime.ln_get_mean_sidereal_time;
-import static org.n4j.Utility.ln_deg_to_rad;
-import static org.n4j.Utility.ln_rad_to_deg;
-import static org.n4j.Utility.ln_range_degrees;
+import static net.sourceforge.novaforjava.Nutation.ln_get_nutation;
+import static net.sourceforge.novaforjava.Precession.ln_get_equ_prec2;
+import static net.sourceforge.novaforjava.SiderealTime.ln_get_apparent_sidereal_time;
+import static net.sourceforge.novaforjava.SiderealTime.ln_get_mean_sidereal_time;
+import static net.sourceforge.novaforjava.Utility.ln_deg_to_rad;
+import static net.sourceforge.novaforjava.Utility.ln_rad_to_deg;
+import static net.sourceforge.novaforjava.Utility.ln_range_degrees;
 
-import org.n4j.api.Constants;
-import org.n4j.api.LnEquPosn;
-import org.n4j.api.LnGalPosn;
-import org.n4j.api.LnHelioPosn;
-import org.n4j.api.LnHrzPosn;
-import org.n4j.api.LnLnlatPosn;
-import org.n4j.api.LnNutation;
-import org.n4j.api.LnRectPosn;
+import net.sourceforge.novaforjava.api.Constants;
+import net.sourceforge.novaforjava.api.LnEquPosn;
+import net.sourceforge.novaforjava.api.LnGalPosn;
+import net.sourceforge.novaforjava.api.LnHelioPosn;
+import net.sourceforge.novaforjava.api.LnHrzPosn;
+import net.sourceforge.novaforjava.api.LnLnlatPosn;
+import net.sourceforge.novaforjava.api.LnNutation;
+import net.sourceforge.novaforjava.api.LnRectPosn;
 
 public class Transform {
 	/**

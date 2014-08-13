@@ -1,4 +1,4 @@
-package org.n4j.solarsystem;
+package net.sourceforge.novaforjava.solarsystem;
 
 /*
  * #%L
@@ -27,24 +27,24 @@ import static java.lang.Math.asin;
 import static java.lang.Math.atan2;
 import static java.lang.Math.log10;
 import static java.lang.Math.sqrt;
-import static org.n4j.RiseSet.LN_STAR_STANDART_HORIZON;
-import static org.n4j.RiseSet.ln_get_body_rst_horizon;
-import static org.n4j.Transform.ln_get_rect_from_helio;
-import static org.n4j.Utility.ln_rad_to_deg;
-import static org.n4j.Utility.ln_range_degrees;
-import static org.n4j.Vsop87.ln_calc_series;
-import static org.n4j.Vsop87.ln_vsop87_to_fk5;
-import static org.n4j.solarsystem.Earth.ln_get_earth_helio_coords;
-import static org.n4j.solarsystem.Earth.ln_get_earth_solar_dist;
-import static org.n4j.solarsystem.Solar.ln_get_solar_geom_coords;
-import static org.n4j.util.Reflect.getMethod;
+import static net.sourceforge.novaforjava.RiseSet.LN_STAR_STANDART_HORIZON;
+import static net.sourceforge.novaforjava.RiseSet.ln_get_body_rst_horizon;
+import static net.sourceforge.novaforjava.Transform.ln_get_rect_from_helio;
+import static net.sourceforge.novaforjava.Utility.ln_rad_to_deg;
+import static net.sourceforge.novaforjava.Utility.ln_range_degrees;
+import static net.sourceforge.novaforjava.Vsop87.ln_calc_series;
+import static net.sourceforge.novaforjava.Vsop87.ln_vsop87_to_fk5;
+import static net.sourceforge.novaforjava.solarsystem.Earth.ln_get_earth_helio_coords;
+import static net.sourceforge.novaforjava.solarsystem.Earth.ln_get_earth_solar_dist;
+import static net.sourceforge.novaforjava.solarsystem.Solar.ln_get_solar_geom_coords;
+import static net.sourceforge.novaforjava.util.Reflect.getMethod;
 
-import org.n4j.Vsop87;
-import org.n4j.api.LnEquPosn;
-import org.n4j.api.LnHelioPosn;
-import org.n4j.api.LnLnlatPosn;
-import org.n4j.api.LnRectPosn;
-import org.n4j.api.LnRstTime;
+import net.sourceforge.novaforjava.Vsop87;
+import net.sourceforge.novaforjava.api.LnEquPosn;
+import net.sourceforge.novaforjava.api.LnHelioPosn;
+import net.sourceforge.novaforjava.api.LnLnlatPosn;
+import net.sourceforge.novaforjava.api.LnRectPosn;
+import net.sourceforge.novaforjava.api.LnRstTime;
 
 public class Jupiter {
 

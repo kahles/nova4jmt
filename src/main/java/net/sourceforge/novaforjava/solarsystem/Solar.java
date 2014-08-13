@@ -1,4 +1,4 @@
-package org.n4j.solarsystem;
+package net.sourceforge.novaforjava.solarsystem;
 
 /*
  * #%L
@@ -22,21 +22,21 @@ package org.n4j.solarsystem;
  * #L%
  */
 
-import static org.n4j.Nutation.ln_get_nutation;
-import static org.n4j.RiseSet.ln_get_body_rst_horizon;
-import static org.n4j.Transform.ln_get_equ_from_ecl;
-import static org.n4j.Transform.ln_get_rect_from_helio;
-import static org.n4j.Utility.ln_range_degrees;
-import static org.n4j.solarsystem.Earth.ln_get_earth_helio_coords;
-import static org.n4j.solarsystem.Earth.ln_get_earth_solar_dist;
-import static org.n4j.util.Reflect.getMethod;
+import static net.sourceforge.novaforjava.Nutation.ln_get_nutation;
+import static net.sourceforge.novaforjava.RiseSet.ln_get_body_rst_horizon;
+import static net.sourceforge.novaforjava.Transform.ln_get_equ_from_ecl;
+import static net.sourceforge.novaforjava.Transform.ln_get_rect_from_helio;
+import static net.sourceforge.novaforjava.Utility.ln_range_degrees;
+import static net.sourceforge.novaforjava.solarsystem.Earth.ln_get_earth_helio_coords;
+import static net.sourceforge.novaforjava.solarsystem.Earth.ln_get_earth_solar_dist;
+import static net.sourceforge.novaforjava.util.Reflect.getMethod;
 
-import org.n4j.api.LnEquPosn;
-import org.n4j.api.LnHelioPosn;
-import org.n4j.api.LnLnlatPosn;
-import org.n4j.api.LnNutation;
-import org.n4j.api.LnRectPosn;
-import org.n4j.api.LnRstTime;
+import net.sourceforge.novaforjava.api.LnEquPosn;
+import net.sourceforge.novaforjava.api.LnHelioPosn;
+import net.sourceforge.novaforjava.api.LnLnlatPosn;
+import net.sourceforge.novaforjava.api.LnNutation;
+import net.sourceforge.novaforjava.api.LnRectPosn;
+import net.sourceforge.novaforjava.api.LnRstTime;
 
 public class Solar {
 

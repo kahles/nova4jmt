@@ -1,4 +1,4 @@
-package org.n4j;
+package net.sourceforge.novaforjava;
 
 /*
  * #%L
@@ -25,8 +25,8 @@ package org.n4j;
 import static java.lang.Math.asin;
 import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
-import static org.n4j.Utility.ln_deg_to_rad;
-import static org.n4j.Utility.ln_rad_to_deg;
+import static net.sourceforge.novaforjava.Utility.ln_deg_to_rad;
+import static net.sourceforge.novaforjava.Utility.ln_rad_to_deg;
 
 public class Airmass {
 
