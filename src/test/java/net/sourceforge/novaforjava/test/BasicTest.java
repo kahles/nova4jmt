@@ -2396,6 +2396,11 @@ public class BasicTest {
 				.format("TEST deg %f ==> deg %c%d min %d sec %f\n", deg3,
 						dms.neg != 0 ? '-' : '+', dms.degrees, dms.minutes,
 						dms.seconds);
+		
+		//TODO
+//		TEST deg -1.230000 ==> deg -1 min 13 sec 48.000000
+//	    TEST deg 1.230000 ==> deg +1 min 13 sec 48.000000
+//		TEST deg -0.500000 ==> deg -0 min 30 sec 0.000000
 	}
 
 	@Test
