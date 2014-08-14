@@ -22,8 +22,9 @@ package net.sourceforge.novaforjava.api;
  * #L%
  */
 
-/** \struct ln_lnlat_posn
- ** \brief Ecliptical (or celestial) Longitude and Latitude.
+/**
+ * \struct ln_lnlat_posn \brief Ecliptical (or celestial) Longitude and
+ * Latitude.
  *
  * The Ecliptical (or celestial) Latitude and Longitude of and object.
  *

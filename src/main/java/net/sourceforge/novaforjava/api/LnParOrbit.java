@@ -23,11 +23,9 @@ package net.sourceforge.novaforjava.api;
  */
 
 /**
- * \struct ln_par_orbit
- * \brief Parabolic Orbital elements
+ * \struct ln_par_orbit \brief Parabolic Orbital elements
  *
- *  TODO.
- * Angles are expressed in degrees.
+ * TODO. Angles are expressed in degrees.
  */
 public class LnParOrbit {
 

@@ -29,14 +29,13 @@ import static net.sourceforge.novaforjava.Transform.ln_get_rect_from_helio;
 import static net.sourceforge.novaforjava.Utility.ln_range_degrees;
 import static net.sourceforge.novaforjava.solarsystem.Earth.ln_get_earth_helio_coords;
 import static net.sourceforge.novaforjava.solarsystem.Earth.ln_get_earth_solar_dist;
-import static net.sourceforge.novaforjava.util.Reflect.getMethod;
-
 import net.sourceforge.novaforjava.api.LnEquPosn;
 import net.sourceforge.novaforjava.api.LnHelioPosn;
 import net.sourceforge.novaforjava.api.LnLnlatPosn;
 import net.sourceforge.novaforjava.api.LnNutation;
 import net.sourceforge.novaforjava.api.LnRectPosn;
 import net.sourceforge.novaforjava.api.LnRstTime;
+import net.sourceforge.novaforjava.util.IGetEquBodyCoords;
 
 public class Solar {
 
@@ -142,8 +141,13 @@ public class Solar {
 
 	public static int ln_get_solar_rst_horizon(double JD, LnLnlatPosn observer,
 			double horizon, LnRstTime rst) {
-		return ln_get_body_rst_horizon(JD, observer,
-				getMethod(Solar.class, "ln_get_solar_equ_coords"), horizon, rst);
+		return ln_get_body_rst_horizon(JD, observer, new IGetEquBodyCoords() {
+
+			@Override
+			public void get_equ_body_coords(double JD, LnEquPosn position) {
+				ln_get_solar_equ_coords(JD, position);
+			}
+		}, horizon, rst);
 	}
 
 	/**

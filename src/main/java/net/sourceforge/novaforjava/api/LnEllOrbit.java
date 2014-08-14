@@ -23,11 +23,9 @@ package net.sourceforge.novaforjava.api;
  */
 
 /**
- * \struct ln_ell_orbit
- * \brief Elliptic Orbital elements
+ * \struct ln_ell_orbit \brief Elliptic Orbital elements
  *
- *  TODO.
- * Angles are expressed in degrees.
+ * TODO. Angles are expressed in degrees.
  */
 public class LnEllOrbit {
 

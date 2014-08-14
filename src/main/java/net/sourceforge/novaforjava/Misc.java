@@ -32,7 +32,7 @@ public class Misc {
 	 * Calculate an intermediate value of the 3 arguments for the given
 	 * interpolation factor.
 	 */
-	double interpolate3(double n, double y1, double y2, double y3) {
+	public static double interpolate3(double n, double y1, double y2, double y3) {
 		double y, a, b, c;
 
 		/** equ 3.2 */
@@ -55,7 +55,7 @@ public class Misc {
 	 * Calculate an intermediate value of the 5 arguments for the given
 	 * interpolation factor.
 	 */
-	double interpolate5(double n, double y1, double y2, double y3, double y4,
+	public static double interpolate5(double n, double y1, double y2, double y3, double y4,
 			double y5) {
 		double y, A, B, C, D, E, F, G, H, J, K;
 		double n2, n3, n4;

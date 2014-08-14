@@ -25,7 +25,6 @@ package net.sourceforge.novaforjava;
 import static net.sourceforge.novaforjava.Nutation.ln_get_nutation;
 import static net.sourceforge.novaforjava.Utility.ln_deg_to_rad;
 import static net.sourceforge.novaforjava.Utility.ln_range_degrees;
-
 import net.sourceforge.novaforjava.api.LnNutation;
 
 public class SiderealTime {

@@ -23,8 +23,7 @@ package net.sourceforge.novaforjava.api;
  */
 
 /**
- * \struct ln_gal_posn
- * \brief Galactic coordinates
+ * \struct ln_gal_posn \brief Galactic coordinates
  *
  * The Galactic Latitude and Longitude of and object.
  *

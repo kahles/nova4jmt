@@ -22,8 +22,13 @@ package net.sourceforge.novaforjava;
  * #L%
  */
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Properties;
 import java.util.TimeZone;
 
 import net.sourceforge.novaforjava.api.LnDms;
@@ -54,16 +59,6 @@ public class Utility {
 	 * radian.deg
 	 */
 	private static final double R2D = (5.7295779513082320877e1d);
-	/**
-	 * arc seconds per radian
-	 */
-	private static final double R2S = (2.0626480624709635516e5d);
-	/**
-	 * radians per arc second
-	 */
-	private static final double S2R = (4.8481368110953599359e-6d);
-	private static final double DM_PI = (2 * Math.PI);
-	private static final double RADIAN = (180.0 / Math.PI);
 
 	/**
 	 * String ln_get_version (void) \return Null terminated version string.
@@ -71,7 +66,22 @@ public class Utility {
 	 * Return the libnova library version number string e.g. "0.4.0"
 	 */
 	public static String ln_get_version() {
-		return "1.0";// TODO
+		Properties pomProps = new Properties();
+		try {
+			InputStream in = Utility.class
+					.getClassLoader()
+					.getResourceAsStream(
+							"META-INF/maven/net.sourceforge.novaforjava/novaforjava/pom.properties");
+			if (in == null) {
+				in = new FileInputStream(new File(
+						"target/maven-archiver/pom.properties"));
+			}
+			pomProps.load(in);
+			in.close();
+		} catch (IOException e) {
+			new IllegalArgumentException("Could not load version info ", e);
+		}
+		return pomProps.getProperty("version");
 	}
 
 	/** convert radians to degrees */
@@ -447,14 +457,12 @@ public class Utility {
 	 * 90º0'0,01 N ERROR: +- 90º0'00.00" latitude limit
 	 */
 	public static double ln_get_dec_location(String s) {
-		String ptr, dec;
+		String ptr;
 		boolean negative = false;
 		char delim1[] = " :.,;DdHhMm'\n\t".toCharArray();
 		char delim2[] = " NSEWnsew\"\n\t".toCharArray();
 		int dghh = 0, minutes = 0;
 		double seconds = 0.0, pos;
-		short count;
-		int comma;
 
 		if (s == null || s.isEmpty())
 			return -0.0;

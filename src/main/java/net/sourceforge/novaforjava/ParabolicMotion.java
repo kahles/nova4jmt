@@ -42,14 +42,13 @@ import static net.sourceforge.novaforjava.Utility.ln_range_degrees;
 import static net.sourceforge.novaforjava.solarsystem.Earth.ln_get_earth_helio_coords;
 import static net.sourceforge.novaforjava.solarsystem.Earth.ln_get_earth_solar_dist;
 import static net.sourceforge.novaforjava.solarsystem.Solar.ln_get_solar_geo_coords;
-import static net.sourceforge.novaforjava.util.Reflect.getMethod;
-
 import net.sourceforge.novaforjava.api.LnEquPosn;
 import net.sourceforge.novaforjava.api.LnHelioPosn;
 import net.sourceforge.novaforjava.api.LnLnlatPosn;
 import net.sourceforge.novaforjava.api.LnParOrbit;
 import net.sourceforge.novaforjava.api.LnRectPosn;
 import net.sourceforge.novaforjava.api.LnRstTime;
+import net.sourceforge.novaforjava.util.IGetMotionBodyCoords;
 
 public class ParabolicMotion {
 
@@ -348,8 +347,14 @@ public class ParabolicMotion {
 			LnLnlatPosn observer, LnParOrbit orbit, double horizon,
 			LnRstTime rst) {
 		return ln_get_motion_body_rst_horizon(JD, observer,
-				getMethod(ParabolicMotion.class, "ln_get_par_body_equ_coords"),
-				orbit, horizon, rst);
+				new IGetMotionBodyCoords<LnParOrbit>() {
+
+					@Override
+					public void get_motion_body_coords(double JD, LnParOrbit orbit,
+							LnEquPosn posn) {
+						ln_get_par_body_equ_coords(JD, orbit, posn);
+					}
+				}, orbit, horizon, rst);
 	}
 
 	/**
@@ -399,8 +404,14 @@ public class ParabolicMotion {
 			LnLnlatPosn observer, LnParOrbit orbit, double horizon,
 			LnRstTime rst) {
 		return ln_get_motion_body_next_rst_horizon(JD, observer,
-				getMethod(ParabolicMotion.class, "ln_get_par_body_equ_coords"),
-				orbit, horizon, rst);
+				new IGetMotionBodyCoords<LnParOrbit>() {
+
+					@Override
+					public void get_motion_body_coords(double JD, LnParOrbit orbit,
+							LnEquPosn posn) {
+						ln_get_par_body_equ_coords(JD, orbit, posn);
+					}
+				}, orbit, horizon, rst);
 	}
 
 	/**
@@ -428,7 +439,13 @@ public class ParabolicMotion {
 			LnLnlatPosn observer, LnParOrbit orbit, double horizon,
 			int day_limit, LnRstTime rst) {
 		return ln_get_motion_body_next_rst_horizon_future(JD, observer,
-				getMethod(ParabolicMotion.class, "ln_get_par_body_equ_coords"),
-				orbit, horizon, day_limit, rst);
+				new IGetMotionBodyCoords<LnParOrbit>() {
+
+					@Override
+					public void get_motion_body_coords(double JD, LnParOrbit orbit,
+							LnEquPosn posn) {
+						ln_get_par_body_equ_coords(JD, orbit, posn);
+					}
+				}, orbit, horizon, day_limit, rst);
 	}
 }

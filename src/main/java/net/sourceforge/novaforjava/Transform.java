@@ -29,7 +29,6 @@ import static net.sourceforge.novaforjava.SiderealTime.ln_get_mean_sidereal_time
 import static net.sourceforge.novaforjava.Utility.ln_deg_to_rad;
 import static net.sourceforge.novaforjava.Utility.ln_rad_to_deg;
 import static net.sourceforge.novaforjava.Utility.ln_range_degrees;
-
 import net.sourceforge.novaforjava.api.Constants;
 import net.sourceforge.novaforjava.api.LnEquPosn;
 import net.sourceforge.novaforjava.api.LnGalPosn;

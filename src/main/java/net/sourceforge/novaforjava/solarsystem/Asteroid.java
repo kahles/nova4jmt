@@ -34,7 +34,6 @@ import static net.sourceforge.novaforjava.EllipticMotion.ln_get_ell_mean_motion;
 import static net.sourceforge.novaforjava.EllipticMotion.ln_get_ell_radius_vector;
 import static net.sourceforge.novaforjava.EllipticMotion.ln_solve_kepler;
 import static net.sourceforge.novaforjava.Utility.ln_deg_to_rad;
-
 import net.sourceforge.novaforjava.api.LnEllOrbit;
 
 public class Asteroid {

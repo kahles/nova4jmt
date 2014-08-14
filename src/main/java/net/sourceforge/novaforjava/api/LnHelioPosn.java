@@ -22,14 +22,13 @@ package net.sourceforge.novaforjava.api;
  * #L%
  */
 
-/** \struct ln_helio_posn
- * \brief Heliocentric position 
+/**
+ * \struct ln_helio_posn \brief Heliocentric position
  *
- * A heliocentric position is an objects position relative to the
- * centre of the Sun. 
+ * A heliocentric position is an objects position relative to the centre of the
+ * Sun.
  *
- * Angles are expressed in degrees.
- * Radius vector is in AU.
+ * Angles are expressed in degrees. Radius vector is in AU.
  */
 public class LnHelioPosn {
 

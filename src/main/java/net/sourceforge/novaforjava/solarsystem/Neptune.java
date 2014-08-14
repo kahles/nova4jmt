@@ -37,14 +37,13 @@ import static net.sourceforge.novaforjava.Vsop87.ln_vsop87_to_fk5;
 import static net.sourceforge.novaforjava.solarsystem.Earth.ln_get_earth_helio_coords;
 import static net.sourceforge.novaforjava.solarsystem.Earth.ln_get_earth_solar_dist;
 import static net.sourceforge.novaforjava.solarsystem.Solar.ln_get_solar_geom_coords;
-import static net.sourceforge.novaforjava.util.Reflect.getMethod;
-
 import net.sourceforge.novaforjava.Vsop87.LnVsop;
 import net.sourceforge.novaforjava.api.LnEquPosn;
 import net.sourceforge.novaforjava.api.LnHelioPosn;
 import net.sourceforge.novaforjava.api.LnLnlatPosn;
 import net.sourceforge.novaforjava.api.LnRectPosn;
 import net.sourceforge.novaforjava.api.LnRstTime;
+import net.sourceforge.novaforjava.util.IGetEquBodyCoords;
 
 public class Neptune {
 
@@ -2342,9 +2341,13 @@ public class Neptune {
 	 */
 	public static int ln_get_neptune_rst(double JD, LnLnlatPosn observer,
 			LnRstTime rst) {
-		return ln_get_body_rst_horizon(JD, observer,
-				getMethod(Neptune.class, "ln_get_neptune_equ_coords"),
-				LN_STAR_STANDART_HORIZON.doubleValue(), rst);
+		return ln_get_body_rst_horizon(JD, observer, new IGetEquBodyCoords() {
+
+			@Override
+			public void get_equ_body_coords(double JD, LnEquPosn position) {
+				ln_get_neptune_equ_coords(JD, position);
+			}
+		}, LN_STAR_STANDART_HORIZON.doubleValue(), rst);
 	}
 
 	/**

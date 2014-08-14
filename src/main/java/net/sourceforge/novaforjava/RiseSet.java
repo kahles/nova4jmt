@@ -33,12 +33,13 @@ import static net.sourceforge.novaforjava.Utility.ln_rad_to_deg;
 import static net.sourceforge.novaforjava.Utility.ln_range_degrees;
 import static net.sourceforge.novaforjava.Utility.nan;
 
-import java.lang.reflect.Method;
 import java.math.BigDecimal;
 
 import net.sourceforge.novaforjava.api.LnEquPosn;
 import net.sourceforge.novaforjava.api.LnLnlatPosn;
 import net.sourceforge.novaforjava.api.LnRstTime;
+import net.sourceforge.novaforjava.util.IGetEquBodyCoords;
+import net.sourceforge.novaforjava.util.IGetMotionBodyCoords;
 
 public class RiseSet {
 	public static final BigDecimal LN_STAR_STANDART_HORIZON = new BigDecimal(
@@ -352,14 +353,14 @@ public class RiseSet {
 	 * special function for such things.
 	 */
 	public static int ln_get_body_rst_horizon(double JD, LnLnlatPosn observer,
-			Method get_equ_body_coords, double horizon, LnRstTime rst) {
+			IGetEquBodyCoords get_equ_body_coords, double horizon, LnRstTime rst) {
 		return ln_get_body_rst_horizon_offset(JD, observer,
 				get_equ_body_coords, horizon, rst, 0.5);
 	}
 
 	public static int ln_get_body_rst_horizon_offset(double JD,
-			LnLnlatPosn observer, Method get_equ_body_coords, double horizon,
-			LnRstTime rst, double ut_offset) {
+			LnLnlatPosn observer, IGetEquBodyCoords get_equ_body_coords,
+			double horizon, LnRstTime rst, double ut_offset) {
 		int jd;
 		double T, O, JD_UT, H0, H1;
 		double Hat, Har, Has, altr, alts;
@@ -385,9 +386,9 @@ public class RiseSet {
 		O *= 15.0;
 
 		/** get body coords for JD_UT -1, JD_UT and JD_UT + 1 */
-		get_equ_body_coords(get_equ_body_coords, JD_UT - 1.0, sol1);
-		get_equ_body_coords(get_equ_body_coords, JD_UT, sol2);
-		get_equ_body_coords(get_equ_body_coords, JD_UT + 1.0, sol3);
+		get_equ_body_coords.get_equ_body_coords(JD_UT - 1.0, sol1);
+		get_equ_body_coords.get_equ_body_coords(JD_UT, sol2);
+		get_equ_body_coords.get_equ_body_coords(JD_UT + 1.0, sol3);
 
 		/** equ 15.1 */
 		H0 = (sin(ln_deg_to_rad(horizon)) - sin(ln_deg_to_rad(observer.lat))
@@ -505,16 +506,6 @@ public class RiseSet {
 		return 0;
 	}
 
-	private static void get_equ_body_coords(Method get_equ_body_coords,
-			double d, LnEquPosn sol1) {
-		try {
-			get_equ_body_coords.invoke(get_equ_body_coords.getDeclaringClass(),
-					d, sol1);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
 	/**
 	 * int ln_get_body_next_rst_horizon(double JD, LnLnlatPosn observer,
 	 * LnEquPosn object, double horizon, LnRstTime rst); \param JD Julian day
@@ -540,8 +531,8 @@ public class RiseSet {
 	 * special function for such things.
 	 */
 	public static int ln_get_body_next_rst_horizon(double JD,
-			LnLnlatPosn observer, Method get_equ_body_coords, double horizon,
-			LnRstTime rst) {
+			LnLnlatPosn observer, IGetEquBodyCoords get_equ_body_coords,
+			double horizon, LnRstTime rst) {
 		return ln_get_body_next_rst_horizon_future(JD, observer,
 				get_equ_body_coords, horizon, 1, rst);
 	}
@@ -573,8 +564,8 @@ public class RiseSet {
 	 * special function for such things.
 	 */
 	public static int ln_get_body_next_rst_horizon_future(double JD,
-			LnLnlatPosn observer, Method get_equ_body_coords, double horizon,
-			int day_limit, LnRstTime rst) {
+			LnLnlatPosn observer, IGetEquBodyCoords get_equ_body_coords,
+			double horizon, int day_limit, LnRstTime rst) {
 		int ret;
 		LnRstTime rst_1 = new LnRstTime(), rst_2 = new LnRstTime();
 
@@ -646,16 +637,16 @@ public class RiseSet {
 	 * Note 1: this functions returns 1 if the body is circumpolar, that is it
 	 * remains the whole day either above or below the horizon.
 	 */
-	public static int ln_get_motion_body_rst_horizon(double JD,
-			LnLnlatPosn observer, Method get_motion_body_coords, Object orbit,
-			double horizon, LnRstTime rst) {
+	public static <T>int ln_get_motion_body_rst_horizon(double JD,
+			LnLnlatPosn observer, IGetMotionBodyCoords<T> get_motion_body_coords,
+			T orbit, double horizon, LnRstTime rst) {
 		return ln_get_motion_body_rst_horizon_offset(JD, observer,
 				get_motion_body_coords, orbit, horizon, rst, 0.5);
 	}
 
-	public static int ln_get_motion_body_rst_horizon_offset(double JD,
-			LnLnlatPosn observer, Method get_motion_body_coords, Object orbit,
-			double horizon, LnRstTime rst, double ut_offset) {
+	public static <T>int ln_get_motion_body_rst_horizon_offset(double JD,
+			LnLnlatPosn observer, IGetMotionBodyCoords<T> get_motion_body_coords,
+			T orbit, double horizon, LnRstTime rst, double ut_offset) {
 		int jd;
 		double T, O, JD_UT, H0, H1;
 		double Hat, Har, Has, altr, alts;
@@ -677,9 +668,9 @@ public class RiseSet {
 		O *= 15.0;
 
 		/** get body coords for JD_UT -1, JD_UT and JD_UT + 1 */
-		get_motion_body_coords(get_motion_body_coords, JD_UT - 1.0, orbit, sol1);
-		get_motion_body_coords(get_motion_body_coords, JD_UT, orbit, sol2);
-		get_motion_body_coords(get_motion_body_coords, JD_UT + 1.0, orbit, sol3);
+		get_motion_body_coords.get_motion_body_coords(JD_UT - 1.0, orbit, sol1);
+		get_motion_body_coords.get_motion_body_coords(JD_UT, orbit, sol2);
+		get_motion_body_coords.get_motion_body_coords(JD_UT + 1.0, orbit, sol3);
 
 		/** equ 15.1 */
 		H0 = (sin(ln_deg_to_rad(horizon)) - sin(ln_deg_to_rad(observer.lat))
@@ -789,16 +780,6 @@ public class RiseSet {
 		return 0;
 	}
 
-	private static void get_motion_body_coords(Method get_motion_body_coords,
-			double d, Object orbit, LnEquPosn sol1) {
-		try {
-			get_motion_body_coords.invoke(
-					get_motion_body_coords.getDeclaringClass(), d, orbit, sol1);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
 	/**
 	 * int ln_get_body_next_rst_horizon(double JD, LnLnlatPosn observer, void
 	 * (*get_equ_body_coords) (double, LnEquPosn ), double horizon, LnRstTime
@@ -819,9 +800,9 @@ public class RiseSet {
 	 * Note 1: this functions returns 1 if the body is circumpolar, that is it
 	 * remains the whole day either above or below the horizon.
 	 */
-	public static int ln_get_motion_body_next_rst_horizon(double JD,
-			LnLnlatPosn observer, Method get_motion_body_coords, Object orbit,
-			double horizon, LnRstTime rst) {
+	public static <T>int ln_get_motion_body_next_rst_horizon(double JD,
+			LnLnlatPosn observer, IGetMotionBodyCoords<T> get_motion_body_coords,
+			T orbit, double horizon, LnRstTime rst) {
 		return ln_get_motion_body_next_rst_horizon_future(JD, observer,
 				get_motion_body_coords, orbit, horizon, 1, rst);
 	}
@@ -848,9 +829,9 @@ public class RiseSet {
 	 * Note 1: this functions returns 1 if the body is circumpolar, that is it
 	 * remains the whole day either above or below the horizon.
 	 */
-	public static int ln_get_motion_body_next_rst_horizon_future(double JD,
-			LnLnlatPosn observer, Method get_motion_body_coords, Object orbit,
-			double horizon, int day_limit, LnRstTime rst) {
+	public static <T>int ln_get_motion_body_next_rst_horizon_future(double JD,
+			LnLnlatPosn observer, IGetMotionBodyCoords<T> get_motion_body_coords,
+			T orbit, double horizon, int day_limit, LnRstTime rst) {
 		int ret;
 		LnRstTime rst_1 = new LnRstTime(), rst_2 = new LnRstTime();
 

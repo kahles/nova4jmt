@@ -23,13 +23,11 @@ package net.sourceforge.novaforjava.api;
  */
 
 /**
- ** Zone date
- * \struct ln_zonedate
- * \brief Human readable Date and time with timezone information used
- * by libnova
+ ** Zone date \struct ln_zonedate \brief Human readable Date and time with
+ * timezone information used by libnova
  *
- * This is the Human readable (easy printf) date with timezone format
- * used by libnova.
+ * This is the Human readable (easy printf) date with timezone format used by
+ * libnova.
  */
 
 public class LnZoneDate {

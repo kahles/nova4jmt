@@ -30,7 +30,6 @@ import static java.lang.Math.tan;
 import static net.sourceforge.novaforjava.SiderealTime.ln_get_apparent_sidereal_time;
 import static net.sourceforge.novaforjava.Utility.ln_deg_to_rad;
 import static net.sourceforge.novaforjava.Utility.ln_rad_to_deg;
-
 import net.sourceforge.novaforjava.api.DoubleRef;
 import net.sourceforge.novaforjava.api.LnEquPosn;
 import net.sourceforge.novaforjava.api.LnLnlatPosn;

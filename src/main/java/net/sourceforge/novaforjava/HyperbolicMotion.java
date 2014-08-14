@@ -44,14 +44,13 @@ import static net.sourceforge.novaforjava.Utility.nan;
 import static net.sourceforge.novaforjava.solarsystem.Earth.ln_get_earth_helio_coords;
 import static net.sourceforge.novaforjava.solarsystem.Earth.ln_get_earth_solar_dist;
 import static net.sourceforge.novaforjava.solarsystem.Solar.ln_get_solar_geo_coords;
-import static net.sourceforge.novaforjava.util.Reflect.getMethod;
-
 import net.sourceforge.novaforjava.api.LnEquPosn;
 import net.sourceforge.novaforjava.api.LnHelioPosn;
 import net.sourceforge.novaforjava.api.LnHypOrbit;
 import net.sourceforge.novaforjava.api.LnLnlatPosn;
 import net.sourceforge.novaforjava.api.LnRectPosn;
 import net.sourceforge.novaforjava.api.LnRstTime;
+import net.sourceforge.novaforjava.util.IGetMotionBodyCoords;
 
 public class HyperbolicMotion {
 
@@ -392,11 +391,15 @@ public class HyperbolicMotion {
 	public static int ln_get_hyp_body_rst_horizon(double JD,
 			LnLnlatPosn observer, LnHypOrbit orbit, double horizon,
 			LnRstTime rst) {
-		return ln_get_motion_body_rst_horizon(
-				JD,
-				observer,
-				getMethod(HyperbolicMotion.class, "ln_get_hyp_body_equ_coords"),
-				orbit, horizon, rst);
+		return ln_get_motion_body_rst_horizon(JD, observer,
+				new IGetMotionBodyCoords<LnHypOrbit>() {
+
+					@Override
+					public void get_motion_body_coords(double JD, LnHypOrbit orbit,
+							LnEquPosn posn) {
+						ln_get_hyp_body_equ_coords(JD, orbit, posn);
+					}
+				}, orbit, horizon, rst);
 	}
 
 	/**
@@ -445,11 +448,15 @@ public class HyperbolicMotion {
 	public static int ln_get_hyp_body_next_rst_horizon(double JD,
 			LnLnlatPosn observer, LnHypOrbit orbit, double horizon,
 			LnRstTime rst) {
-		return ln_get_motion_body_next_rst_horizon(
-				JD,
-				observer,
-				getMethod(HyperbolicMotion.class, "ln_get_hyp_body_equ_coords"),
-				orbit, horizon, rst);
+		return ln_get_motion_body_next_rst_horizon(JD, observer,
+				new IGetMotionBodyCoords<LnHypOrbit>() {
+
+					@Override
+					public void get_motion_body_coords(double JD, LnHypOrbit orbit,
+							LnEquPosn posn) {
+						ln_get_hyp_body_equ_coords(JD, orbit, posn);
+					}
+				}, orbit, horizon, rst);
 	}
 
 	/**
@@ -476,10 +483,14 @@ public class HyperbolicMotion {
 	public static int ln_get_hyp_body_next_rst_horizon_future(double JD,
 			LnLnlatPosn observer, LnHypOrbit orbit, double horizon,
 			int day_limit, LnRstTime rst) {
-		return ln_get_motion_body_next_rst_horizon_future(
-				JD,
-				observer,
-				getMethod(HyperbolicMotion.class, "ln_get_hyp_body_equ_coords"),
-				orbit, horizon, day_limit, rst);
+		return ln_get_motion_body_next_rst_horizon_future(JD, observer,
+				new IGetMotionBodyCoords<LnHypOrbit>() {
+
+					@Override
+					public void get_motion_body_coords(double JD, LnHypOrbit orbit,
+							LnEquPosn posn) {
+						ln_get_hyp_body_equ_coords(JD, orbit, posn);
+					}
+				}, orbit, horizon, day_limit, rst);
 	}
 }

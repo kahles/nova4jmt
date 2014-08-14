@@ -27,7 +27,6 @@ import static java.lang.Math.sin;
 import static net.sourceforge.novaforjava.Utility.ln_deg_to_rad;
 import static net.sourceforge.novaforjava.Utility.ln_rad_to_deg;
 import static net.sourceforge.novaforjava.solarsystem.Solar.ln_get_solar_geom_coords;
-
 import net.sourceforge.novaforjava.api.LnEquPosn;
 import net.sourceforge.novaforjava.api.LnHelioPosn;
 import net.sourceforge.novaforjava.api.LnLnlatPosn;

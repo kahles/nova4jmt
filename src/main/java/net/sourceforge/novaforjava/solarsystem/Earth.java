@@ -32,7 +32,6 @@ import static net.sourceforge.novaforjava.Utility.ln_rad_to_deg;
 import static net.sourceforge.novaforjava.Utility.ln_range_degrees;
 import static net.sourceforge.novaforjava.Vsop87.ln_calc_series;
 import static net.sourceforge.novaforjava.Vsop87.ln_vsop87_to_fk5;
-
 import net.sourceforge.novaforjava.Vsop87;
 import net.sourceforge.novaforjava.api.DoubleRef;
 import net.sourceforge.novaforjava.api.LnHelioPosn;

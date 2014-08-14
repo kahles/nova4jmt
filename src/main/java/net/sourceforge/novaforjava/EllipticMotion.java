@@ -45,14 +45,13 @@ import static net.sourceforge.novaforjava.api.Constants.M_PI_4;
 import static net.sourceforge.novaforjava.solarsystem.Earth.ln_get_earth_helio_coords;
 import static net.sourceforge.novaforjava.solarsystem.Earth.ln_get_earth_solar_dist;
 import static net.sourceforge.novaforjava.solarsystem.Solar.ln_get_solar_geo_coords;
-import static net.sourceforge.novaforjava.util.Reflect.getMethod;
-
 import net.sourceforge.novaforjava.api.LnEllOrbit;
 import net.sourceforge.novaforjava.api.LnEquPosn;
 import net.sourceforge.novaforjava.api.LnHelioPosn;
 import net.sourceforge.novaforjava.api.LnLnlatPosn;
 import net.sourceforge.novaforjava.api.LnRectPosn;
 import net.sourceforge.novaforjava.api.LnRstTime;
+import net.sourceforge.novaforjava.util.IGetMotionBodyCoords;
 
 public class EllipticMotion {
 
@@ -521,8 +520,14 @@ public class EllipticMotion {
 			LnLnlatPosn observer, LnEllOrbit orbit, double horizon,
 			LnRstTime rst) {
 		return ln_get_motion_body_rst_horizon(JD, observer,
-				getMethod(EllipticMotion.class, "ln_get_ell_body_equ_coords"),
-				orbit, horizon, rst);
+				new IGetMotionBodyCoords<LnEllOrbit>() {
+
+					@Override
+					public void get_motion_body_coords(double JD, LnEllOrbit orbit,
+							LnEquPosn posn) {
+						ln_get_ell_body_equ_coords(JD, orbit, posn);
+					}
+				}, orbit, horizon, rst);
 	}
 
 	/**
@@ -572,8 +577,14 @@ public class EllipticMotion {
 			LnLnlatPosn observer, LnEllOrbit orbit, double horizon,
 			LnRstTime rst) {
 		return ln_get_motion_body_next_rst_horizon(JD, observer,
-				getMethod(EllipticMotion.class, "ln_get_ell_body_equ_coords"),
-				orbit, horizon, rst);
+				new IGetMotionBodyCoords<LnEllOrbit>() {
+
+					@Override
+					public void get_motion_body_coords(double JD, LnEllOrbit orbit,
+							LnEquPosn posn) {
+						ln_get_ell_body_equ_coords(JD,  orbit, posn);
+					}
+				}, orbit, horizon, rst);
 	}
 
 	/**
@@ -600,8 +611,14 @@ public class EllipticMotion {
 			LnLnlatPosn observer, LnEllOrbit orbit, double horizon,
 			int day_limit, LnRstTime rst) {
 		return ln_get_motion_body_next_rst_horizon_future(JD, observer,
-				getMethod(EllipticMotion.class, "ln_get_ell_body_equ_coords"),
-				orbit, horizon, day_limit, rst);
+				new IGetMotionBodyCoords<LnEllOrbit>() {
+
+					@Override
+					public void get_motion_body_coords(double JD, LnEllOrbit orbit,
+							LnEquPosn posn) {
+						ln_get_ell_body_equ_coords(JD, orbit, posn);
+					}
+				}, orbit, horizon, day_limit, rst);
 	}
 
 	/**

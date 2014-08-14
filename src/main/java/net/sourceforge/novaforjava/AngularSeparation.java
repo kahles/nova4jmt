@@ -29,7 +29,6 @@ import static java.lang.Math.sqrt;
 import static java.lang.Math.tan;
 import static net.sourceforge.novaforjava.Utility.ln_deg_to_rad;
 import static net.sourceforge.novaforjava.Utility.ln_rad_to_deg;
-
 import net.sourceforge.novaforjava.api.LnEquPosn;
 
 public class AngularSeparation {

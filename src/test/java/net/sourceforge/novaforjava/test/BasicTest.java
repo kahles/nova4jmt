@@ -171,15 +171,9 @@ import static net.sourceforge.novaforjava.solarsystem.Venus.ln_get_venus_phase;
 import static net.sourceforge.novaforjava.solarsystem.Venus.ln_get_venus_rst;
 import static net.sourceforge.novaforjava.solarsystem.Venus.ln_get_venus_sdiam;
 import static net.sourceforge.novaforjava.solarsystem.Venus.ln_get_venus_solar_dist;
-import static net.sourceforge.novaforjava.util.Reflect.getMethod;
 
 import java.math.BigDecimal;
 import java.util.Locale;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
 
 import net.sourceforge.novaforjava.api.LnDate;
 import net.sourceforge.novaforjava.api.LnDms;
@@ -199,7 +193,11 @@ import net.sourceforge.novaforjava.api.LnZoneDate;
 import net.sourceforge.novaforjava.api.LnhEquPosn;
 import net.sourceforge.novaforjava.api.LnhLnlatPosn;
 import net.sourceforge.novaforjava.api.TimeVal;
-import net.sourceforge.novaforjava.solarsystem.Solar;
+import net.sourceforge.novaforjava.util.IGetEquBodyCoords;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 public class BasicTest {
 
@@ -284,9 +282,6 @@ public class BasicTest {
 		int wday, failed = 0;
 		LnDate date = new LnDate(), pdate = new LnDate();
 		LnZoneDate zonedate = new LnZoneDate();
-
-		long now;
-		long now_jd;
 
 		/** Get julian day for 04/10/1957 19:00:00 */
 		date.years = 1957;
@@ -2198,8 +2193,14 @@ public class BasicTest {
 		JD = ln_get_julian_day(date);
 
 		ret = ln_get_body_next_rst_horizon_future(JD, observer,
-				getMethod(Solar.class, "ln_get_solar_equ_coords"),
-				LN_SOLAR_STANDART_HORIZON, 300, rst);
+				new IGetEquBodyCoords() {
+
+					@Override
+					public void get_equ_body_coords(double JD,
+							LnEquPosn position) {
+						ln_get_solar_equ_coords(JD, position);
+					}
+				}, LN_SOLAR_STANDART_HORIZON, 300, rst);
 
 		failed += test_result("Sun is above horizon sometimes at 0, 85 N", ret,
 				0, 0);
@@ -2243,7 +2244,14 @@ public class BasicTest {
 		}
 
 		ret = ln_get_body_next_rst_horizon_future(JD, observer,
-				getMethod(Solar.class, "ln_get_solar_equ_coords"), 0, 300, rst);
+				new IGetEquBodyCoords() {
+
+					@Override
+					public void get_equ_body_coords(double JD,
+							LnEquPosn position) {
+						ln_get_solar_equ_coords(JD, position);
+					}
+				}, 0, 300, rst);
 		failed += test_result("Sun is above 0 horizon sometimes at 0, 85 N",
 				ret, 0, 0);
 
@@ -2396,11 +2404,11 @@ public class BasicTest {
 				.format("TEST deg %f ==> deg %c%d min %d sec %f\n", deg3,
 						dms.neg != 0 ? '-' : '+', dms.degrees, dms.minutes,
 						dms.seconds);
-		
-		//TODO
-//		TEST deg -1.230000 ==> deg -1 min 13 sec 48.000000
-//	    TEST deg 1.230000 ==> deg +1 min 13 sec 48.000000
-//		TEST deg -0.500000 ==> deg -0 min 30 sec 0.000000
+
+		// TODO
+		// TEST deg -1.230000 ==> deg -1 min 13 sec 48.000000
+		// TEST deg 1.230000 ==> deg +1 min 13 sec 48.000000
+		// TEST deg -0.500000 ==> deg -0 min 30 sec 0.000000
 	}
 
 	@Test
@@ -2426,4 +2434,5 @@ public class BasicTest {
 
 		Assert.assertEquals(0, failed);
 	}
+	
 }

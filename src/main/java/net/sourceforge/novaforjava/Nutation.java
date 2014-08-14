@@ -22,11 +22,10 @@ package net.sourceforge.novaforjava;
  * #L%
  */
 
-import static net.sourceforge.novaforjava.Utility.ln_deg_to_rad;
 import static java.math.MathContext.DECIMAL128;
+import static net.sourceforge.novaforjava.Utility.ln_deg_to_rad;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 
 import net.sourceforge.novaforjava.api.LnNutation;
 

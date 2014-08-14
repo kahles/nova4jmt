@@ -23,11 +23,9 @@ package net.sourceforge.novaforjava.api;
  */
 
 /**
- * \struct ln_hyp_orbit
- * \brief Hyperbolic Orbital elements
+ * \struct ln_hyp_orbit \brief Hyperbolic Orbital elements
  *
- *  TODO.
- * Angles are expressed in degrees.
+ * TODO. Angles are expressed in degrees.
  */
 public class LnHypOrbit {
 

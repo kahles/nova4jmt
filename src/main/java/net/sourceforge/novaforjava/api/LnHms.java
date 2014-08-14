@@ -22,8 +22,8 @@ package net.sourceforge.novaforjava.api;
  * #L%
  */
 
-/** \struct ln_hms
- ** \brief Hours, minutes and seconds.
+/**
+ * \struct ln_hms \brief Hours, minutes and seconds.
  *
  * Human readable Angle in hours, minutes and seconds
  */

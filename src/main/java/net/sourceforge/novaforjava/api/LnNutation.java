@@ -23,10 +23,9 @@ package net.sourceforge.novaforjava.api;
  */
 
 /**
- * \struct ln_nutation
- * \brief Nutation in longitude, ecliptic and obliquity. 
+ * \struct ln_nutation \brief Nutation in longitude, ecliptic and obliquity.
  *
- * Contains Nutation in longitude, obliquity and ecliptic obliquity. 
+ * Contains Nutation in longitude, obliquity and ecliptic obliquity.
  *
  * Angles are expressed in degrees.
  */

@@ -6,7 +6,9 @@ import java.util.Locale;
 
 public class DataReader {
 
-	public static final NumberFormat format = NumberFormat.getInstance(Locale.US);
+	public static final NumberFormat format = NumberFormat
+			.getInstance(Locale.US);
+
 	public static double[] readDoubleArray(String string, ParsePosition pos,
 			int size) {
 		skipOverChar(string, pos, '{');

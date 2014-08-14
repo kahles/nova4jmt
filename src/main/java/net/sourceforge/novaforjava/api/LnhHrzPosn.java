@@ -22,8 +22,8 @@ package net.sourceforge.novaforjava.api;
  * #L%
  */
 
-/** \struct lnh_hrz_posn
- ** \brief Azimuth and Altitude.
+/**
+ * \struct lnh_hrz_posn \brief Azimuth and Altitude.
  *
  * Human readable Horizontal Coordinates.
  */

@@ -22,8 +22,8 @@ package net.sourceforge.novaforjava.api;
  * #L%
  */
 
-/** \struct ln_equ_posn
- ** \brief Equatorial Coordinates.
+/**
+ * \struct ln_equ_posn \brief Equatorial Coordinates.
  *
  * The Right Ascension and Declination of an object.
  *

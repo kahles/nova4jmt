@@ -26,7 +26,6 @@ import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static java.lang.Math.tan;
 import static net.sourceforge.novaforjava.Utility.ln_deg_to_rad;
-
 import net.sourceforge.novaforjava.api.LnHelioPosn;
 
 public class Vsop87 {

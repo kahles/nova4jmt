@@ -30,7 +30,6 @@ import static net.sourceforge.novaforjava.EllipticMotion.ln_get_ell_radius_vecto
 import static net.sourceforge.novaforjava.EllipticMotion.ln_solve_kepler;
 import static net.sourceforge.novaforjava.ParabolicMotion.ln_get_par_body_solar_dist;
 import static net.sourceforge.novaforjava.ParabolicMotion.ln_get_par_radius_vector;
-
 import net.sourceforge.novaforjava.api.LnEllOrbit;
 import net.sourceforge.novaforjava.api.LnParOrbit;
 
