@@ -11,10 +11,8 @@
 	<version>0.14.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>libnova for Java</name>
-	<description>novaforjava is a general purpose, double precision, Celestial Mechanics, Astrometry and Astrodynamics library.
-
-The intended audience of libnova is java programmers, astronomers and anyone else interested in calculating positions of astronomical objects or celestial mechanics. It is a 1:1 port of libnova c-library with is the calculation engine used by the Nova project and most importantly, is free software.</description>
-	<url>http://todo</url>
+	<description>novaforjava is a general purpose, double precision, Celestial Mechanics, Astrometry and Astrodynamics library. The intended audience of libnova is java programmers, astronomers and anyone else interested in calculating positions of astronomical objects or celestial mechanics. It is a 1:1 port of libnova c-library with is the calculation engine used by the Nova project.</description>
+	<url>http://novaforjava.sourceforge.net/</url>
 	<scm>
 		<connection>scm:git:https://git.code.sf.net/p/novaforjava/code.git</connection>
 		<developerConnection>scm:git:https://git.code.sf.net/p/novaforjava/code.git</developerConnection>
@@ -50,7 +48,7 @@ The intended audience of libnova is java programmers, astronomers and anyone els
 	</developers>
 	<issueManagement>
 		<system>sourceforge</system>
-		<url>http://sourceforge.net/p/novaforjava/bugs/</url>
+		<url>http://sourceforge.net/p/novaforjava/tickets</url>
 	</issueManagement>
 	<licenses>
 		<license>
@@ -194,6 +192,14 @@ The intended audience of libnova is java programmers, astronomers and anyone els
 						</reports>
 					</reportSet>
 				</reportSets>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<linkJavadoc>true</linkJavadoc>
+				</configuration>
 			</plugin>
 		</plugins>
 	</reporting>
