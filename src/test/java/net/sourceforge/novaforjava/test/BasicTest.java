@@ -80,7 +80,6 @@ import static net.sourceforge.novaforjava.Transform.ln_get_equ_from_gal;
 import static net.sourceforge.novaforjava.Transform.ln_get_gal_from_equ;
 import static net.sourceforge.novaforjava.Transform.ln_get_gal_from_equ2000;
 import static net.sourceforge.novaforjava.Transform.ln_get_hrz_from_equ;
-import static net.sourceforge.novaforjava.Utility.gettimeofday;
 import static net.sourceforge.novaforjava.Utility.ln_deg_to_dms;
 import static net.sourceforge.novaforjava.Utility.ln_dms_to_deg;
 import static net.sourceforge.novaforjava.Utility.ln_equ_to_hequ;
@@ -192,7 +191,6 @@ import net.sourceforge.novaforjava.api.LnRstTime;
 import net.sourceforge.novaforjava.api.LnZoneDate;
 import net.sourceforge.novaforjava.api.LnhEquPosn;
 import net.sourceforge.novaforjava.api.LnhLnlatPosn;
-import net.sourceforge.novaforjava.api.TimeVal;
 import net.sourceforge.novaforjava.util.IGetEquBodyCoords;
 
 import org.junit.Assert;
@@ -223,21 +221,6 @@ public class BasicTest {
 
 	// holds number of tests
 	int test_number = 0;
-
-	TimeVal start = new TimeVal(), end = new TimeVal();
-
-	void start_timer() {
-		gettimeofday(start, null);
-	}
-
-	void end_timer() {
-		double secs;
-
-		gettimeofday(end, null);
-		secs = ((end.tv_sec * 1000000 + end.tv_usec) - (start.tv_sec * 1000000 + start.tv_usec)) / 1000000.0;
-
-		System.out.format("   Time %3.1f msecs\n", secs * 1000.0);
-	}
 
 	double compare_results(double calc, double expect, double tolerance) {
 		if (calc - expect > tolerance || calc - expect < (tolerance * -1.0))
@@ -752,10 +735,8 @@ public class BasicTest {
 
 		// TODO long double
 		// proper motions
-		pm.ra = ((/** long */
-		double) 0.19877) * (15.0 / 3600.0);
-		pm.dec = ((/** long */
-		double) -0.0152) / 3600.0;
+		pm.ra = (0.19877) * (15.0 / 3600.0);
+		pm.dec = (-0.0152) / 3600.0;
 
 		ln_get_equ_pm(object, pm, B1900, pos);
 

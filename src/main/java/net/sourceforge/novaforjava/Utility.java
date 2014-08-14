@@ -27,9 +27,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.Properties;
-import java.util.TimeZone;
 
 import net.sourceforge.novaforjava.api.LnDms;
 import net.sourceforge.novaforjava.api.LnEquPosn;
@@ -40,8 +38,6 @@ import net.sourceforge.novaforjava.api.LnRectPosn;
 import net.sourceforge.novaforjava.api.LnhEquPosn;
 import net.sourceforge.novaforjava.api.LnhHrzPosn;
 import net.sourceforge.novaforjava.api.LnhLnlatPosn;
-import net.sourceforge.novaforjava.api.TimeVal;
-import net.sourceforge.novaforjava.api.Timezone;
 import net.sourceforge.novaforjava.util.Tokens;
 
 public class Utility {
@@ -108,9 +104,9 @@ public class Utility {
 	public static double ln_hms_to_deg(LnHms hms) {
 		double degrees;
 
-		degrees = ((double) hms.hours / 24.0d) * 360.0d;
-		degrees += ((double) hms.minutes / 60.0d) * 15.0d;
-		degrees += ((double) hms.seconds / 60.0d) * 0.25d;
+		degrees = (hms.hours / 24.0d) * 360.0d;
+		degrees += (hms.minutes / 60.0d) * 15.0d;
+		degrees += (hms.seconds / 60.0d) * 0.25d;
 
 		return degrees;
 	}
@@ -119,9 +115,9 @@ public class Utility {
 	public static double ln_hms_to_rad(LnHms hms) {
 		double radians;
 
-		radians = ((double) hms.hours / 24.0d) * 2.0d * Math.PI;
-		radians += ((double) hms.minutes / 60.0d) * 2.0d * Math.PI / 24.0d;
-		radians += ((double) hms.seconds / 60.0d) * 2.0d * Math.PI / 1440.0d;
+		radians = (hms.hours / 24.0d) * 2.0d * Math.PI;
+		radians += (hms.minutes / 60.0d) * 2.0d * Math.PI / 24.0d;
+		radians += (hms.seconds / 60.0d) * 2.0d * Math.PI / 1440.0d;
 
 		return radians;
 	}
@@ -169,8 +165,8 @@ public class Utility {
 		double degrees;
 
 		degrees = Math.abs((double) dms.degrees);
-		degrees += Math.abs((double) dms.minutes / 60.0d);
-		degrees += Math.abs((double) dms.seconds / 3600.0d);
+		degrees += Math.abs(dms.minutes / 60.0d);
+		degrees += Math.abs(dms.seconds / 3600.0d);
 
 		// negative ?
 		if (dms.neg != 0)
@@ -183,9 +179,9 @@ public class Utility {
 	public static double ln_dms_to_rad(LnDms dms) {
 		double radians;
 
-		radians = Math.abs((double) dms.degrees / 360.0d * 2.0d * Math.PI);
-		radians += Math.abs((double) dms.minutes / 21600.0d * 2.0d * Math.PI);
-		radians += Math.abs((double) dms.seconds / 1296000.0d * 2.0d * Math.PI);
+		radians = Math.abs(dms.degrees / 360.0d * 2.0d * Math.PI);
+		radians += Math.abs(dms.minutes / 21600.0d * 2.0d * Math.PI);
+		radians += Math.abs(dms.seconds / 1296000.0d * 2.0d * Math.PI);
 
 		// negative ?
 		if (dms.neg != 0)
@@ -617,23 +613,6 @@ public class Utility {
 		y += n4 * (K / 24.0);
 
 		return y;
-	}
-
-	/**
-	 * Catches calls to the POSIX gettimeofday and converts them to a related
-	 * WIN32 version.
-	 */
-	public static int gettimeofday(TimeVal tv, Timezone tz) {
-
-		long now = System.currentTimeMillis();
-		tv.tv_sec = tv.tv_usec / 100L;
-		tv.tv_usec = now - tv.tv_sec;
-
-		tz.tz_dsttime = TimeZone.getDefault().inDaylightTime(new Date(now)) ? 1
-				: 0;
-		tz.tz_minuteswest = TimeZone.getDefault().getOffset(now) / 60000;
-
-		return 0;
 	}
 
 	/** Simple cube root */

@@ -114,9 +114,9 @@ public class Precession {
 		mean_dec = ln_deg_to_rad(mean_position.dec);
 
 		/** calc t, T, zeta, eta and theta Equ 20.2 */
-		T = ((double) (fromJD - Constants.JD2000)) / 36525.0;
+		T = (fromJD - Constants.JD2000) / 36525.0;
 		T *= 1.0 / 3600.0;
-		t = ((double) (toJD - fromJD)) / 36525.0;
+		t = (toJD - fromJD) / 36525.0;
 		t *= 1.0 / 3600.0;
 		T2 = T * T;
 		t2 = t * t;

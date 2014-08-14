@@ -22,14 +22,11 @@ package net.sourceforge.novaforjava;
  * #L%
  */
 
-import static net.sourceforge.novaforjava.Utility.gettimeofday;
-
 import java.util.Calendar;
+import java.util.TimeZone;
 
 import net.sourceforge.novaforjava.api.LnDate;
 import net.sourceforge.novaforjava.api.LnZoneDate;
-import net.sourceforge.novaforjava.api.TimeVal;
-import net.sourceforge.novaforjava.api.Timezone;
 
 public class JulianDay {
 
@@ -69,9 +66,9 @@ public class JulianDay {
 		}
 
 		/** add a fraction of hours, minutes and secs to days */
-		days = local_date.days + (double) (local_date.hours / 24.0)
-				+ (double) (local_date.minutes / 1440.0)
-				+ (double) (local_date.seconds / 86400.0);
+		days = local_date.days + local_date.hours / 24.0
+				+ local_date.minutes / 1440.0
+				+ local_date.seconds / 86400.0;
 
 		/** now get the JD */
 		JD = (int) (365.25 * (local_date.years + 4716))
@@ -116,7 +113,7 @@ public class JulianDay {
 			A = (int) Z;
 		else {
 			a = (int) ((Z - 1867216.25) / 36524.25);
-			A = (int) (Z + 1 + a - (int) (a / 4));
+			A = (int) (Z + 1 + a - a / 4);
 		}
 
 		B = A + 1524;
@@ -154,23 +151,18 @@ public class JulianDay {
 	 * Calculate local date from system date.
 	 */
 	public static void ln_get_date_from_sys(LnDate date) {
-		TimeVal tv = new TimeVal();
-		Timezone tz = new Timezone();
 
-		/** get current time with microseconds precission */
-		gettimeofday(tv, tz);
+		long now = System.currentTimeMillis();
+		int offsetInSeconds = TimeZone.getDefault().getOffset(now) / 1000;
 
 		Calendar c = Calendar.getInstance();
-		c.setTimeInMillis(tv.tv_sec * 1000L + tv.tv_usec / 10L);
-		int offset = tz.tz_minuteswest;
-		int offsetHrs = offset / 60 / 60;
-		int offsetMins = offset / 60 % 60;
-
-		c.add(Calendar.HOUR_OF_DAY, (-offsetHrs));
-		c.add(Calendar.MINUTE, (-offsetMins));
+		c.setTimeInMillis(now);
+		c.add(Calendar.SECOND, (-offsetInSeconds));
+		c.getTimeInMillis(); // force calculation
 
 		/** fill in date struct */
-		date.seconds = c.get(Calendar.SECOND);
+		date.seconds = (c.get(Calendar.SECOND))
+				+ (c.get(Calendar.MILLISECOND)) / 1000d;
 		date.minutes = c.get(Calendar.MINUTE);
 		date.hours = c.get(Calendar.HOUR_OF_DAY);
 		date.days = c.get(Calendar.DAY_OF_MONTH);
@@ -192,20 +184,6 @@ public class JulianDay {
 		JD = ln_get_julian_day(date);
 
 		return JD;
-	}
-
-	/**
-	 * double ln_get_julian_local_date(LnZonedate* zonedate) \param zonedate
-	 * Local date \return Julian day (UT)
-	 * 
-	 * Calculate Julian day (UT) from zone date
-	 */
-	public static double ln_get_julian_local_date(LnZoneDate zonedate) {
-		LnDate date = new LnDate();
-
-		ln_zonedate_to_date(zonedate, date);
-
-		return ln_get_julian_day(date);
 	}
 
 	/**
