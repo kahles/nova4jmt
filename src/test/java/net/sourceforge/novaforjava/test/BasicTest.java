@@ -1003,9 +1003,7 @@ public class BasicTest {
 		/** JD = get_julian_from_sys(); */
 		/** JD=2448724.5; */
 		ln_get_lunar_geo_posn(JD, moon, 0);
-		if (1 == 1) {
-			return;
-		}
+
 		Assert.assertEquals(
 				"lunar x -252118.863940  y 267821.304702  z -20748.127775",
 				String.format("lunar x %f  y %f  z %f", moon.X, moon.Y, moon.Z));
@@ -1023,11 +1021,11 @@ public class BasicTest {
 				"lunar distance km %f", ln_get_lunar_earth_dist(JD)));
 
 		Assert.assertEquals("lunar disk 0.678514",
-				String.format("lunar disk %f\n", ln_get_lunar_disk(JD)));
+				String.format("lunar disk %f", ln_get_lunar_disk(JD)));
 		Assert.assertEquals("lunar phase 69.082257",
-				String.format("lunar phase %f\n", ln_get_lunar_phase(JD)));
+				String.format("lunar phase %f", ln_get_lunar_phase(JD)));
 		Assert.assertEquals("lunar bright limb 285.076674", String.format(
-				"lunar bright limb %f\n", ln_get_lunar_bright_limb(JD)));
+				"lunar bright limb %f", ln_get_lunar_bright_limb(JD)));
 
 		Assert.assertEquals(0, failed);
 	}
@@ -2375,21 +2373,33 @@ public class BasicTest {
 				.format("TEST deg %f ==> deg %c%d min %d sec %f\n", deg,
 						dms.neg != 0 ? '-' : '+', dms.degrees, dms.minutes,
 						dms.seconds);
+
+		Assert.assertEquals(
+				"TEST deg -1.230000 ==> deg -1 min 13 sec 48.000000", String
+						.format("TEST deg %f ==> deg %c%d min %d sec %f", deg,
+								dms.neg != 0 ? '-' : '+', dms.degrees,
+								dms.minutes, dms.seconds));
+
 		ln_deg_to_dms(deg2, dms);
 		System.out
 				.format("TEST deg %f ==> deg %c%d min %d sec %f\n", deg2,
 						dms.neg != 0 ? '-' : '+', dms.degrees, dms.minutes,
 						dms.seconds);
+		Assert.assertEquals(
+				"TEST deg 1.230000 ==> deg +1 min 13 sec 48.000000", String
+						.format("TEST deg %f ==> deg %c%d min %d sec %f", deg2,
+								dms.neg != 0 ? '-' : '+', dms.degrees,
+								dms.minutes, dms.seconds));
 		ln_deg_to_dms(deg3, dms);
 		System.out
 				.format("TEST deg %f ==> deg %c%d min %d sec %f\n", deg3,
 						dms.neg != 0 ? '-' : '+', dms.degrees, dms.minutes,
 						dms.seconds);
-
-		// TODO
-		// TEST deg -1.230000 ==> deg -1 min 13 sec 48.000000
-		// TEST deg 1.230000 ==> deg +1 min 13 sec 48.000000
-		// TEST deg -0.500000 ==> deg -0 min 30 sec 0.000000
+		Assert.assertEquals(
+				"TEST deg -0.500000 ==> deg -0 min 30 sec 0.000000", String
+						.format("TEST deg %f ==> deg %c%d min %d sec %f", deg3,
+								dms.neg != 0 ? '-' : '+', dms.degrees,
+								dms.minutes, dms.seconds));
 	}
 
 	@Test

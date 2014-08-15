@@ -68,7 +68,7 @@ public class Lunar {
 	/** Chapront theory lunar constants */
 	static final double RAD = (648000.0 / Math.PI);
 	static final double DEG = (Math.PI / 180.0);
-	static final double M_PI_2 = (2.0 * Math.PI);
+	static final double M_PI_2 = (Math.PI / 2.0);
 	static final double PIS2 = (Math.PI / 2.0);
 	static final double ATH = 384747.9806743165;
 	static final double A0 = 384747.9806448954;

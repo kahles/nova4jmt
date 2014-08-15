@@ -8,7 +8,7 @@
 	</parent>
 	<artifactId>novaforjava</artifactId>
 	<groupId>net.sourceforge.novaforjava</groupId>
-	<version>0.14.1-SNAPSHOT</version>
+	<version>0.15.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>libnova for Java</name>
 	<description>novaforjava is a general purpose, double precision, Celestial Mechanics, Astrometry and Astrodynamics library. The intended audience of libnova is java programmers, astronomers and anyone else interested in calculating positions of astronomical objects or celestial mechanics. It is a 1:1 port of libnova c-library with is the calculation engine used by the Nova project.</description>
@@ -46,6 +46,16 @@
 			<timezone>+1</timezone>
 		</developer>
 	</developers>
+	<contributors>
+		<contributor>
+			<name>libnova team</name>
+			<organization>libnova</organization>
+			<url>http://libnova.sourceforge.net/</url>
+			<roles>
+				<role>developers of the c version</role>
+			</roles>
+		</contributor>
+	</contributors>
 	<issueManagement>
 		<system>sourceforge</system>
 		<url>http://sourceforge.net/p/novaforjava/tickets</url>

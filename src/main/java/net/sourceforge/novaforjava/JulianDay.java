@@ -66,9 +66,8 @@ public class JulianDay {
 		}
 
 		/** add a fraction of hours, minutes and secs to days */
-		days = local_date.days + local_date.hours / 24.0
-				+ local_date.minutes / 1440.0
-				+ local_date.seconds / 86400.0;
+		days = local_date.days + local_date.hours / 24.0 + local_date.minutes
+				/ 1440.0 + local_date.seconds / 86400.0;
 
 		/** now get the JD */
 		JD = (int) (365.25 * (local_date.years + 4716))
@@ -151,22 +150,33 @@ public class JulianDay {
 	 * Calculate local date from system date.
 	 */
 	public static void ln_get_date_from_sys(LnDate date) {
-
 		long now = System.currentTimeMillis();
-		int offsetInSeconds = TimeZone.getDefault().getOffset(now) / 1000;
+		ln_get_date_from_UTC_milliseconds(date, now);
+	}
 
+	/**
+	 * Calculate date from a java calendar.
+	 */
+	public static void ln_get_date_from_cal(LnDate date, Calendar calendar) {
+		ln_get_date_from_UTC_milliseconds(date, calendar.getTimeInMillis());
+	}
+
+	/**
+	 * Calculate date from java UTC millisecunds in EPOCH.
+	 */
+	public static void ln_get_date_from_UTC_milliseconds(LnDate date, long now) {
 		Calendar c = Calendar.getInstance();
+		c.setTimeZone(TimeZone.getTimeZone("UTC"));
 		c.setTimeInMillis(now);
-		c.add(Calendar.SECOND, (-offsetInSeconds));
 		c.getTimeInMillis(); // force calculation
 
 		/** fill in date struct */
-		date.seconds = (c.get(Calendar.SECOND))
-				+ (c.get(Calendar.MILLISECOND)) / 1000d;
+		date.seconds = (c.get(Calendar.SECOND)) + (c.get(Calendar.MILLISECOND))
+				/ 1000d;
 		date.minutes = c.get(Calendar.MINUTE);
 		date.hours = c.get(Calendar.HOUR_OF_DAY);
 		date.days = c.get(Calendar.DAY_OF_MONTH);
-		date.months = c.get(Calendar.MONTH);
+		date.months = c.get(Calendar.MONTH) + 1;// 0 based in calendar
 		date.years = c.get(Calendar.YEAR);
 	}
 
