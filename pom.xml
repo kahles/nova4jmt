@@ -14,8 +14,8 @@
 	<description>novaforjava is a general purpose, double precision, Celestial Mechanics, Astrometry and Astrodynamics library. The intended audience of libnova is java programmers, astronomers and anyone else interested in calculating positions of astronomical objects or celestial mechanics. It is a 1:1 port of libnova c-library with is the calculation engine used by the Nova project.</description>
 	<url>http://novaforjava.sourceforge.net/</url>
 	<scm>
-		<connection>scm:git:https://git.code.sf.net/p/novaforjava/code.git</connection>
-		<developerConnection>scm:git:https://git.code.sf.net/p/novaforjava/code.git</developerConnection>
+		<connection>scm:git:ssh://git.code.sf.net/p/novaforjava/code.git</connection>
+		<developerConnection>scm:git:ssh://git.code.sf.net/p/novaforjava/code.git</developerConnection>
 		<url>https://sourceforge.net/p/novaforjava/code/ci/master/tree/</url>
 	</scm>
 	<distributionManagement>
