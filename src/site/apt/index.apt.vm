@@ -7,3 +7,21 @@ Nova for Java
   All credit for typing the Astronomical Calculation library in machine readable code goes to the team of libnova, a really great "thank you" for providing them, especially because they included some tests so I could verify if my port to java is functioning correctly.
 
   We hope that providing this library to the community will encourage others to write Astronomical applications without the need to "understand" the complicated Mathematical stuff and the problems that come with the plain GPL license.
+
+Download / Usage
+
+  To use "Nova for Java" just add the dependency to your pom.xml, or get the jars from the central repository.
+  
++---
+...
+<dependencies>
+	...
+	<dependency>
+		<groupId>net.sourceforge.novaforjava</groupId>
+		<artifactId>novaforjava</artifactId>
+		<version>${project.version}</version>
+	</dependency>
+	...
+</dependencies>
+...
++---
