@@ -197,7 +197,7 @@ public class Nutation {
 	private static final BigDecimal LN_NUTATION_EPOCH_THRESHOLD = new BigDecimal(
 			0.1);
 	/** cache values */
-	private static BigDecimal c_JD = BigDecimal.ZERO,
+	private BigDecimal c_JD = BigDecimal.ZERO,
 			c_longitude = BigDecimal.ZERO, c_obliquity = BigDecimal.ZERO,
 			c_ecliptic = BigDecimal.ZERO;
 
@@ -213,7 +213,7 @@ public class Nutation {
 	 */
 	/** TODO: add argument to specify this */
 	/** TODO: use JD or JDE. confirm */
-	public static void ln_get_nutation(double JDdoule, LnNutation nutation) {
+	public void ln_get_nutation(double JDdoule, LnNutation nutation) {
 		BigDecimal JD = d(JDdoule);
 		BigDecimal D, M, MM, F, O, T, T2, T3, JDE;
 		BigDecimal coeff_sine, coeff_cos;

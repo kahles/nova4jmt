@@ -22,7 +22,6 @@ package net.sourceforge.novaforjava;
  * #L%
  */
 
-import static net.sourceforge.novaforjava.Nutation.ln_get_nutation;
 import static net.sourceforge.novaforjava.Precession.ln_get_equ_prec2;
 import static net.sourceforge.novaforjava.SiderealTime.ln_get_apparent_sidereal_time;
 import static net.sourceforge.novaforjava.SiderealTime.ln_get_mean_sidereal_time;
@@ -223,7 +222,7 @@ public class Transform {
 		LnNutation nutation = new LnNutation();
 
 		/** get obliquity of ecliptic and change it to rads */
-		ln_get_nutation(JD, nutation);
+		new Nutation().ln_get_nutation(JD, nutation);
 		nutation.ecliptic = ln_deg_to_rad(nutation.ecliptic);
 
 		/** change object's position into radians */
@@ -267,7 +266,7 @@ public class Transform {
 		/** object position */
 		ra = ln_deg_to_rad(object.ra);
 		declination = ln_deg_to_rad(object.dec);
-		ln_get_nutation(JD, nutation);
+		new Nutation().ln_get_nutation(JD, nutation);
 		nutation.ecliptic = ln_deg_to_rad(nutation.ecliptic);
 
 		/** Equ 12.1, 12.2 */

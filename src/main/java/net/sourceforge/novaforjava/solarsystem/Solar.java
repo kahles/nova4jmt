@@ -22,13 +22,14 @@ package net.sourceforge.novaforjava.solarsystem;
  * #L%
  */
 
-import static net.sourceforge.novaforjava.Nutation.ln_get_nutation;
 import static net.sourceforge.novaforjava.RiseSet.ln_get_body_rst_horizon;
 import static net.sourceforge.novaforjava.Transform.ln_get_equ_from_ecl;
 import static net.sourceforge.novaforjava.Transform.ln_get_rect_from_helio;
 import static net.sourceforge.novaforjava.Utility.ln_range_degrees;
 import static net.sourceforge.novaforjava.solarsystem.Earth.ln_get_earth_helio_coords;
 import static net.sourceforge.novaforjava.solarsystem.Earth.ln_get_earth_solar_dist;
+
+import net.sourceforge.novaforjava.Nutation;
 import net.sourceforge.novaforjava.api.LnEquPosn;
 import net.sourceforge.novaforjava.api.LnHelioPosn;
 import net.sourceforge.novaforjava.api.LnLnlatPosn;
@@ -79,7 +80,7 @@ public class Solar {
 		ln_get_solar_geom_coords(JD, sol);
 
 		/** add nutation */
-		ln_get_nutation(JD, nutation);
+		new Nutation().ln_get_nutation(JD, nutation);
 		sol.L += nutation.longitude;
 
 		/** aberration */
@@ -108,7 +109,7 @@ public class Solar {
 		ln_get_solar_geom_coords(JD, sol);
 
 		/** add nutation */
-		ln_get_nutation(JD, nutation);
+		new Nutation().ln_get_nutation(JD, nutation);
 		sol.L += nutation.longitude;
 
 		/** aberration */

@@ -55,7 +55,6 @@ import static net.sourceforge.novaforjava.JulianDay.ln_get_day_of_week;
 import static net.sourceforge.novaforjava.JulianDay.ln_get_julian_day;
 import static net.sourceforge.novaforjava.JulianDay.ln_get_julian_from_sys;
 import static net.sourceforge.novaforjava.JulianDay.ln_zonedate_to_date;
-import static net.sourceforge.novaforjava.Nutation.ln_get_nutation;
 import static net.sourceforge.novaforjava.ParabolicMotion.ln_get_par_body_earth_dist;
 import static net.sourceforge.novaforjava.ParabolicMotion.ln_get_par_body_equ_coords;
 import static net.sourceforge.novaforjava.ParabolicMotion.ln_get_par_body_solar_dist;
@@ -174,6 +173,7 @@ import static net.sourceforge.novaforjava.solarsystem.Venus.ln_get_venus_solar_d
 import java.math.BigDecimal;
 import java.util.Locale;
 
+import net.sourceforge.novaforjava.Nutation;
 import net.sourceforge.novaforjava.api.LnDate;
 import net.sourceforge.novaforjava.api.LnDms;
 import net.sourceforge.novaforjava.api.LnEllOrbit;
@@ -425,7 +425,7 @@ public class BasicTest {
 
 		JD = 2446895.5;
 
-		ln_get_nutation(JD, nutation);
+		new Nutation().ln_get_nutation(JD, nutation);
 		failed += test_result("(Nutation) longitude (deg) for JD 2446895.5",
 				nutation.longitude, -0.00105222, 0.00000001);
 

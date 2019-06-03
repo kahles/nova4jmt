@@ -22,7 +22,6 @@ package net.sourceforge.novaforjava;
  * #L%
  */
 
-import static net.sourceforge.novaforjava.Nutation.ln_get_nutation;
 import static net.sourceforge.novaforjava.Utility.ln_deg_to_rad;
 import static net.sourceforge.novaforjava.Utility.ln_range_degrees;
 import net.sourceforge.novaforjava.api.LnNutation;
@@ -78,7 +77,7 @@ public class SiderealTime {
 		 * add corrections for nutation in longitude and for the true obliquity
 		 * of the ecliptic
 		 */
-		ln_get_nutation(JD, nutation);
+		new Nutation().ln_get_nutation(JD, nutation);
 
 		correction = (nutation.longitude / 15.0 * Math
 				.cos(ln_deg_to_rad(nutation.obliquity)));

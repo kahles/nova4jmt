@@ -24,7 +24,6 @@ package net.sourceforge.novaforjava;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
-import static net.sourceforge.novaforjava.Nutation.ln_get_nutation;
 import static net.sourceforge.novaforjava.Utility.ln_deg_to_rad;
 import static net.sourceforge.novaforjava.Utility.ln_range_degrees;
 import static net.sourceforge.novaforjava.solarsystem.Earth.ln_get_earth_helio_coords;
@@ -50,7 +49,7 @@ public class HeliocentricTime {
 		LnNutation nutation = new LnNutation();
 		LnHelioPosn earth = new LnHelioPosn();
 
-		ln_get_nutation(JD, nutation);
+		new Nutation().ln_get_nutation(JD, nutation);
 		ln_get_earth_helio_coords(JD, earth);
 
 		theta = ln_deg_to_rad(ln_range_degrees(earth.L + 180));
