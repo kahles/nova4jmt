@@ -2,48 +2,37 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<!-- FIXME update pom -->
-
-	<parent>
-		<groupId>org.sonatype.oss</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>7</version>
-	</parent>
 	<artifactId>nova4jmt</artifactId>
-	<groupId>de.kah2.nova4jmt</groupId>
+	<groupId>de.kah2.zodiac</groupId>
 	<version>0.15.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>libnova for Java with multi thread fix</name>
-	<description>novaforjava is a general purpose, double precision, Celestial Mechanics, Astrometry and Astrodynamics library. The intended audience of libnova is java programmers, astronomers and anyone else interested in calculating positions of astronomical objects or celestial mechanics. It is a 1:1 port of libnova c-library with is the calculation engine used by the Nova project.</description>
-	<url>http://novaforjava.sourceforge.net/</url>
+	<description>novaforjava is a general purpose, double precision, Celestial Mechanics, Astrometry and Astrodynamics library. The intended audience of libnova is java programmers, astronomers and anyone else interested in calculating positions of astronomical objects or celestial mechanics. It is a 1:1 port of libnova c-library with a small fix to enable parallel calculations.</description>
+	<url>https://github.com/kahles/nova4jmt</url>
 	<scm>
-		<connection>scm:git:ssh://git.code.sf.net/p/novaforjava/code.git</connection>
-		<developerConnection>scm:git:ssh://git.code.sf.net/p/novaforjava/code.git</developerConnection>
-		<url>https://sourceforge.net/p/novaforjava/code/ci/master/tree/</url>
-		<tag>HEAD</tag>
+		<connection>scm:git:git://github.com/kahles/nova4jmt.git</connection>
+		<developerConnection>scm:git:ssh://github.com/kahles/nova4jmt.git</developerConnection>
+		<url>https://github.com/kahles/nova4jmt/tree/master</url>
 	</scm>
+
 	<distributionManagement>
 		<repository>
-			<id>sonatype-nexus-staging</id>
-			<name>n4j sonytype Maven 2 repository</name>
+			<id>ossrh</id>
+			<name>nova4jmt sonatype Maven 2 repository</name>
 			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
 		</repository>
 		<snapshotRepository>
-			<id>sonatype-nexus-staging</id>
-			<name>n4j sonytype Snapshot Maven 2 repository</name>
+			<id>ossrh</id>
+			<name>nova4jmt sonatype Snapshot Maven 2 repository</name>
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
-		<site>
-			<id>sourceforge-deploy</id>
-			<name>Sourceforge Maven 2 Project Site</name>
-			<url>scp://shell.sourceforge.net/home/project-web/novaforjava/htdocs</url>
-		</site>
 	</distributionManagement>
+
 	<developers>
 		<developer>
-			<id>ritchie_gmx_at</id>
-			<name>Richard van Nieuwenhoven</name>
-			<email>ritchie [at] gmx [dot] at</email>
+			<id>kahles</id>
+			<name>Stephan Kahle</name>
+			<email>st-git@kah2.de</email>
 			<roles>
 				<role>Developer</role>
 			</roles>
@@ -52,18 +41,23 @@
 	</developers>
 	<contributors>
 		<contributor>
+			<name>Richard van Nieuwenhoven</name>
+			<roles>
+				<role>developer of the java port</role>
+			</roles>
+			<url>https://novaforjava.sourceforge.net</url>
+			<timezone>+1</timezone>
+		</contributor>
+		<contributor>
 			<name>libnova team</name>
 			<organization>libnova</organization>
-			<url>http://libnova.sourceforge.net/</url>
+			<url>https://libnova.sourceforge.net/</url>
 			<roles>
 				<role>developers of the c version</role>
 			</roles>
 		</contributor>
 	</contributors>
-	<issueManagement>
-		<system>sourceforge</system>
-		<url>http://sourceforge.net/p/novaforjava/tickets</url>
-	</issueManagement>
+
 	<licenses>
 		<license>
 			<name>GNU LESSER GENERAL PUBLIC LICENSE (LGPL) version 3</name>
@@ -73,27 +67,11 @@
 	</licenses>
 
 	<build>
-		<extensions>
-			<extension>
-				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-ssh</artifactId>
-				<version>1.0-beta-7</version>
-			</extension>
-		</extensions>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-release-plugin</artifactId>
-					<version>2.5</version>
-				</plugin>
-			</plugins>
-		</pluginManagement>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
+				<version>3.8.1</version>
 				<configuration>
 					<source>1.7</source>
 					<target>1.7</target>
@@ -102,7 +80,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.5</version>
+				<version>3.1.2</version>
 				<configuration>
 					<archive>
 						<manifest>
@@ -113,8 +91,32 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.8</version>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
-				<version>1.5</version>
+				<version>1.6</version>
 				<executions>
 					<execution>
 						<id>sign-artifacts</id>
@@ -128,107 +130,29 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-site-plugin</artifactId>
-				<version>3.3</version>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.1.0</version>
 				<configuration>
-					<inputEncoding>UTF-8</inputEncoding>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>license-maven-plugin</artifactId>
-				<version>1.7</version>
-				<configuration>
-					<verbose>false</verbose>
-					<organizationName>novaforjava</organizationName>
-					<inceptionYear>2014</inceptionYear>
+					<encoding>UTF-8</encoding>
 				</configuration>
 				<executions>
 					<execution>
-						<id>first</id>
-						<goals>
-							<goal>update-file-header</goal>
-							<goal>update-project-license</goal>
-						</goals>
-						<phase>process-sources</phase>
-						<configuration>
-							<licenseName>lgpl_v3</licenseName>
-							<roots>
-								<root>src/main/java</root>
-								<root>src/test</root>
-							</roots>
-						</configuration>
+						<id>attach-javadoc</id>
 					</execution>
 				</executions>
 			</plugin>
 		</plugins>
 	</build>
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-plugin-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>2.7</version>
-				<reportSets>
-					<reportSet>
-						<reports>
-							<report>index</report>
-							<report>dependencies</report>
-							<report>project-team</report>
-							<report>mailing-list</report>
-							<report>cim</report>
-							<report>issue-tracking</report>
-							<report>license</report>
-							<report>scm</report>
-						</reports>
-					</reportSet>
-				</reportSets>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9</version>
-				<reportSets>
-					<reportSet><!-- by default, id = "default" -->
-						<reports><!-- select non-aggregate reports -->
-							<report>javadoc</report>
-							<report>test-javadoc</report>
-						</reports>
-					</reportSet>
-					<reportSet><!-- aggregate reportSet, to define in poms having modules -->
-						<id>aggregate</id>
-						<inherited>false</inherited><!-- don't run aggregate in child modules -->
-						<reports>
-							<report>aggregate</report>
-						</reports>
-					</reportSet>
-				</reportSets>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jxr-plugin</artifactId>
-				<version>2.3</version>
-				<configuration>
-					<linkJavadoc>true</linkJavadoc>
-				</configuration>
-			</plugin>
-		</plugins>
-	</reporting>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
+			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.scm.id>n4j-deploy</project.scm.id>
 	</properties>
 
 </project>
