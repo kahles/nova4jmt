@@ -32,7 +32,7 @@
 		<developer>
 			<id>kahles</id>
 			<name>Stephan Kahle</name>
-			<email>st-git@kah2.de</email>
+			<email>st-mvn@kah2.de</email>
 			<roles>
 				<role>Developer</role>
 			</roles>
@@ -124,6 +124,9 @@
 						<goals>
 							<goal>sign</goal>
 						</goals>
+						<configuration>
+							<keyname>F5CDEC2C56F20B1DF252174B1EB5A76F230D610B</keyname>
+						</configuration>
 					</execution>
 				</executions>
 				<!-- if the local user is not the key user use -Dgpg.keyname=XXXX -->
