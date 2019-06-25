@@ -12,22 +12,19 @@ This project is a fork of the java port [novaforjava](https://sourceforge.net/pr
 #### maven
 ```xml
 <dependency>
-    <groupId>de.kah2.zodiac</groupId>
-    <artifactId>nova4jmt</artifactId>
-    <version>0.15.0.1-SNAPSHOT</version>
+  <groupId>de.kah2.zodiac</groupId>
+  <artifactId>nova4jmt</artifactId>
+  <version>0.15.0.1</version>
 </dependency>
 ```
 #### gradle
 ```groovy
 repositories {
     mavenCentral()
-    maven {
-        url 'https://oss.sonatype.org/content/repositories/snapshots/'
-    }
 }
 
 dependencies {
-    compile 'de.kah2.zodiac:nova4jmt:0.15.0.1-SNAPSHOT'
+  compile 'de.kah2.zodiac:nova4jmt:0.15.0.1'
 }
 ```
 
