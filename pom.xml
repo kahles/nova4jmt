@@ -4,7 +4,7 @@
 
 	<artifactId>nova4jmt</artifactId>
 	<groupId>de.kah2.zodiac</groupId>
-	<version>0.15.0.1-SNAPSHOT</version>
+	<version>0.15.0.1</version>
 	<packaging>jar</packaging>
 	<name>libnova for Java with multi thread fix</name>
 	<description>novaforjava is a general purpose, double precision, Celestial Mechanics, Astrometry and Astrodynamics library. The intended audience of libnova is java programmers, astronomers and anyone else interested in calculating positions of astronomical objects or celestial mechanics. It is a 1:1 port of libnova c-library with a small fix to enable parallel calculations.</description>
@@ -73,8 +73,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.8.1</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -140,7 +140,10 @@
 				</configuration>
 				<executions>
 					<execution>
-						<id>attach-javadoc</id>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
 					</execution>
 				</executions>
 			</plugin>
