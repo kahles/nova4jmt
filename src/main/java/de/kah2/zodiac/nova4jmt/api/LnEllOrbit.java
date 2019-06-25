@@ -29,18 +29,24 @@ package de.kah2.zodiac.nova4jmt.api;
  */
 public class LnEllOrbit {
 
+	/** Semi major axis, in AU */
 	public double a;
-	/** !< Semi major axis, in AU */
+
+	/** Eccentricity */
 	public double e;
-	/** !< Eccentricity */
+
+	/** Inclination in degrees */
 	public double i;
-	/** !< Inclination in degrees */
+
+	/** Argument of perihelion in degrees */
 	public double w;
-	/** !< Argument of perihelion in degrees */
+
+	/** Longitude of ascending node in degrees */
 	public double omega;
-	/** !< Longitude of ascending node in degrees */
+
+	/** Mean motion, in degrees/day */
 	public double n;
-	/** !< Mean motion, in degrees/day */
+
+	/** Time of last passage in Perihelion, in julian day */
 	public double JD;
-	/** !< Time of last passage in Perihelion, in julian day */
 }

@@ -32,10 +32,12 @@ package de.kah2.zodiac.nova4jmt.api;
  */
 public class LnHelioPosn {
 
+	/** Heliocentric longitude */
 	public double L;
-	/** !< Heliocentric longitude */
+
+	/** Heliocentric latitude */
 	public double B;
-	/** !< Heliocentric latitude */
+
+	/** Heliocentric radius vector */
 	public double R;
-	/** !< Heliocentric radius vector */
 }

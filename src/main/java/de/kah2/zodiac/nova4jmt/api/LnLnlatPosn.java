@@ -32,9 +32,10 @@ package de.kah2.zodiac.nova4jmt.api;
  */
 
 public class LnLnlatPosn {
-	public double lng;
-	/** !< longitude. Object longitude. */
-	public double lat;
-	/** !< latitude. Object latitude */
 
+	/** longitude. Object longitude. */
+	public double lng;
+
+	/** latitude. Object latitude */
+	public double lat;
 }

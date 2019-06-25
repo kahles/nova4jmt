@@ -30,10 +30,12 @@ package de.kah2.zodiac.nova4jmt.api;
 
 public class LnHms {
 
+	/** Hours. Valid 0 - 23 */
 	public int hours;
-	/** !< Hours. Valid 0 - 23 */
+
+	/** Minutes. Valid 0 - 59 */
 	public int minutes;
-	/** !< Minutes. Valid 0 - 59 */
+
+	/** Seconds. Valid 0 - 59.9999... */
 	public double seconds;
-	/** !< Seconds. Valid 0 - 59.9999... */
 }

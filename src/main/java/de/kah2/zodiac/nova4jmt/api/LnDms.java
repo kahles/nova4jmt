@@ -24,12 +24,15 @@ package de.kah2.zodiac.nova4jmt.api;
 
 public class LnDms {
 
+	/** Non zero if negative */
 	public int neg;
-	/** !< Non zero if negative */
+
+	/** Degrees. Valid 0 - 360 */
 	public int degrees;
-	/** !< Degrees. Valid 0 - 360 */
+
+	/** Minutes. Valid 0 - 59 */
 	public int minutes;
-	/** !< Minutes. Valid 0 - 59 */
+
+	/** Seconds. Valid 0 - 59.9999... */
 	public double seconds;
-	/** !< Seconds. Valid 0 - 59.9999... */
 }

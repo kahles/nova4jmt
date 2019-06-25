@@ -413,7 +413,7 @@ public class HyperbolicMotion {
 	 * meridian at upper culmination) time of a body with an hyperbolic orbit
 	 * for the given Julian day.
 	 * 
-	 * This function guarantee, that rise, set and transit will be in <JD, JD+1>
+	 * This function guarantee, that rise, set and transit will be in &lt;JD, JD+1;gt;
 	 * range.
 	 * 
 	 * Note: this functions returns 1 if the body is circumpolar, that is it
@@ -438,7 +438,7 @@ public class HyperbolicMotion {
 	 * meridian at upper culmination) time of a body with an hyperbolic orbit
 	 * for the given Julian day.
 	 * 
-	 * This function guarantee, that rise, set and transit will be in <JD, JD+1>
+	 * This function guarantee, that rise, set and transit will be in &lt;JD, JD+1&gt;
 	 * range.
 	 * 
 	 * Note: this functions returns 1 if the body is circumpolar, that is it
@@ -473,8 +473,8 @@ public class HyperbolicMotion {
 	 * meridian at upper culmination) time of a body with an hyperbolic orbit
 	 * for the given Julian day.
 	 * 
-	 * This function guarantee, that rise, set and transit will be in <JD, JD +
-	 * day_limit> range.
+	 * This function guarantee, that rise, set and transit will be in &lt;JD, JD +
+	 * day_limit&gt; range.
 	 * 
 	 * Note: this functions returns 1 if the body is circumpolar, that is it
 	 * remains the whole day above the horizon. Returns -1 when it remains the

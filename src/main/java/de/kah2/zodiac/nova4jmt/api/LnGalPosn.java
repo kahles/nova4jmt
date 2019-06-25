@@ -31,8 +31,9 @@ package de.kah2.zodiac.nova4jmt.api;
  */
 public class LnGalPosn {
 
+	/** Galactic longitude (degrees) */
 	public double l;
-	/** !< Galactic longitude (degrees) */
+
+	/** Galactic latitude (degrees) */
 	public double b;
-	/** !< Galactic latitude (degrees) */
 }

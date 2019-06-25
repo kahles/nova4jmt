@@ -40,7 +40,7 @@ public class Constants {
 
 	public static final double LN_SIDEREAL_DAY_DAY = (LN_SIDEREAL_DAY_SEC / 86400.0d);
 
-	/** 1.1.2000 Julian Day & others */
+	/** 1.1.2000 Julian Day &amp; others */
 	public static final double JD2000 = 2451545.0d;
 
 	public static final double JD2050 = 2469807.50d;

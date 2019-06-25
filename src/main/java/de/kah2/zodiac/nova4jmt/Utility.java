@@ -416,7 +416,7 @@ public class Utility {
 
 	/**
 	 * []----------------------------------------------------------------------
-	 * -- [] | trim() & strip() | | | | strips trailing whitespaces from buf. |
+	 * -- [] | trim() &amp; strip() | | | | strips trailing whitespaces from buf. |
 	 * | | [
 	 * ]------------------------------------------------------------------------
 	 * []

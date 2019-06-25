@@ -31,10 +31,12 @@ package de.kah2.zodiac.nova4jmt.api;
  */
 public class LnRstTime {
 
+	/** Rise time in JD */
 	public double rise;
-	/** !< Rise time in JD */
+
+	/** Set time in JD */
 	public double set;
-	/** !< Set time in JD */
+
+	/** Transit time in JD */
 	public double transit;
-	/** !< Transit time in JD */
 }

@@ -36,10 +36,12 @@ package de.kah2.zodiac.nova4jmt.api;
  */
 public class LnRectPosn {
 
+	/** Rectangular X coordinate */
 	public double X;
-	/** !< Rectangular X coordinate */
+
+	/** Rectangular Y coordinate */
 	public double Y;
-	/** !< Rectangular Y coordinate */
+
+	/** Rectangular Z coordinate */
 	public double Z;
-	/** !< Rectangular Z coordinate */
 }

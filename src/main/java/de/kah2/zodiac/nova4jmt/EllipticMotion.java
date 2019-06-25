@@ -313,7 +313,7 @@ public class EllipticMotion {
 	 * 
 	 * Calculate the orbital length in AU.
 	 * 
-	 * Accuracy: - 0.001% for e < 0.88 - 0.01% for e < 0.95 - 1% for e = 0.9997
+	 * Accuracy: - 0.001% for e &lt; 0.88 - 0.01% for e &lt; 0.95 - 1% for e = 0.9997
 	 * - 3% for e = 1
 	 */
 	public static double ln_get_ell_orbit_len(LnEllOrbit orbit) {
@@ -541,7 +541,7 @@ public class EllipticMotion {
 	 * meridian at upper culmination) time of a body with an elliptic orbit for
 	 * the given Julian day.
 	 * 
-	 * This function guarantee, that rise, set and transit will be in <JD, JD+1>
+	 * This function guarantee, that rise, set and transit will be in &lt;JD, JD+1&gt;
 	 * range.
 	 * 
 	 * Note: this functions returns 1 if the body is circumpolar, that is it
@@ -566,7 +566,7 @@ public class EllipticMotion {
 	 * meridian at upper culmination) time of a body with an elliptic orbit for
 	 * the given Julian day.
 	 * 
-	 * This function guarantee, that rise, set and transit will be in <JD, JD+1>
+	 * This function guarantee, that rise, set and transit will be in &lt;JD, JD+1&gt;
 	 * range.
 	 * 
 	 * Note: this functions returns 1 if the body is circumpolar, that is it
@@ -600,8 +600,8 @@ public class EllipticMotion {
 	 * meridian at upper culmination) time of a body with an elliptic orbit for
 	 * the given Julian day.
 	 * 
-	 * This function guarantee, that rise, set and transit will be in <JD, JD +
-	 * day_limit> range.
+	 * This function guarantee, that rise, set and transit will be in &lt;JD, JD +
+	 * day_limit&gt; range.
 	 * 
 	 * Note: this functions returns 1 if the body is circumpolar, that is it
 	 * remains the whole day above the horizon. Returns -1 when it remains the

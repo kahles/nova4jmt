@@ -32,8 +32,9 @@ package de.kah2.zodiac.nova4jmt.api;
 
 public class LnEquPosn {
 
+	/** RA. Object right ascension in degrees. */
 	public double ra;
-	/** !< RA. Object right ascension in degrees. */
+
+	/** DEC. Object declination */
 	public double dec;
-	/** !< DEC. Object declination */
 }

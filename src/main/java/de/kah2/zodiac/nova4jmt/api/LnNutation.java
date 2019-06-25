@@ -31,10 +31,12 @@ package de.kah2.zodiac.nova4jmt.api;
  */
 public class LnNutation {
 
+	/** Nutation in longitude, in degrees */
 	public double longitude;
-	/** !< Nutation in longitude, in degrees */
+
+	/** Nutation in obliquity, in degrees */
 	public double obliquity;
-	/** !< Nutation in obliquity, in degrees */
+
+	/** Mean obliquity of the ecliptic, in degrees */
 	public double ecliptic;
-	/** !< Mean obliquity of the ecliptic, in degrees */
 }

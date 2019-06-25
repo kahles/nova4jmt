@@ -242,7 +242,7 @@ public class RiseSet {
 	 * meridian at upper culmination) time of the object for the given Julian
 	 * day and horizon.
 	 * 
-	 * This function guarantee, that rise, set and transit will be in <JD, JD+1>
+	 * This function guarantee, that rise, set and transit will be in &lt;JD, JD+1&gt;
 	 * range.
 	 * 
 	 * Note: this functions returns 1 if the object is circumpolar, that is it
@@ -287,7 +287,7 @@ public class RiseSet {
 	 * meridian at upper culmination) time of the object for the given Julian
 	 * day and horizon.
 	 * 
-	 * This function guarantee, that rise, set and transit will be in <JD, JD+1>
+	 * This function guarantee, that rise, set and transit will be in &lt;JD, JD+1&gt;
 	 * range.
 	 * 
 	 * Note: this functions returns 1 if the object is circumpolar, that is it
@@ -519,7 +519,7 @@ public class RiseSet {
 	 * meridian at upper culmination) time of the body for the given Julian day
 	 * and given horizon.
 	 * 
-	 * This function guarantee, that rise, set and transit will be in <JD, JD+1>
+	 * This function guarantee, that rise, set and transit will be in &lt;JD, JD+1&gt;
 	 * range.
 	 * 
 	 * Note 1: this functions returns 1 if the body is circumpolar, that is it
@@ -552,8 +552,8 @@ public class RiseSet {
 	 * meridian at upper culmination) time of the body for the given Julian day
 	 * and given horizon.
 	 * 
-	 * This function guarantee, that rise, set and transit will be in <JD, JD +
-	 * day_limit> range.
+	 * This function guarantee, that rise, set and transit will be in &lt;JD, JD +
+	 * day_limit&gt; range.
 	 * 
 	 * Note 1: this functions returns 1 if the body is circumpolar, that is it
 	 * remains the whole day either above or below the horizon.
@@ -794,7 +794,7 @@ public class RiseSet {
 	 * meridian at upper culmination) time of the body for the given Julian day
 	 * and given horizon.
 	 * 
-	 * This function guarantee, that rise, set and transit will be in <JD, JD+1>
+	 * This function guarantee, that rise, set and transit will be in &lt;JD, JD+1&gt;
 	 * range.
 	 * 
 	 * Note 1: this functions returns 1 if the body is circumpolar, that is it
@@ -823,8 +823,8 @@ public class RiseSet {
 	 * meridian at upper culmination) time of the body for the given Julian day
 	 * and given horizon.
 	 * 
-	 * This function guarantee, that rise, set and transit will be in <JD, JD +
-	 * day_limit> range.
+	 * This function guarantee, that rise, set and transit will be in &lt;JD, JD +
+	 * day_limit&gt; range.
 	 * 
 	 * Note 1: this functions returns 1 if the body is circumpolar, that is it
 	 * remains the whole day either above or below the horizon.

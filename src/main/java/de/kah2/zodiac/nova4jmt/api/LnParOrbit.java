@@ -29,14 +29,18 @@ package de.kah2.zodiac.nova4jmt.api;
  */
 public class LnParOrbit {
 
+	/** Perihelion distance in AU */
 	public double q;
-	/** !< Perihelion distance in AU */
+
+	/** Inclination in degrees */
 	public double i;
-	/** !< Inclination in degrees */
+
+	/** Argument of perihelion in degrees */
 	public double w;
-	/** !< Argument of perihelion in degrees */
+
+	/** Longitude of ascending node in degrees */
 	public double omega;
-	/** !< Longitude of ascending node in degrees */
+
+	/** Time of last passage in Perihelion, in julian day */
 	public double JD;
-	/** !< Time of last passage in Perihelion, in julian day */
 }
